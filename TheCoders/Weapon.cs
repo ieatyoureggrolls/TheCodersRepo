@@ -6,5 +6,6 @@ namespace TheCoders
 {
     public class Weapon
     {
+        // second comment here
     }
 }
