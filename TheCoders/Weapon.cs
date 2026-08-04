@@ -6,5 +6,8 @@ namespace TheCoders
 {
     public class Weapon
     {
+        //can someone do something 
+
+
     }
 }
