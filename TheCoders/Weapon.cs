@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TheCoders
 {
-    internal class Weapon
+    public class Weapon
     {
     }
 }
