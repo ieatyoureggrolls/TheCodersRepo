@@ -23,8 +23,8 @@ public class Runner
 
     public void Endless()
     {
-        //Battle();
         Console.WriteLine("Endless");
+        Battle();
     }
 
     /// <summary>
@@ -43,26 +43,44 @@ public class Runner
     /// </summary>
     private void Battle()
     {
-        List<Person> vilians = AddExperimentalPeople();
+        List<Person> villians = AddExperimentalPeople();
         List<Person> people = new List<Person>();
-        people.AddRange(vilians);
+        people.AddRange(villians);
         people.AddRange(partyMembers);
         List<Person> attackOrder = people.OrderBy(p => p.speed).ToList();
-
-        foreach (Person person in attackOrder)
+        bool herosDead = false;
+        bool villiansDead = false;
+        do
         {
-            int attackChoice;
-            if (person.isHero)
+            foreach (Person person in attackOrder)
             {
-                attackChoice = random.Next(vilians.Count);
-                vilians[attackChoice].health -= person.damage;
+                if (person.currentHealth <= 0)
+                {
+                    Console.WriteLine("This person is dead, but you dont know whooooooo");
+                    continue;
+                }
+                int attackChoice;
+                if (person.isHero)
+                {
+                    attackChoice = random.Next(villians.Count);
+                    villians[attackChoice].currentHealth -= person.damage;
+                    Console.WriteLine($"Hero did {person.damage} damage to the {attackChoice + 1} villian");
+                }
+                else if (!person.isHero)
+                {
+                    attackChoice = random.Next(partyMembers.Length);
+                    partyMembers[attackChoice].currentHealth -= person.damage;
+                    Console.WriteLine($"Villian did {person.damage} damage to the {attackChoice + 1} hero");
+                }
+                Console.WriteLine("\n");
             }
-            else if (!person.isHero)
-            {
-                attackChoice = random.Next(vilians.Count);
-                partyMembers[attackChoice].health -= person.damage;
-            }
-        }
+            Console.WriteLine("\n\nCurrentStandings");
+            foreach (Person person in attackOrder)
+                Console.WriteLine($"\t{(person.isHero ? "Hero" : "Villian")}'s health: {person.currentHealth}");
+            herosDead = partyMembers.OrderByDescending(p => p.currentHealth).First().currentHealth <= 0;
+            villiansDead = villians.OrderByDescending(p => p.currentHealth).First().currentHealth <= 0;
+        } while (!herosDead && !villiansDead);
+        Console.WriteLine($"{(herosDead ? "Villians" : "Heroes")} Won!");
     }
 
 
