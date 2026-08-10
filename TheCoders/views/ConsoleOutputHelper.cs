@@ -5,8 +5,9 @@ namespace TheCoders.views;
 public static class ConsoleOutputHelper
 {
     //Print Health bar
+    public static void PrintHealthBar(Perso)
     
-    //Battle Summaru
+    //Battle Summary
     
     //PrintCrit
     
