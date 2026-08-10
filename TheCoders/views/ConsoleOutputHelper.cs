@@ -1,5 +1,7 @@
 namespace TheCoders.views;
 
+//Git assignment branch commit
+
 public static class ConsoleOutputHelper
 {
     //Print Health bar
