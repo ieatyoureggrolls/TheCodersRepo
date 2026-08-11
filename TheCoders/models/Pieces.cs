@@ -11,19 +11,25 @@ namespace TheCoders.models
             blade,
             handle
         }
-        enum Material
+        public enum Material
         {
             wood,
             stone,
+            bronze,
             steel,
-            bronze
+            gold,
+            adamantine,
+            mithril
         }
+
         PieceType pieceType;
         Material material;
         string pieceName;
         int attack;
         int speed;
         int durability;
+        int enchantTier;
+
         public int getAttack()
         {
             return attack;
@@ -47,6 +53,10 @@ namespace TheCoders.models
         public string getPieceName()
         {
             return pieceName;
+        }
+        public int getEnchantTier()
+        {
+            return enchantTier;
         }
 
         internal int setAttack(int attack)
@@ -73,67 +83,104 @@ namespace TheCoders.models
         {
             this.pieceType = pieceType;
         }
+        internal void setEnchantTier(int enchantTier)
+        {
+            this.enchantTier = enchantTier;
+        }
         internal abstract void combineStats();
     }
 
     internal class blade : Pieces
     {
         PieceType type = PieceType.blade;
-        enum BladeType
+        public enum BladeType
         {
-            shortBlade,
-            longBlade,
-            curvedBlade
+            Short,
+            Long,
+            Great
         }
-        BladeType bladeType;
+        private BladeType bladeType;
+
+        internal void setBladeType(BladeType bladeType)
+        {
+            this.bladeType = bladeType;
+        }
+        public BladeType getBladeType()
+        {
+            return bladeType;
+        }
         override internal void combineStats()
         {
-            switch (bladeType)
+            switch (getBladeType())
             {
-                case BladeType.shortBlade:
+                case BladeType.Short:
                     setAttack(2);
                     setSpeed(3);
                     break;
-                case BladeType.longBlade:
-                    setAttack(4);
-                    setSpeed(1);
-                    break;
-                case BladeType.curvedBlade:
+                case BladeType.Long:
                     setAttack(3);
                     setSpeed(2);
+                    break;
+                case BladeType.Great:
+                    setAttack(5);
                     break;
             }
             switch (getMaterial())
             {
                 case Material.wood:
                     setDurability(getDurability() + 1);
-                    break;
-                case Material.steel:
-                    setAttack(getAttack() + 3);
-                    setDurability(getDurability() + 4);
+                    setEnchantTier(1);
                     break;
                 case Material.stone:
                     setAttack(getAttack() + 1);
                     setDurability(getDurability() + 2);
+                    setEnchantTier(1);
                     break;
                 case Material.bronze:
                     setAttack(getAttack() + 2);
                     setDurability(getDurability() + 3);
+                    setEnchantTier(2);
+                    break;
+                case Material.steel:
+                    setAttack(getAttack() + 3);
+                    setDurability(getDurability() + 4);
+                    setEnchantTier(2);
+                    break;
+                case Material.gold:
+                    setAttack(getAttack() + 1);
+                    setDurability(getDurability() + 1);
+                    setSpeed(getspeed() + 2);
+                    setEnchantTier(3);
+                    break;
+                case Material.adamantine:
+                    setAttack(getAttack() + 5);
+                    setDurability(getDurability() + 5);
+                    setEnchantTier(3);
+                    break;
+                case Material.mithril:
+                    setAttack(getAttack() + 2);
+                    setDurability(getDurability() + 4);
+                    setEnchantTier(4);
                     break;
             }
         }
-        combineStats();
+        public blade(BladeType bladeType, Material material)
+        {
+            setPieceType(bladeType);
+            setMaterial(material);
+            combineStats();
+        }
     }
     internal class handle : Pieces
     {
         PieceType type = PieceType.handle;
-        enum HandleType
+        public enum HandleType
         {
-            SHORT,
-            LONG,
-            MEDIUM
+            Short,
+            Long,
+            Medium
         }
-        HandleType handleType;
+        private HandleType handleType;
 
         internal void setHandleType(HandleType handleType)
         {
@@ -145,18 +192,15 @@ namespace TheCoders.models
         }
         override internal void combineStats()
         {
-            switch (handleType)
+            switch (getHandleType())
             {
                 case HandleType.SHORT:
-                    setAttack(1);
-                    setSpeed(2);
+                    setSpeed(3);
                     break;
                 case HandleType.MEDIUM:
-                    setAttack(2);
-                    setSpeed(1);
+                    setSpeed(2);
                     break;
                 case HandleType.LONG:
-                    setAttack(3);
                     setSpeed(1);
                     break;
             }
@@ -165,17 +209,35 @@ namespace TheCoders.models
                 case Material.wood:
                     setDurability(getDurability() + 1);
                     break;
-                case Material.steel:
-                    setDurability(getDurability() + 4);
-                    break;
                 case Material.stone:
                     setDurability(getDurability() + 2);
                     break;
                 case Material.bronze:
                     setDurability(getDurability() + 3);
                     break;
+                case Material.steel:
+                    setDurability(getDurability() + 4);
+                    break;
+                case Material.gold:
+                    setDurability(getDurability() + 1);
+                    setSpeed(getspeed() + 2);
+                    break;
+                case Material.adamantine:
+                    setDurability(getDurability() + 5);
+                    break;
+                case Material.mithril:
+                    setDurability(getDurability() + 4);
+                    break;
             }
         }
-        combineStats();
+
+        public handle(HandleType handleType, Material material)
+        {
+            setHandleType(handleType);
+            setMaterial(material);
+            combineStats();
+        }
     }
+
+
 }
