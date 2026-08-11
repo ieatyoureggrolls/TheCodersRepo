@@ -10,7 +10,7 @@ namespace TheCoders.models
         public int CurrentHealth { get;
             set{
                 if (value >= MaxHealth)
-                    value = MaxHealth;
+                    field = MaxHealth;
                 else
                     field = value;
             }
