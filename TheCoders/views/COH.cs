@@ -18,7 +18,9 @@ public static class COH
     
     //PrintCrit
     
-    //Clear screen
+    /// <summary>
+    /// Clears Terminal of all text
+    /// </summary>
     public static void ClearScreen()
     {
         Console.Clear();
