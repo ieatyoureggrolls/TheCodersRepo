@@ -10,6 +10,7 @@ namespace TheCoders.models
         public int speed;
         public int damage;
         public bool isHero;
+       
 
         public Person(int health, int speed, int damage, bool isHero)
         {

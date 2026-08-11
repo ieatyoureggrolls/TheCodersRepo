@@ -19,6 +19,7 @@ public class Runner
     public void Story()
     {
         Console.WriteLine("Story");
+        Storymode.main(partyMembers);
     }
 
     public void Endless()
