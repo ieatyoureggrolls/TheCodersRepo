@@ -1,4 +1,5 @@
 using TheCoders.models;
+using TheCoders.views;
 
 namespace TheCoders.controllers;
 
@@ -8,6 +9,7 @@ public class Runner
     public Person[] partyMembers = {new Person(30, 2, 4, true), new Person(25, 3, 6, true), new Person(50, 1, 1, true) };
     public void Run()
     {
+        
         // Entry point of the application
         bool isStory = ChooseMode();
         if (isStory)
@@ -15,6 +17,8 @@ public class Runner
         else
             Endless();
     }
+
+    
 
     public void Story()
     {
