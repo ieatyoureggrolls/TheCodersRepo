@@ -43,6 +43,16 @@ public static class ConsoleOutputHelper
     //Battle Summary
 
     //PrintCrit
+    public static void PrintCrit(int damage, string playerName)
+    {
+        
+    }
+
+    public static void rainbowText(string sentence)
+    {
+        //Use hexadecimal
+        //random generate each 
+    }
 
     /// <summary>
     /// Clears Terminal of all text
