@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TheCoders.models
 {
-    internal abstract class Pieces
+    public abstract class Pieces
     {
         enum PieceType
         {
@@ -65,43 +65,43 @@ namespace TheCoders.models
             return enchantTier;
         }
 
-        internal void setRarity(int rarity)
+        public void setRarity(int rarity)
         {
             this.rarity = rarity;
         }
 
-        internal int setAttack(int attack)
+        public int setAttack(int attack)
         {
             this.attack = attack;
         }
-        internal void setSpeed(int speed)
+        public void setSpeed(int speed)
         {
             this.speed = speed;
         }
-        internal void setDurability(int durability)
+        public void setDurability(int durability)
         {
             this.durability = durability;
         }
-        internal void setMaterial(Material material)
+        public void setMaterial(Material material)
         {
             this.material = material;
         }
-        internal void setPieceName(string pieceName)
+        public void setPieceName(string pieceName)
         {
             this.pieceName = pieceName;
         }
-        internal void setPieceType(PieceType pieceType)
+        public void setPieceType(PieceType pieceType)
         {
             this.pieceType = pieceType;
         }
-        internal void setEnchantTier(int enchantTier)
+        public void setEnchantTier(int enchantTier)
         {
             this.enchantTier = enchantTier;
         }
-        internal abstract void combineStats();
+        public abstract void combineStats();
     }
 
-    internal class blade : Pieces
+    public class blade : Pieces
     {
         PieceType type = PieceType.blade;
         public enum BladeType
@@ -112,7 +112,7 @@ namespace TheCoders.models
         }
         private BladeType bladeType;
 
-        internal void setBladeType(BladeType bladeType)
+        public void setBladeType(BladeType bladeType)
         {
             this.bladeType = bladeType;
         }
@@ -120,7 +120,7 @@ namespace TheCoders.models
         {
             return bladeType;
         }
-        override internal void combineStats()
+        override public void combineStats()
         {
             switch (getBladeType())
             {
@@ -189,7 +189,7 @@ namespace TheCoders.models
             combineStats();
         }
     }
-    internal class handle : Pieces
+    public class handle : Pieces
     {
         PieceType type = PieceType.handle;
         public enum HandleType
@@ -200,7 +200,7 @@ namespace TheCoders.models
         }
         private HandleType handleType;
 
-        internal void setHandleType(HandleType handleType)
+        public void setHandleType(HandleType handleType)
         {
             this.handleType = handleType;
         }
@@ -208,7 +208,7 @@ namespace TheCoders.models
         {
             return handleType;
         }
-        override internal void combineStats()
+        override public void combineStats()
         {
             switch (getHandleType())
             {
