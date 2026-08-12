@@ -1,8 +1,10 @@
+using System.Drawing;
 using TheCoders.models;
 
 namespace TheCoders.views;
 
 //Console Output Helper
+
 
 public static class ConsoleOutputHelper
 {
@@ -39,8 +41,31 @@ public static class ConsoleOutputHelper
             Console.ResetColor();
         }
     }
+    //Print battle standings
+    public static void PrintBattleStanding(Person[] playerParty, Person[] enemyParty)
+    {
+        
+    }
+    //Print banner
+    
+    public static void PrintBanner(string message)
+    {
+        //Banner has different thickness or font size
+        //Figure out char length of Terminal
+        //Print message in the top center
+        //Fill the left and right sides with -----
+    }
 
     //Battle Summary
+    
+    //Print Boss health bar
+    
+    public static void PrintHealthBar(Enemy enemy)
+    {
+        //Multi-Rowed
+        //Shifts through different colors
+        
+    }
 
     //PrintCrit
     public static void PrintCrit(int damage, string playerName)
@@ -48,10 +73,31 @@ public static class ConsoleOutputHelper
         
     }
 
+    public static byte[] GenerateRGB()
+    {
+        Random rand = new Random();
+        byte[] rgbBytes = new byte[3];
+        rand.NextBytes(rgbBytes);
+        byte red = rgbBytes[0];
+        byte green = rgbBytes[1];
+        byte blue = rgbBytes[2];
+        return rgbBytes;
+    }
+
     public static void rainbowText(string sentence)
     {
-        //Use hexadecimal
-        //random generate each 
+        char[] chars = sentence.ToCharArray();
+        
+        //Use rgb
+        foreach (char c in chars )
+        { 
+            byte[] rgb = GenerateRGB();
+            Console.BackgroundColor = Color.FromArgb(255, rgb[0], rgb[1], rgb[2]);
+        }
+        
+        //random generate each
+        
+        
     }
 
     /// <summary>
