@@ -12,17 +12,26 @@ namespace TheCoders
         private int attack;
         private int speed;
         private int durability;
+        private int rarity;
 
         public Weapon(Pieces blade, Pieces handle)
         {
             attack = blade.getAttack() + handle.getAttack();
             speed = blade.getspeed() + handle.getspeed();
             durability = blade.getDurability() + handle.getDurability();
+            if(blade.getRarity() > handle.getRarity())
+            {
+                rarity = blade.getRarity();
+            }
+            else
+            {
+                rarity = handle.getRarity();
+            }
         }
 
         public void DisplayWeaponInfo()
         {
-            Console.WriteLine($"Weapon Stats: Attack: {attack}, Speed: {speed}, Durability: {durability}");
+            Console.WriteLine($"Weapon Stats: Attack: {attack}, Speed: {speed}, Durability: {durability}, Rarity: {rarity}");
         }
     }
 }

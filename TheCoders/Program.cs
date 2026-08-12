@@ -1,4 +1,6 @@
-﻿using TheCoders.controllers;
+﻿using TheCoders;
+using TheCoders.controllers;
+using TheCoders.models;
 internal class Program()
 {
     private static void Main(string[] args)
@@ -6,5 +8,7 @@ internal class Program()
         //Needed for health bar and other possible icons
         Console.OutputEncoding = System.Text.Encoding.UTF8; 
         new Runner().Run();
+
+
     }
 }
