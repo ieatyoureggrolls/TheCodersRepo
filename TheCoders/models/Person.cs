@@ -6,18 +6,16 @@ namespace TheCoders.models
 {
     public class Person
     {
-
-        public int health;
-        public int speed;
-        public int damage;
-        public bool isHero;
-       
-
         public string Name { get; private set; }
-        public int CurrentHealth { get;
-            set{
+        public int CurrentHealth
+        {
+            get;
+            set
+            {
                 if (value >= MaxHealth)
                     field = MaxHealth;
+                else if (value <= 0)
+                    field = 0;
                 else
                     field = value;
             }
@@ -26,7 +24,7 @@ namespace TheCoders.models
         public int Speed { get; private set; }
         public int Damage { get; private set; }
         public bool IsHero { get; private set; }
-        
+
 
         public Person(string name, int maxHealth, int speed, int damage, bool isHero)
         {

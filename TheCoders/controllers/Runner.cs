@@ -45,51 +45,64 @@ public class Runner
     }
 
     /// <summary>
-    /// Handles the main battle programing between the heros and the vilians
+    /// Has heroes battle enemies in a loop
     /// </summary>
-    private void Battle()
+    /// <param name="enemies">Used for pregenerated enemies</param>
+    private void Battle(List<Enemy>? enemies = null)
     {
-        List<Enemy> villians = AddExperimentalPeople();
+        if (enemies == null)
+            enemies = AddExperimentalPeople();
         List<Person> people = new List<Person>();
-        people.AddRange(villians);
+        people.AddRange(enemies);
         people.AddRange(partyMembers);
         List<Person> attackOrder = people.OrderBy(p => p.Speed).ToList();
-        bool herosDead = false;
-        bool villiansDead = false;
+
         do
         {
             foreach (Person person in attackOrder)
             {
-                if (person.CurrentHealth <= 0)
-                {
-                    Console.WriteLine($"{person.Name} is dead");
-                    continue;
-                }
-                int damageToDeal = person.DealDamage();
-                int attackChoice;
-                if (person.IsHero)
-                {
-                    attackChoice = random.Next(villians.Count);
-                    int damageDealt = villians[attackChoice].TakeDamage(damageToDeal);
-                    Console.WriteLine($"{person.Name} did {damageDealt} damage to {villians[attackChoice].Name}");
-                }
-                else if (!person.IsHero)
-                {
-                    attackChoice = random.Next(partyMembers.Length);
-                    int damageDealt = partyMembers[attackChoice].TakeDamage(damageToDeal);
-                    Console.WriteLine($"{person.Name} did {damageDealt} damage to {partyMembers[attackChoice].Name}");
-                }
+                int defenderIndex = random.Next(person.IsHero ? enemies.Count : partyMembers.Length);
+                Person defender = person.IsHero ? enemies[defenderIndex] : partyMembers[defenderIndex];
+
+                PersonAttacks(person, defender);
                 Console.WriteLine("\n");
+                Thread.Sleep(1000);
             }
 
-            Console.WriteLine("\n\nCurrentStandings");
+            Console.WriteLine("\n\n---------------------------\nCurrentStandings");
             foreach (Person person in attackOrder)
-                Console.WriteLine($"\t{(person.IsHero ? "Hero" : "Villian")}'s health: {person.CurrentHealth}");
+            {
+                COH.PrintHealthBar(person);
+                Console.WriteLine();
+            }
+            Console.WriteLine("---------------------------\n\n");
 
-            herosDead = partyMembers.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
-            villiansDead = villians.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
-        } while (!herosDead && !villiansDead);
-        Console.WriteLine($"{(herosDead ? "Villians" : "Heroes")} Won!");
+        } while (isBattleOver(partyMembers, enemies.ToArray()));
+    }
+
+    /// <summary>
+    /// Makes one person attack another for one instance of damage
+    /// </summary>
+    /// <param name="attacker">The person doing damage</param>
+    /// <param name="defender">The person taking damage</param>
+    private static void PersonAttacks(Person attacker, Person defender)
+    {
+        int damageToDeal = attacker.DealDamage();
+        int damageDealt = defender.TakeDamage(damageToDeal);
+        Console.WriteLine($"{attacker.Name} did {damageDealt} damage to {defender.Name}\n\n");
+    }
+
+    /// <summary>
+    /// Checks to see if either side of the fight is dead
+    /// </summary>
+    /// <param name="heroes">Array of heroes to check their state</param>
+    /// <param name="enemies">Array of enemies to check their state</param>
+    /// <returns>True if the heroes or enemies are dead</returns>
+    private static bool isBattleOver(Person[] heroes, Enemy[] enemies)
+    {
+        bool herosDead = heroes.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
+        bool enemiesDead = enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
+        return !herosDead && !enemiesDead;
     }
 
 
