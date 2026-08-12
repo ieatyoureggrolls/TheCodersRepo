@@ -6,6 +6,13 @@ namespace TheCoders.models
 {
     public class Person
     {
+
+        public int health;
+        public int speed;
+        public int damage;
+        public bool isHero;
+       
+
         public string Name { get; private set; }
         public int CurrentHealth { get;
             set{
