@@ -1,5 +1,6 @@
 using TheCoders.models;
 using TheCoders.views;
+using COH = TheCoders.views.ConsoleOutputHelper;
 
 namespace TheCoders.controllers;
 
@@ -48,7 +49,7 @@ public class Runner
     /// </summary>
     private void Battle()
     {
-        List<Person> villians = AddExperimentalPeople();
+        List<Enemy> villians = AddExperimentalPeople();
         List<Person> people = new List<Person>();
         people.AddRange(villians);
         people.AddRange(partyMembers);
@@ -93,14 +94,9 @@ public class Runner
 
 
 
-    private List<Person> AddExperimentalPeople()
+    private List<Enemy> AddExperimentalPeople()
     {
-        List<Person> people = new List<Person>();
-        people.Add(new Person("Villian 1", 20, 1, 1, false));
-        people.Add(new Person("Villian 2", 5, 3, 4, false));
-        people.Add(new Person("Villian 3", 10, 1, 7, false));
-        people.Add(new Person("Villian 4", 15, 2, 5, false));
-
-        return people;
+        List<Enemy> enemies = EnemyGenerator.GenerateEnemies(0, 4).ToList();
+        return enemies;
     }
 }
