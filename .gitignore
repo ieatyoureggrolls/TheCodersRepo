@@ -28,3 +28,7 @@ packages/
 # Rider or VS Code metadata if the team does not track it
 .idea/
 .vscode/   
+
+#Personal Test file-Lucas
+Tester/
+*.slnf

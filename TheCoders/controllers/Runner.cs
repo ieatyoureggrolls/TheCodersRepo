@@ -1,13 +1,15 @@
 using TheCoders.models;
+using TheCoders.views;
 
 namespace TheCoders.controllers;
 
 public class Runner
 {
     private Random random = new Random();
-    public Person[] partyMembers = {new Person(30, 2, 4, true), new Person(25, 3, 6, true), new Person(50, 1, 1, true) };
+    public Person[] partyMembers = {new Person("Hero 1", 30, 2, 4, true), new Person("Hero 2", 25, 3, 6, true), new Person("Hero 3", 50, 1, 1, true) };
     public void Run()
     {
+        
         // Entry point of the application
         bool isStory = ChooseMode();
         if (isStory)
@@ -15,6 +17,8 @@ public class Runner
         else
             Endless();
     }
+
+    
 
     public void Story()
     {
@@ -24,8 +28,8 @@ public class Runner
 
     public void Endless()
     {
-        //Battle();
         Console.WriteLine("Endless");
+        Battle();
     }
 
     /// <summary>
@@ -44,26 +48,47 @@ public class Runner
     /// </summary>
     private void Battle()
     {
-        List<Person> vilians = AddExperimentalPeople();
+        List<Person> villians = AddExperimentalPeople();
         List<Person> people = new List<Person>();
-        people.AddRange(vilians);
+        people.AddRange(villians);
         people.AddRange(partyMembers);
-        List<Person> attackOrder = people.OrderBy(p => p.speed).ToList();
-
-        foreach (Person person in attackOrder)
+        List<Person> attackOrder = people.OrderBy(p => p.Speed).ToList();
+        bool herosDead = false;
+        bool villiansDead = false;
+        do
         {
-            int attackChoice;
-            if (person.isHero)
+            foreach (Person person in attackOrder)
             {
-                attackChoice = random.Next(vilians.Count);
-                vilians[attackChoice].health -= person.damage;
+                if (person.CurrentHealth <= 0)
+                {
+                    Console.WriteLine($"{person.Name} is dead");
+                    continue;
+                }
+                int damageToDeal = person.DealDamage();
+                int attackChoice;
+                if (person.IsHero)
+                {
+                    attackChoice = random.Next(villians.Count);
+                    int damageDealt = villians[attackChoice].TakeDamage(damageToDeal);
+                    Console.WriteLine($"{person.Name} did {damageDealt} damage to {villians[attackChoice].Name}");
+                }
+                else if (!person.IsHero)
+                {
+                    attackChoice = random.Next(partyMembers.Length);
+                    int damageDealt = partyMembers[attackChoice].TakeDamage(damageToDeal);
+                    Console.WriteLine($"{person.Name} did {damageDealt} damage to {partyMembers[attackChoice].Name}");
+                }
+                Console.WriteLine("\n");
             }
-            else if (!person.isHero)
-            {
-                attackChoice = random.Next(vilians.Count);
-                partyMembers[attackChoice].health -= person.damage;
-            }
-        }
+
+            Console.WriteLine("\n\nCurrentStandings");
+            foreach (Person person in attackOrder)
+                Console.WriteLine($"\t{(person.IsHero ? "Hero" : "Villian")}'s health: {person.CurrentHealth}");
+
+            herosDead = partyMembers.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
+            villiansDead = villians.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
+        } while (!herosDead && !villiansDead);
+        Console.WriteLine($"{(herosDead ? "Villians" : "Heroes")} Won!");
     }
 
 
@@ -71,10 +96,10 @@ public class Runner
     private List<Person> AddExperimentalPeople()
     {
         List<Person> people = new List<Person>();
-        people.Add(new Person(20, 1, 1, false));
-        people.Add(new Person(5, 3, 4, false));
-        people.Add(new Person(10, 1, 7, false));
-        people.Add(new Person(15, 2, 5, false));
+        people.Add(new Person("Villian 1", 20, 1, 1, false));
+        people.Add(new Person("Villian 2", 5, 3, 4, false));
+        people.Add(new Person("Villian 3", 10, 1, 7, false));
+        people.Add(new Person("Villian 4", 15, 2, 5, false));
 
         return people;
     }
