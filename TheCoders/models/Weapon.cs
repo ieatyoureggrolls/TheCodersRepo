@@ -17,7 +17,7 @@ namespace TheCoders
         public Weapon(Pieces blade, Pieces handle)
         {
             attack = blade.getAttack() + handle.getAttack();
-            speed = blade.getspeed() + handle.getspeed();
+            speed = blade.getSpeed() + handle.getSpeed();
             durability = blade.getDurability() + handle.getDurability();
             if(blade.getRarity() > handle.getRarity())
             {

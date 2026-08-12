@@ -6,7 +6,7 @@ namespace TheCoders.models
 {
     public abstract class Pieces
     {
-        enum PieceType
+        public enum PieceType
         {
             blade,
             handle
@@ -30,6 +30,12 @@ namespace TheCoders.models
         int durability;
         int enchantTier;
         int rarity;
+        int price;
+
+        public int getPrice()
+        {
+            return price;
+        }
 
         public int getRarity()
         {
@@ -40,7 +46,7 @@ namespace TheCoders.models
         {
             return attack;
         }
-        public int getspeed()
+        public int getSpeed()
         {
             return speed;
         }
@@ -65,12 +71,17 @@ namespace TheCoders.models
             return enchantTier;
         }
 
+        public void setPrice(int price)
+        {
+            this.price = price;
+        }
+
         public void setRarity(int rarity)
         {
             this.rarity = rarity;
         }
 
-        public int setAttack(int attack)
+        public void setAttack(int attack)
         {
             this.attack = attack;
         }
@@ -99,11 +110,12 @@ namespace TheCoders.models
             this.enchantTier = enchantTier;
         }
         public abstract void combineStats();
+
+        public abstract void DisplayPieceInfo();
     }
 
     public class blade : Pieces
     {
-        PieceType type = PieceType.blade;
         public enum BladeType
         {
             Short,
@@ -142,56 +154,67 @@ namespace TheCoders.models
                     setRarity(1);
                     setDurability(getDurability() + 1);
                     setEnchantTier(1);
+                    setPrice(10);
                     break;
                 case Material.stone:
                     setRarity(2);
                     setAttack(getAttack() + 1);
                     setDurability(getDurability() + 2);
                     setEnchantTier(1);
+                    setPrice(20);
                     break;
                 case Material.bronze:
                     setRarity(3);
                     setAttack(getAttack() + 2);
                     setDurability(getDurability() + 3);
                     setEnchantTier(2);
+                    setPrice(30);
                     break;
                 case Material.steel:
                     setRarity(4);
                     setAttack(getAttack() + 3);
                     setDurability(getDurability() + 4);
                     setEnchantTier(2);
+                    setPrice(40);
                     break;
                 case Material.gold:
                     setRarity(4);
                     setAttack(getAttack() + 1);
                     setDurability(getDurability() + 1);
-                    setSpeed(getspeed() + 2);
+                    setSpeed(getSpeed() + 2);
                     setEnchantTier(3);
+                    setPrice(40);
                     break;
                 case Material.adamantine:
                     setRarity(5);
                     setAttack(getAttack() + 5);
                     setDurability(getDurability() + 5);
                     setEnchantTier(3);
+                    setPrice(50);
                     break;
                 case Material.mithril:
                     setRarity(5);
                     setAttack(getAttack() + 2);
                     setDurability(getDurability() + 4);
                     setEnchantTier(4);
+                    setPrice(50);
                     break;
             }
         }
+
+        override public void DisplayPieceInfo()
+        {
+            Console.WriteLine($"Blade Stats: Type: {getBladeType()}, Material: {getMaterial()}, Attack: {getAttack()}, Speed: {getSpeed()}, Durability: {getDurability()}, Rarity: {getRarity()}, Enchant Tier: {getEnchantTier()}, Price: {getPrice()}");
+        }
         public blade(BladeType bladeType, Material material)
         {
-            setPieceType(bladeType);
+            setPieceType(PieceType.blade);
             setMaterial(material);
             combineStats();
         }
     }
     public class handle : Pieces
     {
-        PieceType type = PieceType.handle;
         public enum HandleType
         {
             Short,
@@ -212,13 +235,13 @@ namespace TheCoders.models
         {
             switch (getHandleType())
             {
-                case HandleType.SHORT:
+                case HandleType.Short:
                     setSpeed(3);
                     break;
-                case HandleType.MEDIUM:
+                case HandleType.Medium:
                     setSpeed(2);
                     break;
-                case HandleType.LONG:
+                case HandleType.Long:
                     setSpeed(1);
                     break;
             }
@@ -227,33 +250,45 @@ namespace TheCoders.models
                 case Material.wood:
                     setRarity(1);
                     setDurability(getDurability() + 1);
+                    setPrice(10);
                     break;
                 case Material.stone:
                     setRarity(2);
                     setDurability(getDurability() + 2);
+                    setPrice(20);
                     break;
                 case Material.bronze:
                     setRarity(3);
                     setDurability(getDurability() + 3);
+                    setPrice(30);
                     break;
                 case Material.steel:
                     setRarity(4);
                     setDurability(getDurability() + 4);
+                    setPrice(40);
                     break;
                 case Material.gold:
                     setRarity(4);
                     setDurability(getDurability() + 1);
-                    setSpeed(getspeed() + 2);
+                    setSpeed(getSpeed() + 2);
+                    setPrice(40);
                     break;
                 case Material.adamantine:
                     setRarity(5);
                     setDurability(getDurability() + 5);
+                    setPrice(50);
                     break;
                 case Material.mithril:
                     setRarity(5);
                     setDurability(getDurability() + 4);
+                    setPrice(50);
                     break;
             }
+        }
+
+        override public void DisplayPieceInfo()
+        {
+            Console.WriteLine($"Handle Stats: Type: {getHandleType()}, Material: {getMaterial()}, Speed: {getSpeed()}, Durability: {getDurability()}, Rarity: {getRarity()}, Price: {getPrice()}");
         }
 
         public handle(HandleType handleType, Material material)
