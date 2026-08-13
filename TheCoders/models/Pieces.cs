@@ -114,7 +114,7 @@ namespace TheCoders.models
         public abstract void DisplayPieceInfo();
     }
 
-    public class blade : Pieces
+    public class Blade : Pieces
     {
         public enum BladeType
         {
@@ -206,14 +206,14 @@ namespace TheCoders.models
         {
             Console.WriteLine($"Blade Stats: Type: {getBladeType()}, Material: {getMaterial()}, Attack: {getAttack()}, Speed: {getSpeed()}, Durability: {getDurability()}, Rarity: {getRarity()}, Enchant Tier: {getEnchantTier()}, Price: {getPrice()}");
         }
-        public blade(BladeType bladeType, Material material)
+        public Blade(BladeType bladeType, Material material)
         {
             setPieceType(PieceType.blade);
             setMaterial(material);
             combineStats();
         }
     }
-    public class handle : Pieces
+    public class Handle : Pieces
     {
         public enum HandleType
         {
@@ -291,7 +291,7 @@ namespace TheCoders.models
             Console.WriteLine($"Handle Stats: Type: {getHandleType()}, Material: {getMaterial()}, Speed: {getSpeed()}, Durability: {getDurability()}, Rarity: {getRarity()}, Price: {getPrice()}");
         }
 
-        public handle(HandleType handleType, Material material)
+        public Handle(HandleType handleType, Material material)
         {
             setHandleType(handleType);
             setMaterial(material);

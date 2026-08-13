@@ -14,7 +14,7 @@ namespace TheCoders
         private int durability;
         private int rarity;
 
-        public Weapon(Pieces blade, Pieces handle)
+        public Weapon(Blade blade, Handle handle)
         {
             attack = blade.getAttack() + handle.getAttack();
             speed = blade.getSpeed() + handle.getSpeed();
