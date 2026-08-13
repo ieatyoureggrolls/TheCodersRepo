@@ -31,6 +31,12 @@ namespace TheCoders.models
         int enchantTier;
         int rarity;
         int price;
+        int enchantThreshold;
+
+        public int getThreshold()
+        {
+            return enchantThreshold;
+        }
 
         public int getPrice()
         {
@@ -71,6 +77,11 @@ namespace TheCoders.models
             return enchantTier;
         }
 
+        public void setThreshold(int threshold)
+        {
+            enchantThreshold = threshold;
+        }
+
         public void setPrice(int price)
         {
             this.price = price;
@@ -97,9 +108,9 @@ namespace TheCoders.models
         {
             this.material = material;
         }
-        public void setPieceName(string pieceName)
+        public void setPieceName()
         {
-            this.pieceName = pieceName;
+            pieceName = material + " " + pieceType;
         }
         public void setPieceType(PieceType pieceType)
         {
@@ -152,52 +163,59 @@ namespace TheCoders.models
             {
                 case Material.wood:
                     setRarity(1);
-                    setDurability(getDurability() + 1);
+                    setDurability(getDurability() + 10);
                     setEnchantTier(1);
                     setPrice(10);
+                    setThreshold(100);
                     break;
                 case Material.stone:
                     setRarity(2);
                     setAttack(getAttack() + 1);
-                    setDurability(getDurability() + 2);
+                    setDurability(getDurability() + 20);
                     setEnchantTier(1);
                     setPrice(20);
+                    setThreshold(200);
                     break;
                 case Material.bronze:
                     setRarity(3);
                     setAttack(getAttack() + 2);
-                    setDurability(getDurability() + 3);
+                    setDurability(getDurability() + 30);
                     setEnchantTier(2);
                     setPrice(30);
+                    setThreshold(300);
                     break;
                 case Material.steel:
                     setRarity(4);
                     setAttack(getAttack() + 3);
-                    setDurability(getDurability() + 4);
+                    setDurability(getDurability() + 40);
                     setEnchantTier(2);
                     setPrice(40);
+                    setThreshold(400);
                     break;
                 case Material.gold:
                     setRarity(4);
                     setAttack(getAttack() + 1);
-                    setDurability(getDurability() + 1);
+                    setDurability(getDurability() + 10);
                     setSpeed(getSpeed() + 2);
                     setEnchantTier(3);
                     setPrice(40);
+                    setThreshold(600);
                     break;
                 case Material.adamantine:
                     setRarity(5);
                     setAttack(getAttack() + 5);
-                    setDurability(getDurability() + 5);
+                    setDurability(getDurability() + 50);
                     setEnchantTier(3);
                     setPrice(50);
+                    setThreshold(600);
                     break;
                 case Material.mithril:
                     setRarity(5);
                     setAttack(getAttack() + 2);
-                    setDurability(getDurability() + 4);
+                    setDurability(getDurability() + 40);
                     setEnchantTier(4);
                     setPrice(50);
+                    setThreshold(800);
                     break;
             }
         }
@@ -211,6 +229,7 @@ namespace TheCoders.models
             setPieceType(PieceType.blade);
             setMaterial(material);
             combineStats();
+            setPieceName();
         }
     }
     public class Handle : Pieces
@@ -249,38 +268,40 @@ namespace TheCoders.models
             {
                 case Material.wood:
                     setRarity(1);
-                    setDurability(getDurability() + 1);
+                    setDurability(getDurability() + 10);
                     setPrice(10);
+                    setThreshold(100);
                     break;
                 case Material.stone:
                     setRarity(2);
-                    setDurability(getDurability() + 2);
+                    setDurability(getDurability() + 20);
                     setPrice(20);
+
                     break;
                 case Material.bronze:
                     setRarity(3);
-                    setDurability(getDurability() + 3);
+                    setDurability(getDurability() + 30);
                     setPrice(30);
                     break;
                 case Material.steel:
                     setRarity(4);
-                    setDurability(getDurability() + 4);
+                    setDurability(getDurability() + 40);
                     setPrice(40);
                     break;
                 case Material.gold:
                     setRarity(4);
-                    setDurability(getDurability() + 1);
+                    setDurability(getDurability() + 10);
                     setSpeed(getSpeed() + 2);
                     setPrice(40);
                     break;
                 case Material.adamantine:
                     setRarity(5);
-                    setDurability(getDurability() + 5);
+                    setDurability(getDurability() + 50);
                     setPrice(50);
                     break;
                 case Material.mithril:
                     setRarity(5);
-                    setDurability(getDurability() + 4);
+                    setDurability(getDurability() + 40);
                     setPrice(50);
                     break;
             }
@@ -296,6 +317,7 @@ namespace TheCoders.models
             setHandleType(handleType);
             setMaterial(material);
             combineStats();
+            setPieceName();
         }
     }
 
