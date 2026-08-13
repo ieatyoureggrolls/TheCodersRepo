@@ -60,11 +60,13 @@ namespace TheCoders.models
                 case (3):
                     Level3(theParty);
                     break;
+
                 case (4):
-                    Level3(theParty);
+                    Level4(theParty);
                     break;
+
                 case (5):
-                    Level3(theParty);
+                    Level5(theParty);
                     break;
                 default:
                     Console.WriteLine("Sorry that wasn't a proper level");
@@ -96,11 +98,13 @@ namespace TheCoders.models
                     case (3):
                         Level3(theParty);
                         break;
+
                     case (4):
-                        Level3(theParty);
+                        Level4(theParty);
                         break;
+
                     case (5):
-                        Level3(theParty);
+                        Level5(theParty);
                         break;
 
                 default:
