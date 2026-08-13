@@ -31,9 +31,9 @@ namespace TheCoders.models
          * 
          * level1 player spectates the computer making a weapon and sees the auto battler (partially complete)
          * level2 player makes a weapon for the second hero and watches auto battler (partially complete)
-         * level3 weapons are low on durability so player learns to repair weapons ()
-         * level4 player learns to replace weapons
-         * level5 player upgrades existing wepons with enchantmets? perhaps
+         * level3 weapons are low on durability so player learns to repair weapons (partially complete)
+         * level4 player learns to replace weapons (partially complete)
+         * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
          * 
          * weapon creation methods-
          * create weapon
@@ -58,6 +58,12 @@ namespace TheCoders.models
                     break;
 
                 case (3):
+                    Level3(theParty);
+                    break;
+                case (4):
+                    Level3(theParty);
+                    break;
+                case (5):
                     Level3(theParty);
                     break;
                 default:
@@ -90,8 +96,14 @@ namespace TheCoders.models
                     case (3):
                         Level3(theParty);
                         break;
+                    case (4):
+                        Level3(theParty);
+                        break;
+                    case (5):
+                        Level3(theParty);
+                        break;
 
-                    default:
+                default:
                         Console.WriteLine("Sorry that wasn't a proper level choose something else");
                         chooseLevel(theParty, availableLevels);
                         break;
@@ -215,7 +227,34 @@ namespace TheCoders.models
             //call enemy inspect method
 
 
-            Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best");
+            Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best those guys are tought");
+
+            //create wepon method
+
+            //auto battler method
+
+            winOrLose(theParty, currentLevel);
+
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+
+            takeToLevel(currentLevel + 1, theParty);
+
+        }
+
+        private static void Level5(Person[] theParty)
+        {
+            const int currentLevel = 5;
+
+            Console.WriteLine("\n\n Good job defeating that boss, now that the village is defended its time to go on the offensive");
+
+            //call enemy inspect method
+
+            Console.WriteLine("\n\nwow thats a lot of them good luck you know what to do");
 
             //create wepon method
 
