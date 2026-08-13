@@ -121,17 +121,11 @@ namespace TheCoders.models
 
             Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
 
-            for (int i = 0; i <= theParty.Length; i++)
-            {
-
-
-                if (i == theParty.Length)
-                {
-                    Console.WriteLine($"the team consists of {i} heroes you must make a weapon for all of them");
-                }
-
-
-            }
+                   
+                      
+                    Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
+           
+                   
 
             Console.WriteLine("\n\n im gonna make the first weapon so pay attention.\n from the following choice below im going to pick 'placeholder' as our 'placeholder'");
 
