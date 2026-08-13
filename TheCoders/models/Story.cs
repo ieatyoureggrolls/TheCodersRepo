@@ -55,9 +55,9 @@ namespace TheCoders.models
                     Level2(theParty);
                     break;
 
-                //case (3):
-                //    Level3(theParty);
-                //    break;
+                case (3):
+                    Level3(theParty);
+                    break;
                 default:
                     Console.WriteLine("Sorry that wasn't a proper level");
 
@@ -87,13 +87,13 @@ namespace TheCoders.models
                         Level1(theParty);
                         break;
 
-                    //case (2):
-                    //    Level2(theParty);
-                    //    break;
+                    case (2):
+                        Level2(theParty);
+                        break;
 
-                    //case (3):
-                    //    Level3(theParty);
-                    //    break;
+                    case (3):
+                        Level3(theParty);
+                        break;
 
                     default:
                         Console.WriteLine("Sorry that wasn't a proper level choose something else");
@@ -187,6 +187,11 @@ namespace TheCoders.models
 
             takeToLevel(3, theParty);
 
+        }
+
+        private static void Level3(Person[] theParty) 
+        {
+            const int currentLevel = 3;
         }
 
 
