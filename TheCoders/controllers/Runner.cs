@@ -11,9 +11,11 @@ public class Runner
     public Person[] partyMembers = { new Person("I", 10000, 250, 250, true), new Person("Am", 25, 3, 6, true), new Person("SUFFING ALL CAPS... ALL. CAPS.", 50, 1, 1, true) };
     public void Run()
     {
-
+        string[] enemyNames = ["Mark", "Bill", "Jeff", "Mike"];
+        COH.PrintCrit(100, "Jeff", enemyNames);
+        
         // Entry point of the application
-        ChooseMode();
+        //ChooseMode();
     }
 
     /// <summary>
@@ -34,6 +36,17 @@ public class Runner
                 //Quit message here
                 break;
         }
+
+        
+        
+        
+        //// Entry point of the application
+        //bool isStory = ChooseMode();
+        //if (isStory)
+        //    Story();
+        //else
+        //    Endless();
+
     }
 
 
@@ -208,4 +221,16 @@ public class Runner
         bool enemiesDead = enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
         return !herosDead && !enemiesDead;
     }
+
+
+
+
+
+
+    private List<Enemy> AddExperimentalPeople()
+    {
+        List<Enemy> enemies = EnemyGenerator.GenerateEnemies(0, 4).ToList();
+        return enemies;
+    }
 }
+
