@@ -120,7 +120,7 @@ public static class ConsoleOutputHelper
     /// <returns>An int[] that is used for rgb</returns>
     public static int[] GenerateRGB(int[] oldColor)
     {
-        int numberRange = 200;
+        int numberRange = 25;
         int[] newColor;
         int[] black = new int[3];
         black = [0, 0, 0];
