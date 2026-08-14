@@ -1,3 +1,4 @@
+using CSC160_ConsoleMenu;
 using TheCoders.models;
 using TheCoders.views;
 using COH = TheCoders.views.ConsoleOutputHelper;
@@ -7,19 +8,34 @@ namespace TheCoders.controllers;
 public class Runner
 {
     private Random random = new Random();
-    public Person[] partyMembers = {new Person("Hero 1", 30, 2, 4, true), new Person("Hero 2", 25, 3, 6, true), new Person("Hero 3", 50, 1, 1, true) };
+    public Person[] partyMembers = { new Person("I", 10000, 250, 250, true), new Person("Am", 25, 3, 6, true), new Person("SUFFING ALL CAPS... ALL. CAPS.", 50, 1, 1, true) };
     public void Run()
     {
-        
+
         // Entry point of the application
-        bool isStory = ChooseMode();
-        if (isStory)
-            Story();
-        else
-            Endless();
+        ChooseMode();
     }
 
-    
+    /// <summary>
+    /// Prompts the user if they want to play story or endless mode. Then sends them into that mode
+    /// </summary>
+    private void ChooseMode()
+    {
+        int input = CIO.PromptForMenuSelection(["Story Mode", "Endless Mode"], true);
+        switch (input)
+        {
+            case 1:
+                Story();
+                break;
+            case 2:
+                Endless();
+                break;
+            default:
+                //Quit message here
+                break;
+        }
+    }
+
 
     public void Story()
     {
@@ -29,33 +45,116 @@ public class Runner
 
     public void Endless()
     {
-        Console.WriteLine("Endless");
-        Battle();
+        int currentRound = 100;
+        Console.WriteLine("Welcome To Endless");
+        bool partyAlive;
+        do
+        {
+            partyAlive = Wave(currentRound);
+            currentRound++;
+        } while (partyAlive);
+    }
+
+
+    /// <summary>
+    /// Entry point for a level, handles all level logic (generates enemies | print enemies | craft weapons | do battle stuff)
+    /// </summary>
+    /// <param name="level">The level to scale enemies stats around</param>
+    /// <param name="enemies">Used for if you want pregenerated enemies opposed to randomly generated enemies</param>
+    /// <returns>True if the heroes won | False if the enemies won</returns>
+    private bool Wave(int level, List<Enemy>? enemies = null)
+    {
+        Console.WriteLine($"Wave: {level}");
+        if (enemies == null)
+            enemies = EnemyGenerator.GenerateRangeOfEnemies(level, 2, 4).ToList();
+
+        PrintEnemies(enemies.ToArray());
+
+        HandleWeapons();
+
+        bool partySurvives = Battle(enemies);
+        return partySurvives;
     }
 
     /// <summary>
-    /// Prompts the user if they want to play story or endless mode
+    /// Prints out the info of all enemies you will be fighting this wave
     /// </summary>
-    /// <returns>True for story | False for endless</returns>
-    private bool ChooseMode()
+    private void PrintEnemies(Enemy[] enemies)
     {
-        Console.WriteLine("Story mode: S\nEndless mode: E");
-        string input = Console.ReadLine().ToUpper();
-        return input == "S";
+        foreach (Enemy enemy in enemies)
+        {
+            Console.WriteLine(enemy);
+        }
     }
+
+
+    #region Weaopn Stuff
+    /// <summary>
+    /// Controls the crafting weapon stage of the game
+    /// </summary>
+    private void HandleWeapons()
+    {
+        Console.WriteLine("What would you like to do?");
+        string[] possibleMenus = { "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon", "Enchant Weapon" };
+        int selection = CIO.PromptForMenuSelection(possibleMenus, false);
+
+        switch (selection)
+        {
+            case 1:
+                CraftWeapon();
+                break;
+            case 2:
+                RepairWeapon();
+                break;
+            case 3:
+                ReplaceWeapon();
+                break;
+            case 4:
+                UpgradeWeapon();
+                break;
+            case 5:
+                EnchantWeapon();
+                break;
+        }
+    }
+
+    private void CraftWeapon()
+    {
+        
+    }
+
+    private void RepairWeapon()
+    {
+
+    }
+
+    private void ReplaceWeapon()
+    {
+
+    }
+
+    private void UpgradeWeapon()
+    {
+
+    }
+
+    private void EnchantWeapon()
+    {
+
+    }
+    #endregion
 
     /// <summary>
     /// Has heroes battle enemies in a loop
     /// </summary>
-    /// <param name="enemies">Used for pregenerated enemies</param>
-    private void Battle(List<Enemy>? enemies = null)
+    /// <param name="enemies">The list of eneimes the party will be fighting</param>
+    /// <returns>True if the heroes won | False if the enemies won</returns>
+    private bool Battle(List<Enemy> enemies)
     {
-        if (enemies == null)
-            enemies = AddExperimentalPeople();
         List<Person> people = new List<Person>();
         people.AddRange(enemies);
         people.AddRange(partyMembers);
-        List<Person> attackOrder = people.OrderBy(p => p.Speed).ToList();
+        List<Person> attackOrder = people.OrderByDescending(p => p.Speed).ToList();
 
         do
         {
@@ -69,15 +168,20 @@ public class Runner
                 Thread.Sleep(1000);
             }
 
+            List<Person> alivePeople = new List<Person>();
             Console.WriteLine("\n\n---------------------------\nCurrentStandings");
             foreach (Person person in attackOrder)
             {
                 COH.PrintHealthBar(person);
                 Console.WriteLine();
+                if (person.CurrentHealth > 0)
+                    alivePeople.Add(person);
             }
             Console.WriteLine("---------------------------\n\n");
+            attackOrder = alivePeople;
 
         } while (isBattleOver(partyMembers, enemies.ToArray()));
+        return enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
     }
 
     /// <summary>
@@ -103,13 +207,5 @@ public class Runner
         bool herosDead = heroes.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
         bool enemiesDead = enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
         return !herosDead && !enemiesDead;
-    }
-
-
-
-    private List<Enemy> AddExperimentalPeople()
-    {
-        List<Enemy> enemies = EnemyGenerator.GenerateEnemies(0, 4).ToList();
-        return enemies;
     }
 }
