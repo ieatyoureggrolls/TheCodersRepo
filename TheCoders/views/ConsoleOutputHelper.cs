@@ -111,7 +111,7 @@ public static class ConsoleOutputHelper
         
     }
 
-
+    #region coloring
 
     /// <summary>
     /// Generates an int array that can be used as a rgb color
@@ -303,9 +303,17 @@ public static class ConsoleOutputHelper
         }
     }
 
-    //print colored sentence
+    /// <summary>
+    /// Prints a char to terminal with the given foreground and background color
+    /// Can print without and with new line
+    /// </summary>
+    /// <param name="character">The character to be printed</param>
+    /// <param name="newLine">Is this going to have a new line at the end</param>
+    /// <param name="fgColor">The foreground/fopnt color</param>
+    /// <param name="bgColor">The background color</param>
     public static void PrintColoredChar(char character, bool? newLine = false, int[]? fgColor = null, int[]? bgColor = null)
     {
+        //De3faults font color to white
         if (fgColor == null)
         {
             fgColor = new int[3];
@@ -313,6 +321,8 @@ public static class ConsoleOutputHelper
             fgColor[1] = 0;
             fgColor[2] = 0;
         }
+
+        //Defaults Background color to black
         if (bgColor == null)
         {
             bgColor = new int[3];
@@ -320,6 +330,8 @@ public static class ConsoleOutputHelper
             bgColor[1] = 255;
             bgColor[2] = 255;
         }
+
+        //Bolds/thicken character for better visibility
         string boldedC = ToBold(character);
 
         if (newLine == false || newLine == null)
@@ -335,31 +347,42 @@ public static class ConsoleOutputHelper
 
     }
 
-    //Bold
+    /// <summary>
+    /// Prints a bolded/thickened character
+    /// </summary>
+    /// <param name="c">Thje character to be bolded/thickened</param>
+    /// <returns></returns>
     public static string ToBold(char c)
     {
+        //Gets the unicode for the character, subtracts it from a different unicode to get the uinicode for
+        //the bolden unicode for the requested char
+
+        //Is capital
         if (c >= 'A' && c <= 'Z')
         {
             int offset = c - 'A';
             return char.ConvertFromUtf32(0x1D400 + offset);
         }
+        //Is lowercase
         else if (c >= 'a' && c <= 'z')
         {
             int offset = c - 'a';
             return char.ConvertFromUtf32(0x1D41A + offset);
         }
+        //Is number
         else if (c >= '0' && c <= '9')
         {
             int offset = c - '0';
             return char.ConvertFromUtf32(0x1D7CE + offset);
         }
+        //No bold
         else
         {
             return c.ToString();
         }
     }
 
-
+# endregion
 
 
     /// <summary>
