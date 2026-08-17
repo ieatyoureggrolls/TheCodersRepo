@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using TheCoders.controllers;
+using TheCoders.views;
 
 namespace TheCoders.models
 {
@@ -18,7 +19,7 @@ namespace TheCoders.models
 
             chooseLevel(theParty, availableLevels);
 
-            //Level1(theParty);
+            
         }
 
         /*
@@ -78,11 +79,10 @@ namespace TheCoders.models
 
         private static void chooseLevel(Person[] theParty, int availableLevels)
         {
-            Console.WriteLine($"\n what level would you like to start with? the highest level is level: {availableLevels}");
 
             
 
-            int selectedLevel = CIO.PromptForInt("What level would you like to go too?",minimumLevels,availableLevels);
+            int selectedLevel = CIO.PromptForInt("What level would you like to go too?: ",minimumLevels,availableLevels);
                       
                 
                 switch (selectedLevel)
@@ -135,6 +135,13 @@ namespace TheCoders.models
 
             // write code that finds all the options for step one of the weapon building
 
+            //ConsoleOutputHelper.PrintCombatantParty(enemy array goes here if you want to see that or hero array to see them);
+            //ConsoleOutputHelper.PrintBattleStanding(theParty, theEnemyParty);
+            
+
+            whoGetsAWeapon(theParty);
+            
+
             Console.WriteLine("\n\n 'placeholder' has 'placeholder' as its stats keep those stats in mind when making weapons ");
             Console.WriteLine("\nnow that the wepon is made one of the heroes will automatically equip it\n");
 
@@ -155,9 +162,9 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(currentLevel + 1, theParty);
 
 
+            wantNextLevel(currentLevel, theParty);
 
 
         }
@@ -187,7 +194,7 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(currentLevel + 1, theParty);
+            wantNextLevel(currentLevel, theParty);
 
         }
 
@@ -212,7 +219,7 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(currentLevel + 1, theParty);
+            wantNextLevel(currentLevel, theParty);
 
         }
 
@@ -240,7 +247,7 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(currentLevel + 1, theParty);
+            wantNextLevel(currentLevel,theParty);
 
         }
 
@@ -267,7 +274,7 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(currentLevel + 1, theParty);
+            wantNextLevel(currentLevel, theParty);
 
         }
 
@@ -304,6 +311,52 @@ namespace TheCoders.models
 
 
             }
+
+        }
+
+        private static void wantNextLevel(int currentLevel, Person[] theParty)
+        {
+
+
+            
+                int input = CIO.PromptForMenuSelection(["Go to next level", "go to level select"], true);
+                switch (input)
+                {
+
+
+                    case 1:
+
+                    ConsoleOutputHelper.ClearScreen();
+                    takeToLevel(currentLevel + 1, theParty);
+                        break;
+
+                    case 2:
+
+
+                    ConsoleOutputHelper.ClearScreen();
+                    chooseLevel(theParty, availableLevels);
+                        break;
+
+                    default:
+
+                    ConsoleOutputHelper.ClearScreen();
+                    returnToMainMenu();
+                        break;
+                }
+            
+            
+
+        }
+
+        private static void whoGetsAWeapon(Person[] theParty) 
+        {
+
+            int heroSlot = CIO.PromptForInt($"which of the heroes from slot 0 to {theParty.Length - 1} do you want to recieve the weapon", 0, theParty.Length - 1); 
+               
+
+
+            //Weapon weapon = new Weapon.createWeapon();
+            //theParty[heroSlot].EquipWeapon(weapon);
 
         }
 
