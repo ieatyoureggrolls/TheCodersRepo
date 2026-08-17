@@ -17,7 +17,7 @@ namespace TheCoders
         }
 
         private DamageType damageType;
-        Enchantments[] enchantmentList;
+        List<Enchantments> enchantmentList;
         private int attack;
         private int speed;
         private int durability;
@@ -26,6 +26,8 @@ namespace TheCoders
         private int maxThreshold;
         private int enchantPoints;
         private bool isBroken = false;
+
+        private int? damageIndex = null;
 
         public Weapon(Blade blade, Handle handle)
         {
@@ -54,44 +56,188 @@ namespace TheCoders
             }
         }
 
+        //asks for shape of the blade and length of the handle, as well as materials for both. Then returns a blade with those parameters.
+        public Weapon createWeapon()
+        {
+            Blade.BladeType bladetype;
+            String bladetypeStr;
+            Handle.HandleType handletype;
+            String handletypeStr;
+            Pieces.Material handleMaterial;
+            String handleMaterialStr;
+            Pieces.Material bladeMaterial;
+            String bladeMaterialStr;
+
+            Console.WriteLine("Select a shape for the blade:\nShort\nLong\nGreat");
+            do
+            {
+                bladetypeStr = Console.ReadLine();
+
+            } while (bladetypeStr.Trim().ToLower()!="short"|| bladetypeStr.Trim().ToLower() != "long"|| bladetypeStr.Trim().ToLower() != "great");
+            Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril");
+            do
+            {
+                bladeMaterialStr = Console.ReadLine();
+
+            } while (bladeMaterialStr.Trim().ToLower()!="wood"|| bladeMaterialStr.Trim().ToLower() != "stone"||bladeMaterialStr.Trim().ToLower()!="bronze"||
+            bladeMaterialStr.Trim().ToLower()!="steel"||bladeMaterialStr.Trim().ToLower() != "gold"|| bladeMaterialStr.Trim().ToLower() != "adamantine"|| 
+            bladeMaterialStr.Trim().ToLower() != "mythril");
+            Console.WriteLine("Select a length for the handle:\nShort\nMedium\nLong");
+            do
+            {
+                handletypeStr = Console.ReadLine();
+
+            } while (handletypeStr.Trim().ToLower() != "short" || handletypeStr.Trim().ToLower() != "long" || handletypeStr.Trim().ToLower() != "medium");
+            Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril");
+            do
+            {
+                handleMaterialStr = Console.ReadLine();
+
+            } while (handleMaterialStr.Trim().ToLower() != "wood" || handleMaterialStr.Trim().ToLower() != "stone" || handleMaterialStr.Trim().ToLower() != "bronze" ||
+            handleMaterialStr.Trim().ToLower() != "steel" || handleMaterialStr.Trim().ToLower() != "gold" || handleMaterialStr.Trim().ToLower() != "adamantine" ||
+            handleMaterialStr.Trim().ToLower() != "mythril");
+
+            switch (bladetypeStr.Trim().ToLower())
+            {
+                case "short":
+                    bladetype = Blade.BladeType.Short;
+                    break;
+                case "long":
+                    bladetype = Blade.BladeType.Long;
+                    break;
+                case "great":
+                    bladetype = Blade.BladeType.Great;
+                    break;
+                default:
+                    bladetype = Blade.BladeType.Short;
+                    break;
+            }
+            switch (bladeMaterialStr.Trim().ToLower())
+            {
+                case "wood":
+                    bladeMaterial = Pieces.Material.wood;
+                    break;
+                case "stone":
+                    bladeMaterial = Pieces.Material.stone;
+                    break;
+                case "bronze":
+                    bladeMaterial = Pieces.Material.bronze;
+                    break;
+                case "steel":
+                    bladeMaterial = Pieces.Material.steel;
+                    break;
+                case "gold":
+                    bladeMaterial = Pieces.Material.gold;
+                    break;
+                case "adamantine":
+                    bladeMaterial = Pieces.Material.adamantine;
+                    break;
+                case "mythril":
+                    bladeMaterial = Pieces.Material.mithril;
+                    break;
+                default:
+                    bladeMaterial = Pieces.Material.wood;
+                    break;
+            }
+            switch (handleMaterialStr.Trim().ToLower())
+            {
+                case "wood":
+                    handleMaterial = Pieces.Material.wood;
+                    break;
+                case "stone":
+                    handleMaterial = Pieces.Material.stone;
+                    break;
+                case "bronze":
+                    handleMaterial = Pieces.Material.bronze;
+                    break;
+                case "steel":
+                    handleMaterial = Pieces.Material.steel;
+                    break;
+                case "gold":
+                    handleMaterial = Pieces.Material.gold;
+                    break;
+                case "adamantine":
+                    handleMaterial = Pieces.Material.adamantine;
+                    break;
+                case "mythril":
+                    handleMaterial = Pieces.Material.mithril;
+                    break;
+                default:
+                    handleMaterial = Pieces.Material.wood;
+                    break;
+            }
+            switch (handletypeStr.Trim().ToLower())
+            {
+                case "short":
+                    handletype = Handle.HandleType.Short;
+                    break;
+                case "long":
+                    handletype = Handle.HandleType.Long;
+                    break;
+                case "medium":
+                    handletype = Handle.HandleType.Medium;
+                    break;
+                default:
+                    handletype = Handle.HandleType.Short;
+                    break;
+            }
+
+            Blade blade = new Blade(bladetype,bladeMaterial);
+            Handle handle = new Handle(handletype,handleMaterial);
+
+
+            
+            return new Weapon(blade,handle);
+        }
+
+        //TODO: finish addEnchantment()
+        //adds the enchantment onto the weapon. If the weapon has elemental damage and you add an enchantment that changes the damage type,
+        //it will ask if you want to replace the enchantment with the new one.
         public void addEnchantment(Enchantments enchantment)
         {
-            if(enchantPoints>0) {
-                enchantmentList.Append(enchantment);
-                enchantPoints -= enchantment.getEnchCost();
-                if (enchantPoints == 0)
-                {
-                    Console.WriteLine("You have no more enchantment points left!");
-                }
-            }
-            else
+            String? input = "";
+            bool confirm = false;
+            if (enchantmentList.Contains(enchantment))
             {
-                Console.WriteLine("You don't have enough enchantment points on this weapon!");
+                Console.WriteLine("You already have this enchantment!");
+                return;
+            }
+            if (damageIndex != null)
+            {
+                Console.WriteLine("You already have elemental damage on this weapon. Adding a new damage type onto the weapon will override the current one. Are you sure?");
+                do
+                {
+                    input = Console.ReadLine();
+                    if (input.ToLower().Equals("yes") || input.ToLower().Equals("no"))
+                    {
+                        confirm = true;
+                    }
+
+                } while (!confirm);
+                if (input.ToLower().Equals("no"))
+                {
+                    return;
+                }
+                setEnchantment(enchantment, damageIndex.Value);
             }
             
+            
         }
+
+        //sets the damage type to an enchantment that changes the type
+        private void updateDamageType()
+        {
+            if (damageIndex != null)
+            {
+                
+            }
+        }
+
 
         public void setEnchantment(Enchantments enchantment, int index)
         {
             enchantmentList[index] = enchantment;
-            if (index == 0)
-            {
-                switch (enchantment.getEnchantmentType())
-                {
-                    case Enchantments.EnchantmentType.fire:
-                        damageType = DamageType.fire;
-                        break;
-                    case Enchantments.EnchantmentType.water:
-                        damageType = DamageType.water;
-                        break;
-                    case Enchantments.EnchantmentType.earth:
-                        damageType = DamageType.earth;
-                        break;
-                    default:
-                        damageType = DamageType.normal;
-                        break;
-                }
-            }
+            updateDamageType();
         }
         
         public void displayWeaponInfo()
@@ -107,6 +253,17 @@ namespace TheCoders
             
         }
 
+        public void displayEnchantments(Weapon weapon)
+        {
+            Console.WriteLine($"Weapon Enchantments: {enchantmentList.ToList}");
+        }
+
+        public void repairWeapon()
+        {
+            durability = maxDurability;
+            isBroken = false;
+        }
+
         public void damageWeapon()
         {
             durability--;
@@ -116,18 +273,6 @@ namespace TheCoders
                 isBroken = true;
             }
         }
-        public void enchantWeapon(Enchantments enchant)
-        {
-            if (enchantPoints <= 0)
-            {
-                Console.WriteLine("You're out of enchantment points!");
-            }
-            else
-            {
-                enchantment = enchant;
 
-            }
-            
-        }
     }
 }
