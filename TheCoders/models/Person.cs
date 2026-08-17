@@ -25,6 +25,8 @@ namespace TheCoders.models
         public int Damage { get; private set; }
         public bool IsHero { get; private set; }
 
+        public Weapon heldWeapon { get; private set; }
+
 
         public Person(string name, int maxHealth, int speed, int damage, bool isHero)
         {
@@ -54,6 +56,16 @@ namespace TheCoders.models
         public int DealDamage()
         {
             return Damage;
+        }
+
+
+        /// <summary>
+        /// Makes the person start using a new weapon
+        /// </summary>
+        /// <param name="weapon">A new weapon to be used</param>
+        public void EquipWeapon(Weapon weapon)
+        {
+            heldWeapon = weapon;
         }
     }
 }
