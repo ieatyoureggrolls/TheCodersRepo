@@ -2,6 +2,7 @@ using System.Drawing;
 using TheCoders.models;
 using System.Linq.Expressions;
 using TheCoders.extensions;
+using System.Runtime.CompilerServices;
 
 namespace TheCoders.views;
 
@@ -11,6 +12,30 @@ namespace TheCoders.views;
 public static class ConsoleOutputHelper
 {
     public static Random rand = new Random();
+
+    public static void Test()
+    {
+        Person Jeff = new Person("Jeff", 100, 10, 100, true);
+        Person Jack = new Person("Jack", 100, 10, 100, true);
+        Person Mort = new Person("Mort", 100, 10, 100, true);
+        Person Jor = new Person("Jor", 100, 10, 100, true);
+        Jeff.CurrentHealth = 77;
+        Jack.CurrentHealth = 23;
+        Mort.CurrentHealth = 1;
+        Person[] heroParty = new Person[4] { Jeff, Jack, Mort, Jor };
+        PrintCombatantParty(heroParty);
+
+        Enemy[] enemyParty = EnemyGenerator.GenerateEnemies(5, 4);
+        Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
+        boss.CurrentHealth -= 55;
+        Enemy[] enemyPartyTwo = new Enemy[enemyParty.Length + 1];
+        for (int index = 0; index < enemyParty.Length; index++)
+        {
+            enemyPartyTwo[index] = enemyParty[index];
+        }
+        enemyPartyTwo[4] = boss;
+        PrintCombatantParty(enemyPartyTwo);
+    }
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
     /// </summary>
@@ -27,7 +52,7 @@ public static class ConsoleOutputHelper
 
         //Gets health percentage, then uses it to calculate how many filled and empty squares
         double healthPercentage = currentHealth / maxHealth * 100;
-        int numOfFilledSquares = (int)Math.Round(numOfHealthSquares * (healthPercentage / 100));
+        int numOfFilledSquares = (int)Math.Ceiling(numOfHealthSquares * (healthPercentage / 100));
         int numOfEmptySquares = numOfHealthSquares - numOfFilledSquares;
 
         for (int i = 0; i < numOfFilledSquares; i++)
@@ -43,38 +68,204 @@ public static class ConsoleOutputHelper
             Console.Write(square);
             Console.ResetColor();
         }
+        Console.WriteLine($" {currentHealth}/{maxHealth} ({healthPercentage}%)");
     }
-    //Print Boss health bar
 
     public static void PrintHealthBar(Enemy enemy)
     {
+        Person person = enemy as Person;
+        PrintHealthBar(person);
+    }
+    //Print Boss health bar
+
+    public static void Repeat(string printMe, int quantity)
+    {
+        for (int i = 0; i < quantity; i++)
+        {
+            if(i == quantity -1)
+            {
+                Console.WriteLine(printMe);
+            }
+            else
+            {
+                Console.Write(printMe);
+            }
+            
+        }
+    }
+    public static void Repeat(string printMe, int quantity, int[] rgb)
+    {
+        for (int i = 0;i < quantity; i++)
+        {
+            if(i == quantity)
+            {
+
+                Console.WriteLine($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
+            }
+            else
+            {
+                Console.Write($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
+            }
+            
+        }
+    }
+
+    public static void PrintHealthBar(Enemy boss, bool isBoss)
+    {
         string square = "\u25A0";
-        double maxHealth = enemy.MaxHealth;
-        double currentHealth = enemy.CurrentHealth;
+        double maxHealth = boss.MaxHealth;
+        double currentHealth = boss.CurrentHealth;
+        const int numOfLayers = 3;
+        const int totalSquares = 90;
+        const int totalSquaresInALayer = 30;
+        const int rows = 3;
+        const int numOfHealthSquaresInARow = 10;
+        Console.WriteLine($"Number of layers: {numOfLayers }");
+        Console.WriteLine($"Total squares: {totalSquares}");
+        Console.WriteLine($"Total squares in a layer: {totalSquaresInALayer}");
 
-        double healthPercentage = currentHealth / maxHealth * 100;
-        int numOfHealthSquares = 10;
-        int numOfFilledSquares = (int)Math.Round(numOfHealthSquares * (healthPercentage / 100));
-        int numOfEmptySquares = numOfHealthSquares - numOfFilledSquares;
+        double healthPercentage = currentHealth / maxHealth;
 
-        int rows = 3;
-        for (int i = 0; i < numOfFilledSquares; i++)
+        int totalFilledSquares = (int)Math.Ceiling(totalSquares * healthPercentage);
+        int totalEmptySquares = totalSquares - totalFilledSquares;
+        Console.WriteLine($"Health percentage: {healthPercentage}");
+        Console.WriteLine($"{totalFilledSquares} total filled squares");
+        Console.WriteLine($"{totalEmptySquares} total empty squares");
+
+
+        int totalFilledSquaresInLayerOne = 0;
+        int totalEmptySquaresInLayerOne = 0;
+        if (totalFilledSquares - totalSquaresInALayer < 60)
         {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(square);
-            Console.ResetColor();
+            totalFilledSquaresInLayerOne = 0;
+            totalEmptySquaresInLayerOne = 30;
+        }
+        else
+        {
+            totalFilledSquaresInLayerOne = totalSquares - totalFilledSquares;
+            totalEmptySquaresInLayerOne = totalSquaresInALayer - totalFilledSquaresInLayerOne;
+        }
+        
+
+        
+
+        int remainingSquares;
+        if(totalEmptySquaresInLayerOne == totalSquaresInALayer){
+            remainingSquares = totalFilledSquares;
+        }
+        else
+        {
+            remainingSquares = totalSquares - (totalFilledSquaresInLayerOne + totalEmptySquaresInLayerOne);
         }
 
-        for (int i = 0; i < numOfEmptySquares; i++)
+        Console.WriteLine($"{totalFilledSquaresInLayerOne} filled in layer one");
+        Console.WriteLine($"{totalEmptySquaresInLayerOne} emptied in layer one");
+        Console.WriteLine($"{remainingSquares} remaining after layer one");
+
+        //layer two
+
+        int totalFilledSquaresInLayerTwo = 0;
+        int totalEmptySquaresInLayerTwo = 0;
+        if (totalFilledSquares - remainingSquares < totalSquaresInALayer)
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(square);
-            Console.ResetColor();
+            totalFilledSquaresInLayerTwo = 30;
+            totalEmptySquaresInLayerTwo = 0;
         }
+        else
+        {
+            totalFilledSquaresInLayerTwo = remainingSquares - totalSquaresInALayer;
+            totalEmptySquaresInLayerTwo = totalSquaresInALayer - totalFilledSquaresInLayerTwo;
+        }
+
+
+
+
+        
+        if (totalEmptySquaresInLayerTwo == totalSquaresInALayer)
+        {
+            remainingSquares = totalFilledSquares;
+        }
+        else
+        {
+            remainingSquares -= totalSquaresInALayer;
+        }
+        Console.WriteLine($"{totalFilledSquaresInLayerTwo} filled in layer two");
+        Console.WriteLine($"{totalEmptySquaresInLayerTwo} emptied in layer two");
+        Console.WriteLine($"{remainingSquares} remaining after layer two");
+
+
+        //Layer 3
+        int totalFilledSquaresInLayerThree = 0;
+        int totalEmptySquaresInLayerThree = 0;
+        
+        totalFilledSquaresInLayerThree = totalSquaresInALayer - remainingSquares;
+        totalEmptySquaresInLayerThree = totalSquaresInALayer - totalFilledSquaresInLayerThree;
+        remainingSquares = 0;
+        
+
+
+
+
+        Console.WriteLine($"{totalFilledSquaresInLayerThree} filled in layer three");
+        Console.WriteLine($"{totalEmptySquaresInLayerThree} emptied in layer three");
+        Console.WriteLine($"{remainingSquares} remaining after layer three");
+        //Console.WriteLine($"{totalFilledRows} filled rows");
+        //Console.WriteLine($"{totalFilledLayers} filled layers");
+
+
+        //Green -> Yellow -> Orange -> red
+        //Keep track of layers
+        //Print the previos layes color in empty squares
+        //3 layers of 30
+        //int currentLayer = totalFilledLayers;
+        
+        //Console.WriteLine($"Current Layer: {currentLayer}");
+
+        //int[] orange = new int[3] { 255, 165, 0 };
+        //for (int row = 0; row < totalFilledRows; row++)
+        //{
+        //    if (currentLayer == 3)
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        //        Repeat(square, numOfHealthSquaresInARow);
+        //    }
+
+        //}
+
+
+
+
+        //for (int i = 0; i < numOfEmptySquares; i++)
+        //{
+        //    if (currentLayer == 3)
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        //        Repeat(square, totalSquaresInALayer - totalEmptySquares);
+        //    }
+        //    else if (currentLayer == 2)
+        //    {
+
+        //        int[] orange = new int[3] { 255, 165, 0 };
+        //        Console.Write($"\u001b[38;2;{orange[0]};{orange[1]};{orange[2]}m{square}");
+        //    }
+        //    else if (currentLayer == 1)
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.DarkRed;
+        //        Console.Write(square);
+        //    }
+        //}
+
+
+        Console.ResetColor();
+        }
+    
+            
+
+        
         //Multi-Rowed
         //Shifts through different colors
 
-    }
+    
     //Print battle standings
     public static void PrintBattleStanding(Person[] playerParty, Person[] enemyParty)
     {
@@ -92,91 +283,200 @@ public static class ConsoleOutputHelper
 
     //Battle Summary
 
-
-
-    //PrintCrit
-    public static void PrintCrit(int damage, string playerName)
+    /// <summary>
+    /// Prints a message that says how much damage someone was attacked for
+    /// Each char has alternating background and foreground color
+    /// </summary>
+    /// <param name="damage">The amount of damage done</param>
+    /// <param name="attackerName">The person who attacked</param>
+    /// <param name="targetNames">A string array filled with the names of who is being attacked</param>
+    public static void PrintCrit(int damage, string attackerName, string[] targetNames)
     {
+        foreach (string targetName in targetNames)
+        {
+            rainbowText($"{attackerName} critically hit {targetName} for {damage} damage!");
+        }
 
     }
 
+    #region coloring
 
-
-
-    public static int[] GenerateRGB(int[]? oldColor)
+    /// <summary>
+    /// Generates an int array that can be used as a rgb color
+    /// </summary>
+    /// <param name="oldColor"></param>
+    /// <returns>An int[] that is used for rgb</returns>
+    public static int[] GenerateRGB(int[] oldColor)
     {
+        int numberRange = 25;
         int[] newColor;
+        int[] black = new int[3];
+        black = [0, 0, 0];
+        int[] white = new int[3];
+        white = [255, 255, 255];
         do
         {
+            //Pre comparison rgb color
             newColor = [rand.Next(256), rand.Next(256), rand.Next(256)];
+
+            //Checks if newColor is within numberRange of oldColor
+            if (TooSimilarShade(newColor, oldColor, numberRange))
+            {
+                //Changes existing rgb as opposed to generating a new one, which
+                //has a smallpossibilty of an infinite loop
+                newColor = ShuffleRgb(newColor, numberRange);
+            }
         }
-        while (oldColor != null && newColor.EqualTo(oldColor));
+        //Makes sure colors are not the same, white, black, or null
+        while (oldColor != null && newColor.EqualTo(oldColor) && !(newColor.EqualTo(black) && newColor.EqualTo(white)));
 
         return newColor;
     }
 
-    //public static bool isTooClose(int numberRange, int numToCompare, int numToCompareAgainst)
-    //{
-        
-    //    int[] range = new int[numberRange];
+    /// <summary>
+    /// Subracts a fixed value from each rgb color, in order of making it darker
+    /// </summary>
+    /// <param name="newColor">The RGB color being modified</param>
+    /// <param name="numberRange">The number used to modify the RGBV</param>
+    /// <returns>A RGB value that is NumberRange smaller</returns>
+    public static int[] ShuffleRgb(int[] newColor, int numberRange)
+    {
+        for (int index = 0; index < newColor.Length; index++)
+        {
+            int difference = newColor[index] - numberRange;
+            if (difference > 0)
+            {
 
-    //    int[] compareToRange = new int[numberRange * 2+1];
+                newColor[index] = difference;
+            }
+            //Makes negative overflow wrap around and decrease from 255
+            else
+            {
+                newColor[index] = 255 - (difference *= -1);
+            }
+        }
+        return newColor;
+    }
+    /// <summary>
+    /// Checks if a numer is a within a range more or less than a second number
+    /// </summary>
+    /// <param name="numberRange">The range more and less of numToCompareAgainst</param>
+    /// <param name="numToCompare">The number being compared</param>
+    /// <param name="numToCompareAgainst">The number being compared against</param>
+    /// <returns></returns>
+    public static bool IsTooClose(int numberRange, int numToCompare, int numToCompareAgainst)
+    {
+        /**
+         * Creates an array to store all numbers in range of a given number less than, more 
+         * than the number being compared against as well as the number itself
+        **/
+        int[] range = new int[numberRange];
+        int[] compareToRange = new int[numberRange * 2 + 1];
 
-    //    int totalIndex = 0;
-        
-    //    //slap this dumb number being compared against in the middle of the array
-    //    compareToRange[compareToRange.Length - 1 / 2] = numToCompareAgainst;
-        
-    //    for (int index = 1; index < numberRange; index++)
-    //    {
-    //        range[index] = index;
-    //    }
+        //put the number being compared against in the middle of the array
+        int middleIndex = compareToRange.Length / 2 - 1;
+        compareToRange[middleIndex] = numToCompareAgainst;
 
-    //    //Fill the lower half of array with numbers in range of numberRange less than numToCompareAgainst
-    //    for (int index = 0; index < compareToRange.Length - 1 / 2; index++)
-    //    {
-    //        int rangeInt = numberRange;
-    //        compareToRange[index] = numToCompareAgainst - rangeInt;
-    //        rangeInt--;
-    //    }
+        //Shared index between for loops. This prevents an ugly for loop 
+        int totalIndex = 0;
 
-    //    //Fill the upper half of array with numbers in range of numberRange more than numToCompareAgainst
-        
-    //    for (int index = ; index < compareToRange.Length - 1 / 2; index++)
-    //    {
-    //        int rangeInt = numberRange;
-    //        compareToRange[index] = numToCompareAgainst - rangeInt;
-    //        rangeInt--;
-    //    }
+        //Populate an array with all numbers between numberRange and 0 (inclusive)
+        for (int index = totalIndex; index < numberRange + 1; index++)
+        {
+            totalIndex = index;
+            compareToRange[index] = numToCompareAgainst - index;
 
-    //}
+        }
+        //Add this number to numToCompareAgainst
+        int rangeCounter = numberRange;
 
-    //public static bool TooSimilarShade(int[] colorOne, int[] colorTwo)
-    //{
+        /**
+         * Fill the lower half of array with numbers in range 
+         * of numberRange less than numToCompareAgainst by 
+         * adding rangeCounter to numToCompareAgainst then decreasing
+         * range counter. Repeat untill rangeCounter is zero
+        **/
+        for (int index = totalIndex; index < compareToRange.Length - 1; index++)
+        {
+
+            compareToRange[index] = numToCompareAgainst + rangeCounter;
+            rangeCounter--;
+        }
 
 
-    //    bool tooSimilar = false;
-    //    for (int index = 0; index < colorOne.Length; index++)
-    //    {
-    //        if (colorOne[index] == colorTwo[index])
-    //    }
-    //}
+        //Resets rangeInt back to numberRange to start comparison
+        rangeCounter = numberRange;
 
+        /**
+         * Fill the upper half of array with numbers in range of 
+         * numberRange more than numToCompareAgainst by adding 
+         * rangeCounter to numToCompareAgainst then decrement rangeCounter
+         * Repeat untill rangeCounter = 0
+         **/
+        for (int index = totalIndex; index < compareToRange.Length - 1 / 2; index++)
+        {
+
+            compareToRange[index] = numToCompareAgainst - rangeCounter;
+            rangeCounter--;
+        }
+
+        //checks if numToCompare is in compareToRange atleast once
+        return numToCompare.IsIn(compareToRange);
+
+    }
+
+    /// <summary>
+    /// Checks if any of part of an rgb color is a certain range more or less than the second color
+    /// </summary>
+    /// <param name="colorOne">RGB color being compared</param>
+    /// <param name="colorTwo">RGB color beinmg compared to</param>
+    /// <param name="numberRange"></param>
+    /// <returns>If an rgb color is with range of the other rgb color</returns>
+    public static bool TooSimilarShade(int[] colorOne, int[] colorTwo, int numberRange)
+    {
+        bool isTooSimilar = false;
+
+        for (int index = 0; index < colorOne.Length; index++)
+        {
+            for (int indexTwo = 0; indexTwo < colorTwo.Length; indexTwo++)
+                if (IsTooClose(numberRange, colorOne[index], colorTwo[indexTwo]))
+                {
+                    isTooSimilar = true;
+                }
+        }
+        return isTooSimilar;
+    }
+    /// <summary>
+    /// Takes in a sentence, then prints each character with alternating Background and Foreground color
+    /// </summary>
+    /// <param name="sentence">The sentence to be colorfully printed</param>
     public static void rainbowText(string sentence)
     {
+        //Breaks string into chars for easy customization
         char[] chars = sentence.ToCharArray();
 
+        //Defaults to White in rgb
+        int[] oldColor = new int[3];
+        oldColor = [255, 255, 255];
 
-        int[]? oldColor = null;
+        //Each array is a rgb color
         int[] bgColor = new int[3];
         int[] fgColor = new int[3];
 
-        //Use rgb
+
         for (int index = 0; index < chars.Length; index++)
         {
+            //If char is a space, don't color it
+            if (chars[index] == ' ')
+            {
+                Console.Write(' ');
+                continue;
+            }
+            //Generates Background color
             bgColor = GenerateRGB(oldColor);
             oldColor = bgColor;
 
+            //Generates Foreground color
             fgColor = GenerateRGB(oldColor);
             oldColor = fgColor;
 
@@ -191,9 +491,17 @@ public static class ConsoleOutputHelper
         }
     }
 
-    //print colored sentence
-    public static void PrintColoredChar(char character, bool newLine = false, int[]? fgColor = null, int[]? bgColor = null)
+    /// <summary>
+    /// Prints a char to terminal with the given foreground and background color
+    /// Can print without and with new line
+    /// </summary>
+    /// <param name="character">The character to be printed</param>
+    /// <param name="newLine">Is this going to have a new line at the end</param>
+    /// <param name="fgColor">The foreground/fopnt color</param>
+    /// <param name="bgColor">The background color</param>
+    public static void PrintColoredChar(char character, bool? newLine = false, int[]? fgColor = null, int[]? bgColor = null)
     {
+        //De3faults font color to white
         if (fgColor == null)
         {
             fgColor = new int[3];
@@ -201,6 +509,8 @@ public static class ConsoleOutputHelper
             fgColor[1] = 0;
             fgColor[2] = 0;
         }
+
+        //Defaults Background color to black
         if (bgColor == null)
         {
             bgColor = new int[3];
@@ -209,18 +519,58 @@ public static class ConsoleOutputHelper
             bgColor[2] = 255;
         }
 
+        //Bolds/thicken character for better visibility
+        string boldedC = ToBold(character);
+
         if (newLine == false || newLine == null)
         {
-            Console.Write($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{character}\x1b[0m");
+
+            Console.Write($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{boldedC}\x1b[0m");
+
         }
         else
         {
-            Console.WriteLine($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{character}\x1b[0m");
+            Console.WriteLine($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{boldedC}\x1b[0m");
         }
 
     }
 
+    /// <summary>
+    /// Prints a bolded/thickened character
+    /// </summary>
+    /// <param name="c">Thje character to be bolded/thickened</param>
+    /// <returns></returns>
+    public static string ToBold(char c)
+    {
+        //Gets the unicode for the character, subtracts it from a different unicode to get the uinicode for
+        //the bolden unicode for the requested char
 
+        //Is capital
+        if (c >= 'A' && c <= 'Z')
+        {
+            int offset = c - 'A';
+            return char.ConvertFromUtf32(0x1D400 + offset);
+        }
+        //Is lowercase
+        else if (c >= 'a' && c <= 'z')
+        {
+            int offset = c - 'a';
+            return char.ConvertFromUtf32(0x1D41A + offset);
+        }
+        //Is number
+        else if (c >= '0' && c <= '9')
+        {
+            int offset = c - '0';
+            return char.ConvertFromUtf32(0x1D7CE + offset);
+        }
+        //No bold
+        else
+        {
+            return c.ToString();
+        }
+    }
+
+    #endregion
 
 
     /// <summary>
@@ -234,7 +584,84 @@ public static class ConsoleOutputHelper
     //PrintWeapons
 
     //Print combatant party
+    /// <summary>
+    /// Prints a party of Person objects, Enemy objects including Bosses
+    /// </summary>
+    /// <param name="party">The party of Person objects to print</param>
+    public static void PrintCombatantParty(Person[] party)
+    {
+        //If first array element is a hero, its the hero party, else if enemy party
+        if (party[0].IsHero)
+        {
+            Console.WriteLine("Hero Party\n");
+        }
+        else
+        {
+            Console.WriteLine("Enemy Party\n");
+        }
 
+
+        foreach (Person person in party)
+        {
+
+
+            ///Name
+            ///is a hero
+            if (person.IsHero)
+            {
+                Console.WriteLine($"Name: {person.Name}");
+            }
+            else if (person != null && person is Enemy)
+            {
+                //is a boss
+                Enemy enemy = person as Enemy;
+                if (enemy.IsBoss)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.Write($"Boss Name: {enemy.Name}");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+                else
+                {
+                    //Is an enemy
+                    Console.WriteLine($"Name: {enemy.Name}");
+                }
+            }
+
+
+            //Health
+            if (person is Enemy)
+            {
+                
+                Enemy enemy = (person as Enemy);
+                if (enemy.IsBoss)
+                {
+                    //Is a boss
+                    PrintHealthBar(enemy, enemy.IsBoss);
+                }
+                else
+                {
+                    //is regular enemy
+                    PrintHealthBar(person);
+                }
+
+            }
+            else
+            {
+                //is a hero
+                PrintHealthBar(person);
+            }
+
+            //Weapon Place holder
+            Console.WriteLine("Weapon: {player.Weapon}");
+            ///speed
+            Console.WriteLine($"Speed: {person.Speed}");
+            ///damage
+            Console.WriteLine($"Damage: {person.Damage} \n");
+        }
+    }
     //Print wave information
 }
+
 

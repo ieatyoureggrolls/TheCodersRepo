@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSC160_ConsoleMenu;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -9,6 +10,7 @@ namespace TheCoders.models
     public static class Storymode
     {
         static int availableLevels = 1;
+        const int minimumLevels = 1;
 
         public static void main(Person[] theParty)
         {
@@ -23,15 +25,15 @@ namespace TheCoders.models
          * tasks needed to complete:
          * 
          * methods
-         * takeToLevel should take a player to a level without requiring inputs
-         * winOrLose on a loss the player is asked if they would like to restart the level or go to main menu
-         * returnToMainMenu() return to the main menu where the player can select story or endless mode
+         * takeToLevel should take a player to a level without requiring inputs (complete but needs testing)
+         * winOrLose on a loss the player is asked if they would like to restart the level or go to main menu (complete but needs testing)
+         * returnToMainMenu() return to the main menu where the player can select story or endless mode (complete but needs testing)
          * 
-         * level1 player spectates the computer making a weapon and sees the auto battler (complete)
-         * level2 player makes a weapon for the second hero and watches auto battler (complete)
-         * level3 weapons are low on durability so player learns to repair weapons
-         * level4 player learns to replace weapons
-         * level5 player upgrades existing wepons with enchantmets? perhaps
+         * level1 player spectates the computer making a weapon and sees the auto battler (partially complete)
+         * level2 player makes a weapon for the second hero and watches auto battler (partially complete)
+         * level3 weapons are low on durability so player learns to repair weapons (partially complete)
+         * level4 player learns to replace weapons (partially complete)
+         * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
          * 
          * weapon creation methods-
          * create weapon
@@ -55,9 +57,17 @@ namespace TheCoders.models
                     Level2(theParty);
                     break;
 
-                //case (3):
-                //    Level3(theParty);
-                //    break;
+                case (3):
+                    Level3(theParty);
+                    break;
+
+                case (4):
+                    Level4(theParty);
+                    break;
+
+                case (5):
+                    Level5(theParty);
+                    break;
                 default:
                     Console.WriteLine("Sorry that wasn't a proper level");
 
@@ -70,43 +80,40 @@ namespace TheCoders.models
         {
             Console.WriteLine($"\n what level would you like to start with? the highest level is level: {availableLevels}");
 
-            string levelSelect = Console.ReadLine();
+            
 
-            if (int.TryParse(levelSelect, out int levelSelected))
-            {
-
-                if (levelSelected > availableLevels)
-                {
-                    Console.WriteLine("Highest level selected");
-                    levelSelected = availableLevels;
-                }
+            int selectedLevel = CIO.PromptForInt("What level would you like to go too?",minimumLevels,availableLevels);
+                      
                 
-                switch (levelSelected)
+                switch (selectedLevel)
                 {
                     case (1):
                         Level1(theParty);
                         break;
 
-                    //case (2):
-                    //    Level2(theParty);
-                    //    break;
+                    case (2):
+                        Level2(theParty);
+                        break;
 
-                    //case (3):
-                    //    Level3(theParty);
-                    //    break;
+                    case (3):
+                        Level3(theParty);
+                        break;
 
-                    default:
+                    case (4):
+                        Level4(theParty);
+                        break;
+
+                    case (5):
+                        Level5(theParty);
+                        break;
+
+                default:
                         Console.WriteLine("Sorry that wasn't a proper level choose something else");
                         chooseLevel(theParty, availableLevels);
                         break;
 
                 }
-
-            }
-            else {
-                Console.WriteLine("that is not a number please try an actual number");
-                chooseLevel(theParty, availableLevels);
-            }
+                             
                        
         }
 
@@ -118,17 +125,11 @@ namespace TheCoders.models
 
             Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
 
-            for (int i = 0; i <= theParty.Length; i++)
-            {
-
-
-                if (i == theParty.Length)
-                {
-                    Console.WriteLine($"the team consists of {i} heroes you must make a weapon for all of them");
-                }
-
-
-            }
+                   
+                      
+                    Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
+           
+                   
 
             Console.WriteLine("\n\n im gonna make the first weapon so pay attention.\n from the following choice below im going to pick 'placeholder' as our 'placeholder'");
 
@@ -154,7 +155,7 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(2,theParty);
+            takeToLevel(currentLevel + 1, theParty);
 
 
 
@@ -168,6 +169,7 @@ namespace TheCoders.models
             Console.WriteLine("More enemies are coming one hero won't be enought to hold them off its time for you to make a weapon too\n before every battle you get to see what you're up against");
 
             //call enemy inspect method
+
 
             //call the make weapon method
 
@@ -185,7 +187,87 @@ namespace TheCoders.models
 
             }
 
-            takeToLevel(3, theParty);
+            takeToLevel(currentLevel + 1, theParty);
+
+        }
+
+        private static void Level3(Person[] theParty) 
+        {
+            const int currentLevel = 3;
+
+            Console.WriteLine("\n\n It seems like your weapons are low on durability sometimes its better to repair them than to make new ones");
+
+            //repair weapon method
+
+            Console.WriteLine("\n\ngood now the heroes are able to continue fighting");
+
+            //auto battler method
+
+            winOrLose(theParty, currentLevel);
+
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+
+            takeToLevel(currentLevel + 1, theParty);
+
+        }
+
+        private static void Level4(Person[] theParty)
+        {
+            const int currentLevel = 4;
+
+            Console.WriteLine("\n\n from here on out its all you im sure you can handle whatevers coming");
+
+            //call enemy inspect method
+
+
+            Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best those guys are tought");
+
+            //create wepon method
+
+            //auto battler method
+
+            winOrLose(theParty, currentLevel);
+
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+
+            takeToLevel(currentLevel + 1, theParty);
+
+        }
+
+        private static void Level5(Person[] theParty)
+        {
+            const int currentLevel = 5;
+
+            Console.WriteLine("\n\n Good job defeating that boss, now that the village is defended its time to go on the offensive");
+
+            //call enemy inspect method
+
+            Console.WriteLine("\n\nwow thats a lot of them good luck you know what to do");
+
+            //create wepon method
+
+            //auto battler method
+
+            winOrLose(theParty, currentLevel);
+
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+
+            takeToLevel(currentLevel + 1, theParty);
 
         }
 
@@ -207,21 +289,28 @@ namespace TheCoders.models
             {
                 Console.WriteLine("All the heros have fallen they cannot continue\n\n Game Over!");
 
-                Console.WriteLine("\n\nWould you like to restart the level?\nYes: Y\n No: N ");
-                string input = Console.ReadLine().ToUpper();
+
+                string input = CIO.PromptForInput("\n\nWould you like to restart the level?\nYes: Y\n No: N ",false);
+
                 if (input == "Y" || input == "YES")
                 {
                     takeToLevel(currentLevel, theParty);
                 }
                 else 
                 {
-                    takeToLevel(1, theParty);
-                    // that method should be replaced with the take to main menu method
+                    returnToMainMenu();
+
                 }
 
 
             }
 
+        }
+
+        private static void returnToMainMenu() 
+        {
+            Runner theRunner = new Runner();
+            theRunner.Run();
         }
 
 

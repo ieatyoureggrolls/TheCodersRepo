@@ -6,22 +6,25 @@ namespace TheCoders.models
 {
     public static class EnemyGenerator
     {
-        private const float percentPerLevel = 1.10f;
-        private const int baseHealth = 10;
+        private const float statScaler = 1.04f;
         private const int baseDamage = 1;
         private const int baseSpeed = 3;
+
+        private const int baseHealth = 100;
         private static Random random = new Random();
         /// <summary>
-        /// Generates a random enemy based off of the level
+        /// Generates a random enemy with stats scaled to the current level by the formula "1.04^level"
         /// </summary>
         /// <param name="level">A modifier to adjust how strong the generated enemy is</param>
         /// <returns>A single enemy</returns>
         public static Enemy GenerateOneEnemy(int level)
         {
-            int health = (int)Math.Round((baseHealth + random.Next(11) - 5) * percentPerLevel);
-            int damage = (int)Math.Round((baseDamage + random.Next(2)) * percentPerLevel);
-            int speed = (int)Math.Round((baseSpeed + random.Next(5) - 2) * percentPerLevel);
-            return new Enemy("Izak (he really wanted his name first but wont admit it), Lucas, Austin, Zach | Roots", health, damage, speed, Element.normal);
+            double scale = Math.Pow(statScaler, level);
+            int health = (int)Math.Round((baseHealth + random.Next(11) - 5) * scale);
+            int damage = (int)Math.Round((baseDamage + random.Next(2)) * scale);
+            int speed = (int)Math.Round((baseSpeed + random.Next(5) - 2) * scale);
+            return new Enemy("temp", 4,1, 2);
+            //return new Enemy("Izak (he really wanted his name first but wont admit it), Lucas, Austin, Zach | Roots", health, damage, speed, Element.normal);
         }
 
         /// <summary>
