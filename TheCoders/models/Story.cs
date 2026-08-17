@@ -135,7 +135,7 @@ namespace TheCoders.models
             Console.WriteLine("\n\n im gonna make the first weapon so pay attention.\n from the following choice below im going to pick 'placeholder' as our 'placeholder'");
 
             // write code that finds all the options for step one of the weapon building
-            theParty[0].
+           // theParty[0].
 
             Console.WriteLine("\n\n 'placeholder' has 'placeholder' as its stats keep those stats in mind when making weapons ");
             Console.WriteLine("\nnow that the wepon is made one of the heroes will automatically equip it\n");
