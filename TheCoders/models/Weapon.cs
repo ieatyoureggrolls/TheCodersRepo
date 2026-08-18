@@ -84,7 +84,7 @@ namespace TheCoders
 
                 } while (bladeMaterialStr.Trim().ToLower() != "wood" && bladeMaterialStr.Trim().ToLower() != "stone" && bladeMaterialStr.Trim().ToLower() != "bronze" &&
                 bladeMaterialStr.Trim().ToLower() != "steel" && bladeMaterialStr.Trim().ToLower() != "gold" && bladeMaterialStr.Trim().ToLower() != "adamantine" &&
-                bladeMaterialStr.Trim().ToLower() != "mythril");
+                bladeMaterialStr.Trim().ToLower() != "mithril");
                 Console.WriteLine("Select a length for the handle:\nShort\nMedium\nLong\n");
                 do
                 {
@@ -98,7 +98,7 @@ namespace TheCoders
 
                 } while (handleMaterialStr.Trim().ToLower() != "wood" && handleMaterialStr.Trim().ToLower() != "stone" && handleMaterialStr.Trim().ToLower() != "bronze" &&
                 handleMaterialStr.Trim().ToLower() != "steel" && handleMaterialStr.Trim().ToLower() != "gold" && handleMaterialStr.Trim().ToLower() != "adamantine" &&
-                handleMaterialStr.Trim().ToLower() != "mythril");
+                handleMaterialStr.Trim().ToLower() != "mithril");
 
                 Console.WriteLine($"You chose the {bladeMaterialStr} {bladetypeStr}sword blade and the {handleMaterialStr} {handletypeStr} handle. Is this what you want?\n");
                 do
