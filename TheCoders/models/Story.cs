@@ -142,7 +142,7 @@ namespace TheCoders.models
 
             theParty[0].EquipWeapon(tutorialWeapon);
 
-
+             
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
             //ConsoleOutputHelper.PrintBattleStanding(theParty, enemies); this method doesnt exist yet
