@@ -73,28 +73,28 @@ namespace TheCoders
             {
                 bladetypeStr = Console.ReadLine();
 
-            } while (bladetypeStr.Trim().ToLower()!="short"|| bladetypeStr.Trim().ToLower() != "long"|| bladetypeStr.Trim().ToLower() != "great");
+            } while (bladetypeStr.Trim().ToLower()!="short"&& bladetypeStr.Trim().ToLower() != "long"&& bladetypeStr.Trim().ToLower() != "great");
             Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril");
             do
             {
                 bladeMaterialStr = Console.ReadLine();
 
-            } while (bladeMaterialStr.Trim().ToLower()!="wood"|| bladeMaterialStr.Trim().ToLower() != "stone"||bladeMaterialStr.Trim().ToLower()!="bronze"||
-            bladeMaterialStr.Trim().ToLower()!="steel"||bladeMaterialStr.Trim().ToLower() != "gold"|| bladeMaterialStr.Trim().ToLower() != "adamantine"|| 
+            } while (bladeMaterialStr.Trim().ToLower()!="wood"&& bladeMaterialStr.Trim().ToLower() != "stone"&&bladeMaterialStr.Trim().ToLower()!="bronze"&&
+            bladeMaterialStr.Trim().ToLower()!="steel"&&bladeMaterialStr.Trim().ToLower() != "gold"&& bladeMaterialStr.Trim().ToLower() != "adamantine"&& 
             bladeMaterialStr.Trim().ToLower() != "mythril");
             Console.WriteLine("Select a length for the handle:\nShort\nMedium\nLong");
             do
             {
                 handletypeStr = Console.ReadLine();
 
-            } while (handletypeStr.Trim().ToLower() != "short" || handletypeStr.Trim().ToLower() != "long" || handletypeStr.Trim().ToLower() != "medium");
+            } while (handletypeStr.Trim().ToLower() != "short" && handletypeStr.Trim().ToLower() != "long" && handletypeStr.Trim().ToLower() != "medium");
             Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril");
             do
             {
                 handleMaterialStr = Console.ReadLine();
 
-            } while (handleMaterialStr.Trim().ToLower() != "wood" || handleMaterialStr.Trim().ToLower() != "stone" || handleMaterialStr.Trim().ToLower() != "bronze" ||
-            handleMaterialStr.Trim().ToLower() != "steel" || handleMaterialStr.Trim().ToLower() != "gold" || handleMaterialStr.Trim().ToLower() != "adamantine" ||
+            } while (handleMaterialStr.Trim().ToLower() != "wood" && handleMaterialStr.Trim().ToLower() != "stone" && handleMaterialStr.Trim().ToLower() != "bronze" &&
+            handleMaterialStr.Trim().ToLower() != "steel" && handleMaterialStr.Trim().ToLower() != "gold" && handleMaterialStr.Trim().ToLower() != "adamantine" &&
             handleMaterialStr.Trim().ToLower() != "mythril");
 
             switch (bladetypeStr.Trim().ToLower())
