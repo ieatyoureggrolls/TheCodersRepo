@@ -11,12 +11,12 @@ public class Runner
     public Person[] partyMembers = { new Person("I", 10000, 250, 250, true), new Person("Am", 25, 3, 6, true), new Person("SUFFING ALL CAPS... ALL. CAPS.", 50, 1, 1, true) };
     public void Run()
     {
-        COH.Test();
+        //COH.Test();
        
 
         
         // Entry point of the application
-        //ChooseMode();
+        ChooseMode();
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public class Runner
     /// <param name="level">The level to scale enemies stats around</param>
     /// <param name="enemies">Used for if you want pregenerated enemies opposed to randomly generated enemies</param>
     /// <returns>True if the heroes won | False if the enemies won</returns>
-    private bool Wave(int level, List<Enemy>? enemies = null)
+    public bool Wave(int level, List<Enemy>? enemies = null)
     {
         Console.WriteLine($"Wave: {level}");
         if (enemies == null)
@@ -106,7 +106,7 @@ public class Runner
     /// <summary>
     /// Controls the crafting weapon stage of the game
     /// </summary>
-    private void HandleWeapons()
+    public void HandleWeapons()
     {
         Console.WriteLine("What would you like to do?");
         string[] possibleMenus = { "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon", "Enchant Weapon" };
@@ -121,7 +121,7 @@ public class Runner
                 RepairWeapon();
                 break;
             case 3:
-                ReplaceWeapon();
+                //ReplaceWeapon();
                 break;
             case 4:
                 UpgradeWeapon();
@@ -132,20 +132,37 @@ public class Runner
         }
     }
 
+    /// <summary>
+    /// Makes the user craft a weapon, then they choose who to give the weapon to
+    /// </summary>
     private void CraftWeapon()
     {
-        
+        //Weapon craftedWeapon = new Weapon();
+        Weapon craftedWeapon = Weapon.createWeapon();
+        string[] partyNames = new string[partyMembers.Length];
+        for (int i = 0; i < partyMembers.Length; i++)
+            partyNames[i] = partyMembers[i].Name;
+
+        Console.WriteLine("Who would you like to use the weapon:");
+        int personToUse = CIO.PromptForMenuSelection(partyNames, false) -1;
+        partyMembers[personToUse].EquipWeapon(craftedWeapon);
     }
 
     private void RepairWeapon()
     {
-
+        List<string> weapons = new List<string>();
+        foreach (Person person in partyMembers)
+        {
+            if (person.heldWeapon == null)
+                continue;
+            //weapons.Add(person.heldWeapon.durability);
+        }
     }
 
-    private void ReplaceWeapon()
-    {
+    //private void ReplaceWeapon()
+    //{
 
-    }
+    //}
 
     private void UpgradeWeapon()
     {
@@ -163,7 +180,7 @@ public class Runner
     /// </summary>
     /// <param name="enemies">The list of eneimes the party will be fighting</param>
     /// <returns>True if the heroes won | False if the enemies won</returns>
-    private bool Battle(List<Enemy> enemies)
+    public bool Battle(List<Enemy> enemies)
     {
         List<Person> people = new List<Person>();
         people.AddRange(enemies);
@@ -205,9 +222,12 @@ public class Runner
     /// <param name="defender">The person taking damage</param>
     private static void PersonAttacks(Person attacker, Person defender)
     {
-        int damageToDeal = attacker.DealDamage();
-        int damageDealt = defender.TakeDamage(damageToDeal);
-        Console.WriteLine($"{attacker.Name} did {damageDealt} damage to {defender.Name}\n\n");
+        int[] attackResult = attacker.DealDamage();
+        int damageDealt = defender.TakeDamage(attackResult[0]);
+        if (attackResult[1] > 0)
+            COH.PrintCrit(attackResult[0], attacker.Name, new string[]{defender.Name});
+        else
+            Console.WriteLine($"{attacker.Name} did {damageDealt} damage to {defender.Name}\n\n");
     }
 
     /// <summary>
@@ -221,17 +241,6 @@ public class Runner
         bool herosDead = heroes.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
         bool enemiesDead = enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
         return !herosDead && !enemiesDead;
-    }
-
-
-
-
-
-
-    private List<Enemy> AddExperimentalPeople()
-    {
-        List<Enemy> enemies = EnemyGenerator.GenerateEnemies(0, 4).ToList();
-        return enemies;
     }
 }
 
