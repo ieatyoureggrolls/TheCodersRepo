@@ -23,8 +23,8 @@ namespace TheCoders.models
         public int MaxHealth { get; private set; }
         public int Speed { get; private set; }
         public int Damage { get; private set; }
-        public float critChance { get; private set; } = 1.5f;
-        public float critMult { get; private set; } = .025f;
+        public float critChance { get; private set; } = .025f;
+        public float critMult { get; private set; } = 1.5f;
         public bool IsHero { get; private set; }
 
         public Weapon heldWeapon { get; private set; }
@@ -80,6 +80,12 @@ namespace TheCoders.models
         public void EquipWeapon(Weapon weapon)
         {
             heldWeapon = weapon;
+        }
+
+        public string PersonWithWeaponToString()
+        {
+            
+            return $"{Name}\n\t{heldWeapon.ToString()}";
         }
 
         public override string ToString()
