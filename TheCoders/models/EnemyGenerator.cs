@@ -6,6 +6,7 @@ namespace TheCoders.models
 {
     public static class EnemyGenerator
     {
+        private static readonly string[] possibleNames = { "Bartholomew", "Dewy", "Travis Scott", "Kevin Lamar", "Katy Perry", "Jeffery Dalmer", "Donald Trump", "Donald Of Trump", "Freddie Mercury", "Orel", "Sid", "Sid The Sloth", "Turbo The Snail", "Lady Gaga", "Talor Swift", "Sony The Company", "Data Center", "Geofery Bezos", "Helen Keller", "Hellen Degenerate", "Person with glasses", "Imposter", "Sam Altmen"};
         private const float statScaler = 1.04f;
         private const int baseDamage = 1;
         private const int baseSpeed = 3;
@@ -23,7 +24,9 @@ namespace TheCoders.models
             int health = (int)Math.Round((baseHealth + random.Next(11) - 5) * scale);
             int damage = (int)Math.Round((baseDamage + random.Next(2)) * scale);
             int speed = (int)Math.Round((baseSpeed + random.Next(5) - 2) * scale);
-            return new Enemy("temp", 4,1, 2);
+            int nameIndex = random.Next(possibleNames.Length);
+            string name = possibleNames[nameIndex];
+            return new Enemy(name, 4,1, 2);
             //return new Enemy("Izak (he really wanted his name first but wont admit it), Lucas, Austin, Zach | Roots", health, damage, speed, Element.normal);
         }
 

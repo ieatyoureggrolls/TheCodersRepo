@@ -15,5 +15,10 @@ namespace TheCoders.models
         {
             Element = element;
         }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} | Element: {Element}";
+        }
     }
 }
