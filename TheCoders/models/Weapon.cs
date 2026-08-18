@@ -17,7 +17,7 @@ namespace TheCoders
         }
 
         private DamageType damageType;
-        List<Enchantments> enchantmentList;
+        List<Enchantments> enchantmentList ;
         private int attack;
         private int speed;
         private int durability;
@@ -67,35 +67,51 @@ namespace TheCoders
             String handleMaterialStr;
             Pieces.Material bladeMaterial;
             String bladeMaterialStr;
-
-            Console.WriteLine("Select a shape for the blade:\nShort\nLong\nGreat");
+            bool confirm = false;
+            String conStr;
             do
             {
-                bladetypeStr = Console.ReadLine();
+                Console.WriteLine("Select a shape for the blade:\nShort\nLong\nGreat\n");
+                do
+                {
+                    bladetypeStr = Console.ReadLine();
 
-            } while (bladetypeStr.Trim().ToLower()!="short"&& bladetypeStr.Trim().ToLower() != "long"&& bladetypeStr.Trim().ToLower() != "great");
-            Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril");
-            do
-            {
-                bladeMaterialStr = Console.ReadLine();
+                } while (bladetypeStr.Trim().ToLower() != "short" && bladetypeStr.Trim().ToLower() != "long" && bladetypeStr.Trim().ToLower() != "great");
+                Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril\n");
+                do
+                {
+                    bladeMaterialStr = Console.ReadLine();
 
-            } while (bladeMaterialStr.Trim().ToLower()!="wood"&& bladeMaterialStr.Trim().ToLower() != "stone"&&bladeMaterialStr.Trim().ToLower()!="bronze"&&
-            bladeMaterialStr.Trim().ToLower()!="steel"&&bladeMaterialStr.Trim().ToLower() != "gold"&& bladeMaterialStr.Trim().ToLower() != "adamantine"&& 
-            bladeMaterialStr.Trim().ToLower() != "mythril");
-            Console.WriteLine("Select a length for the handle:\nShort\nMedium\nLong");
-            do
-            {
-                handletypeStr = Console.ReadLine();
+                } while (bladeMaterialStr.Trim().ToLower() != "wood" && bladeMaterialStr.Trim().ToLower() != "stone" && bladeMaterialStr.Trim().ToLower() != "bronze" &&
+                bladeMaterialStr.Trim().ToLower() != "steel" && bladeMaterialStr.Trim().ToLower() != "gold" && bladeMaterialStr.Trim().ToLower() != "adamantine" &&
+                bladeMaterialStr.Trim().ToLower() != "mithril");
+                Console.WriteLine("Select a length for the handle:\nShort\nMedium\nLong\n");
+                do
+                {
+                    handletypeStr = Console.ReadLine();
 
-            } while (handletypeStr.Trim().ToLower() != "short" && handletypeStr.Trim().ToLower() != "long" && handletypeStr.Trim().ToLower() != "medium");
-            Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril");
-            do
-            {
-                handleMaterialStr = Console.ReadLine();
+                } while (handletypeStr.Trim().ToLower() != "short" && handletypeStr.Trim().ToLower() != "long" && handletypeStr.Trim().ToLower() != "medium");
+                Console.WriteLine("Select a material for the handle:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril\n");
+                do
+                {
+                    handleMaterialStr = Console.ReadLine();
 
-            } while (handleMaterialStr.Trim().ToLower() != "wood" && handleMaterialStr.Trim().ToLower() != "stone" && handleMaterialStr.Trim().ToLower() != "bronze" &&
-            handleMaterialStr.Trim().ToLower() != "steel" && handleMaterialStr.Trim().ToLower() != "gold" && handleMaterialStr.Trim().ToLower() != "adamantine" &&
-            handleMaterialStr.Trim().ToLower() != "mythril");
+                } while (handleMaterialStr.Trim().ToLower() != "wood" && handleMaterialStr.Trim().ToLower() != "stone" && handleMaterialStr.Trim().ToLower() != "bronze" &&
+                handleMaterialStr.Trim().ToLower() != "steel" && handleMaterialStr.Trim().ToLower() != "gold" && handleMaterialStr.Trim().ToLower() != "adamantine" &&
+                handleMaterialStr.Trim().ToLower() != "mithril");
+
+                Console.WriteLine($"You chose the {bladeMaterialStr} {bladetypeStr}sword blade and the {handleMaterialStr} {handletypeStr} handle. Is this what you want?\n");
+                do
+                {
+                    conStr = Console.ReadLine();
+
+                } while (!conStr.Trim().ToLower().Equals("yes") && !conStr.Trim().ToLower().Equals("no"));
+                if (conStr.Trim().ToLower().Equals("yes"))
+                {
+                    confirm = true;
+                }
+            } while (!confirm);
+            
 
             switch (bladetypeStr.Trim().ToLower())
             {

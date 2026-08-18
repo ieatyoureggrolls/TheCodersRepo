@@ -23,7 +23,7 @@ public static class ConsoleOutputHelper
         Jack.CurrentHealth = 23;
         Mort.CurrentHealth = 1;
         Person[] heroParty = new Person[4] { Jeff, Jack, Mort, Jor };
-        PrintCombatantParty(heroParty);
+        //PrintCombatantParty(heroParty);
 
         Enemy[] enemyParty = EnemyGenerator.GenerateEnemies(5, 4);
         Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
@@ -34,7 +34,7 @@ public static class ConsoleOutputHelper
             enemyPartyTwo[index] = enemyParty[index];
         }
         enemyPartyTwo[4] = boss;
-        PrintCombatantParty(enemyPartyTwo);
+        //PrintCombatantParty(enemyPartyTwo);
     }
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
@@ -124,136 +124,52 @@ public static class ConsoleOutputHelper
         Console.WriteLine($"Total squares: {totalSquares}");
         Console.WriteLine($"Total squares in a layer: {totalSquaresInALayer}");
 
-        double healthPercentage = currentHealth / maxHealth;
+        double healthPercentage = (currentHealth / maxHealth);
 
         int totalFilledSquares = (int)Math.Ceiling(totalSquares * healthPercentage);
         int totalEmptySquares = totalSquares - totalFilledSquares;
+
         Console.WriteLine($"Health percentage: {healthPercentage}");
         Console.WriteLine($"{totalFilledSquares} total filled squares");
         Console.WriteLine($"{totalEmptySquares} total empty squares");
 
+        int filledSquaresInLayerThree = (totalFilledSquares > 60) ? totalFilledSquares - 60 : 0;
+        totalFilledSquares -= filledSquaresInLayerThree;
+        int filledSquaresInLayerTwo = (totalFilledSquares > 30) ? totalFilledSquares - 30 : 0;
+        totalFilledSquares -= filledSquaresInLayerTwo;
+        int filledSquaresInLayerOne = totalFilledSquares;
+        //Total filled == 80
 
-        int totalFilledSquaresInLayerOne = 0;
-        int totalEmptySquaresInLayerOne = 0;
-        if (totalFilledSquares - totalSquaresInALayer < 60)
-        {
-            totalFilledSquaresInLayerOne = 0;
-            totalEmptySquaresInLayerOne = 30;
-        }
-        else
-        {
-            totalFilledSquaresInLayerOne = totalSquares - totalFilledSquares;
-            totalEmptySquaresInLayerOne = totalSquaresInALayer - totalFilledSquaresInLayerOne;
-        }
-        
+        //l1 green 20 filled
+        //l2 yellow 30 filled
+        //l3 orange 30 filled
+
+
 
         
 
-        int remainingSquares;
-        if(totalEmptySquaresInLayerOne == totalSquaresInALayer){
-            remainingSquares = totalFilledSquares;
-        }
-        else
-        {
-            remainingSquares = totalSquares - (totalFilledSquaresInLayerOne + totalEmptySquaresInLayerOne);
-        }
+        //Subtract
 
-        Console.WriteLine($"{totalFilledSquaresInLayerOne} filled in layer one");
-        Console.WriteLine($"{totalEmptySquaresInLayerOne} emptied in layer one");
-        Console.WriteLine($"{remainingSquares} remaining after layer one");
 
-        //layer two
-
-        int totalFilledSquaresInLayerTwo = 0;
-        int totalEmptySquaresInLayerTwo = 0;
-        if (totalFilledSquares - remainingSquares < totalSquaresInALayer)
-        {
-            totalFilledSquaresInLayerTwo = 30;
-            totalEmptySquaresInLayerTwo = 0;
-        }
-        else
-        {
-            totalFilledSquaresInLayerTwo = remainingSquares - totalSquaresInALayer;
-            totalEmptySquaresInLayerTwo = totalSquaresInALayer - totalFilledSquaresInLayerTwo;
-        }
+        Console.WriteLine($"{filledSquaresInLayerThree} filled in layer three");
+        Console.WriteLine($"{filledSquaresInLayerTwo} filled in layer two");
+        Console.WriteLine($"{filledSquaresInLayerOne} filled in layer one");
+        
+        //Console.WriteLine($"{totalEmptySquaresInLayerOne} emptied in layer one");
 
 
 
 
         
-        if (totalEmptySquaresInLayerTwo == totalSquaresInALayer)
-        {
-            remainingSquares = totalFilledSquares;
-        }
-        else
-        {
-            remainingSquares -= totalSquaresInALayer;
-        }
-        Console.WriteLine($"{totalFilledSquaresInLayerTwo} filled in layer two");
-        Console.WriteLine($"{totalEmptySquaresInLayerTwo} emptied in layer two");
-        Console.WriteLine($"{remainingSquares} remaining after layer two");
-
-
-        //Layer 3
-        int totalFilledSquaresInLayerThree = 0;
-        int totalEmptySquaresInLayerThree = 0;
+        //Console.WriteLine($"{totalEmptySquaresInLayerThree} emptied in layer three");
         
-        totalFilledSquaresInLayerThree = totalSquaresInALayer - remainingSquares;
-        totalEmptySquaresInLayerThree = totalSquaresInALayer - totalFilledSquaresInLayerThree;
-        remainingSquares = 0;
-        
-
-
-
-
-        Console.WriteLine($"{totalFilledSquaresInLayerThree} filled in layer three");
-        Console.WriteLine($"{totalEmptySquaresInLayerThree} emptied in layer three");
-        Console.WriteLine($"{remainingSquares} remaining after layer three");
-        //Console.WriteLine($"{totalFilledRows} filled rows");
-        //Console.WriteLine($"{totalFilledLayers} filled layers");
 
 
         //Green -> Yellow -> Orange -> red
         //Keep track of layers
         //Print the previos layes color in empty squares
         //3 layers of 30
-        //int currentLayer = totalFilledLayers;
-        
-        //Console.WriteLine($"Current Layer: {currentLayer}");
 
-        //int[] orange = new int[3] { 255, 165, 0 };
-        //for (int row = 0; row < totalFilledRows; row++)
-        //{
-        //    if (currentLayer == 3)
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        //        Repeat(square, numOfHealthSquaresInARow);
-        //    }
-
-        //}
-
-
-
-
-        //for (int i = 0; i < numOfEmptySquares; i++)
-        //{
-        //    if (currentLayer == 3)
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.DarkYellow;
-        //        Repeat(square, totalSquaresInALayer - totalEmptySquares);
-        //    }
-        //    else if (currentLayer == 2)
-        //    {
-
-        //        int[] orange = new int[3] { 255, 165, 0 };
-        //        Console.Write($"\u001b[38;2;{orange[0]};{orange[1]};{orange[2]}m{square}");
-        //    }
-        //    else if (currentLayer == 1)
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.DarkRed;
-        //        Console.Write(square);
-        //    }
-        //}
 
 
         Console.ResetColor();
@@ -308,7 +224,7 @@ public static class ConsoleOutputHelper
     /// <returns>An int[] that is used for rgb</returns>
     public static int[] GenerateRGB(int[] oldColor)
     {
-        int numberRange = 25;
+        int numberRange = 15;
         int[] newColor;
         int[] black = new int[3];
         black = [0, 0, 0];
@@ -588,7 +504,7 @@ public static class ConsoleOutputHelper
     /// Prints a party of Person objects, Enemy objects including Bosses
     /// </summary>
     /// <param name="party">The party of Person objects to print</param>
-    public static void PrintCombatantParty(Person[] party)
+    public static void PrintCombatantParty(List<Person> party)
     {
         //If first array element is a hero, its the hero party, else if enemy party
         if (party[0].IsHero)
