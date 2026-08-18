@@ -11,8 +11,9 @@ public class Runner
     public Person[] partyMembers = { new Person("I", 10000, 250, 250, true), new Person("Am", 25, 3, 6, true), new Person("SUFFING ALL CAPS... ALL. CAPS.", 50, 1, 1, true) };
     public void Run()
     {
-        string[] enemyNames = ["Mark", "Bill", "Jeff", "Mike"];
-        COH.PrintCrit(100, "Jeff", enemyNames);
+        COH.Test();
+       
+
         
         // Entry point of the application
         //ChooseMode();

@@ -2,6 +2,7 @@ using System.Drawing;
 using TheCoders.models;
 using System.Linq.Expressions;
 using TheCoders.extensions;
+using System.Runtime.CompilerServices;
 
 namespace TheCoders.views;
 
@@ -11,6 +12,30 @@ namespace TheCoders.views;
 public static class ConsoleOutputHelper
 {
     public static Random rand = new Random();
+
+    public static void Test()
+    {
+        Person Jeff = new Person("Jeff", 100, 10, 100, true);
+        Person Jack = new Person("Jack", 100, 10, 100, true);
+        Person Mort = new Person("Mort", 100, 10, 100, true);
+        Person Jor = new Person("Jor", 100, 10, 100, true);
+        Jeff.CurrentHealth = 77;
+        Jack.CurrentHealth = 23;
+        Mort.CurrentHealth = 1;
+        Person[] heroParty = new Person[4] { Jeff, Jack, Mort, Jor };
+        PrintCombatantParty(heroParty);
+
+        Enemy[] enemyParty = EnemyGenerator.GenerateEnemies(5, 4);
+        Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
+        boss.CurrentHealth -= 55;
+        Enemy[] enemyPartyTwo = new Enemy[enemyParty.Length + 1];
+        for (int index = 0; index < enemyParty.Length; index++)
+        {
+            enemyPartyTwo[index] = enemyParty[index];
+        }
+        enemyPartyTwo[4] = boss;
+        PrintCombatantParty(enemyPartyTwo);
+    }
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
     /// </summary>
@@ -27,7 +52,7 @@ public static class ConsoleOutputHelper
 
         //Gets health percentage, then uses it to calculate how many filled and empty squares
         double healthPercentage = currentHealth / maxHealth * 100;
-        int numOfFilledSquares = (int)Math.Round(numOfHealthSquares * (healthPercentage / 100));
+        int numOfFilledSquares = (int)Math.Ceiling(numOfHealthSquares * (healthPercentage / 100));
         int numOfEmptySquares = numOfHealthSquares - numOfFilledSquares;
 
         for (int i = 0; i < numOfFilledSquares; i++)
@@ -43,38 +68,204 @@ public static class ConsoleOutputHelper
             Console.Write(square);
             Console.ResetColor();
         }
+        Console.WriteLine($" {currentHealth}/{maxHealth} ({healthPercentage}%)");
     }
-    //Print Boss health bar
 
     public static void PrintHealthBar(Enemy enemy)
     {
+        Person person = enemy as Person;
+        PrintHealthBar(person);
+    }
+    //Print Boss health bar
+
+    public static void Repeat(string printMe, int quantity)
+    {
+        for (int i = 0; i < quantity; i++)
+        {
+            if(i == quantity -1)
+            {
+                Console.WriteLine(printMe);
+            }
+            else
+            {
+                Console.Write(printMe);
+            }
+            
+        }
+    }
+    public static void Repeat(string printMe, int quantity, int[] rgb)
+    {
+        for (int i = 0;i < quantity; i++)
+        {
+            if(i == quantity)
+            {
+
+                Console.WriteLine($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
+            }
+            else
+            {
+                Console.Write($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
+            }
+            
+        }
+    }
+
+    public static void PrintHealthBar(Enemy boss, bool isBoss)
+    {
         string square = "\u25A0";
-        double maxHealth = enemy.MaxHealth;
-        double currentHealth = enemy.CurrentHealth;
+        double maxHealth = boss.MaxHealth;
+        double currentHealth = boss.CurrentHealth;
+        const int numOfLayers = 3;
+        const int totalSquares = 90;
+        const int totalSquaresInALayer = 30;
+        const int rows = 3;
+        const int numOfHealthSquaresInARow = 10;
+        Console.WriteLine($"Number of layers: {numOfLayers }");
+        Console.WriteLine($"Total squares: {totalSquares}");
+        Console.WriteLine($"Total squares in a layer: {totalSquaresInALayer}");
 
-        double healthPercentage = currentHealth / maxHealth * 100;
-        int numOfHealthSquares = 10;
-        int numOfFilledSquares = (int)Math.Round(numOfHealthSquares * (healthPercentage / 100));
-        int numOfEmptySquares = numOfHealthSquares - numOfFilledSquares;
+        double healthPercentage = currentHealth / maxHealth;
 
-        int rows = 3;
-        for (int i = 0; i < numOfFilledSquares; i++)
+        int totalFilledSquares = (int)Math.Ceiling(totalSquares * healthPercentage);
+        int totalEmptySquares = totalSquares - totalFilledSquares;
+        Console.WriteLine($"Health percentage: {healthPercentage}");
+        Console.WriteLine($"{totalFilledSquares} total filled squares");
+        Console.WriteLine($"{totalEmptySquares} total empty squares");
+
+
+        int totalFilledSquaresInLayerOne = 0;
+        int totalEmptySquaresInLayerOne = 0;
+        if (totalFilledSquares - totalSquaresInALayer < 60)
         {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(square);
-            Console.ResetColor();
+            totalFilledSquaresInLayerOne = 0;
+            totalEmptySquaresInLayerOne = 30;
+        }
+        else
+        {
+            totalFilledSquaresInLayerOne = totalSquares - totalFilledSquares;
+            totalEmptySquaresInLayerOne = totalSquaresInALayer - totalFilledSquaresInLayerOne;
+        }
+        
+
+        
+
+        int remainingSquares;
+        if(totalEmptySquaresInLayerOne == totalSquaresInALayer){
+            remainingSquares = totalFilledSquares;
+        }
+        else
+        {
+            remainingSquares = totalSquares - (totalFilledSquaresInLayerOne + totalEmptySquaresInLayerOne);
         }
 
-        for (int i = 0; i < numOfEmptySquares; i++)
+        Console.WriteLine($"{totalFilledSquaresInLayerOne} filled in layer one");
+        Console.WriteLine($"{totalEmptySquaresInLayerOne} emptied in layer one");
+        Console.WriteLine($"{remainingSquares} remaining after layer one");
+
+        //layer two
+
+        int totalFilledSquaresInLayerTwo = 0;
+        int totalEmptySquaresInLayerTwo = 0;
+        if (totalFilledSquares - remainingSquares < totalSquaresInALayer)
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(square);
-            Console.ResetColor();
+            totalFilledSquaresInLayerTwo = 30;
+            totalEmptySquaresInLayerTwo = 0;
         }
+        else
+        {
+            totalFilledSquaresInLayerTwo = remainingSquares - totalSquaresInALayer;
+            totalEmptySquaresInLayerTwo = totalSquaresInALayer - totalFilledSquaresInLayerTwo;
+        }
+
+
+
+
+        
+        if (totalEmptySquaresInLayerTwo == totalSquaresInALayer)
+        {
+            remainingSquares = totalFilledSquares;
+        }
+        else
+        {
+            remainingSquares -= totalSquaresInALayer;
+        }
+        Console.WriteLine($"{totalFilledSquaresInLayerTwo} filled in layer two");
+        Console.WriteLine($"{totalEmptySquaresInLayerTwo} emptied in layer two");
+        Console.WriteLine($"{remainingSquares} remaining after layer two");
+
+
+        //Layer 3
+        int totalFilledSquaresInLayerThree = 0;
+        int totalEmptySquaresInLayerThree = 0;
+        
+        totalFilledSquaresInLayerThree = totalSquaresInALayer - remainingSquares;
+        totalEmptySquaresInLayerThree = totalSquaresInALayer - totalFilledSquaresInLayerThree;
+        remainingSquares = 0;
+        
+
+
+
+
+        Console.WriteLine($"{totalFilledSquaresInLayerThree} filled in layer three");
+        Console.WriteLine($"{totalEmptySquaresInLayerThree} emptied in layer three");
+        Console.WriteLine($"{remainingSquares} remaining after layer three");
+        //Console.WriteLine($"{totalFilledRows} filled rows");
+        //Console.WriteLine($"{totalFilledLayers} filled layers");
+
+
+        //Green -> Yellow -> Orange -> red
+        //Keep track of layers
+        //Print the previos layes color in empty squares
+        //3 layers of 30
+        //int currentLayer = totalFilledLayers;
+        
+        //Console.WriteLine($"Current Layer: {currentLayer}");
+
+        //int[] orange = new int[3] { 255, 165, 0 };
+        //for (int row = 0; row < totalFilledRows; row++)
+        //{
+        //    if (currentLayer == 3)
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        //        Repeat(square, numOfHealthSquaresInARow);
+        //    }
+
+        //}
+
+
+
+
+        //for (int i = 0; i < numOfEmptySquares; i++)
+        //{
+        //    if (currentLayer == 3)
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        //        Repeat(square, totalSquaresInALayer - totalEmptySquares);
+        //    }
+        //    else if (currentLayer == 2)
+        //    {
+
+        //        int[] orange = new int[3] { 255, 165, 0 };
+        //        Console.Write($"\u001b[38;2;{orange[0]};{orange[1]};{orange[2]}m{square}");
+        //    }
+        //    else if (currentLayer == 1)
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.DarkRed;
+        //        Console.Write(square);
+        //    }
+        //}
+
+
+        Console.ResetColor();
+        }
+    
+            
+
+        
         //Multi-Rowed
         //Shifts through different colors
 
-    }
+    
     //Print battle standings
     public static void PrintBattleStanding(Person[] playerParty, Person[] enemyParty)
     {
@@ -92,9 +283,6 @@ public static class ConsoleOutputHelper
 
     //Battle Summary
 
-
-
-    //PrintCrit
     /// <summary>
     /// Prints a message that says how much damage someone was attacked for
     /// Each char has alternating background and foreground color
@@ -104,11 +292,11 @@ public static class ConsoleOutputHelper
     /// <param name="targetNames">A string array filled with the names of who is being attacked</param>
     public static void PrintCrit(int damage, string attackerName, string[] targetNames)
     {
-        foreach(string targetName in targetNames)
+        foreach (string targetName in targetNames)
         {
             rainbowText($"{attackerName} critically hit {targetName} for {damage} damage!");
         }
-        
+
     }
 
     #region coloring
@@ -132,7 +320,7 @@ public static class ConsoleOutputHelper
             newColor = [rand.Next(256), rand.Next(256), rand.Next(256)];
 
             //Checks if newColor is within numberRange of oldColor
-            if(TooSimilarShade(newColor, oldColor, numberRange))
+            if (TooSimilarShade(newColor, oldColor, numberRange))
             {
                 //Changes existing rgb as opposed to generating a new one, which
                 //has a smallpossibilty of an infinite loop
@@ -153,12 +341,12 @@ public static class ConsoleOutputHelper
     /// <returns>A RGB value that is NumberRange smaller</returns>
     public static int[] ShuffleRgb(int[] newColor, int numberRange)
     {
-        for(int index = 0; index < newColor.Length; index++)
+        for (int index = 0; index < newColor.Length; index++)
         {
             int difference = newColor[index] - numberRange;
-            if ( difference > 0)
+            if (difference > 0)
             {
-            
+
                 newColor[index] = difference;
             }
             //Makes negative overflow wrap around and decrease from 255
@@ -183,7 +371,7 @@ public static class ConsoleOutputHelper
          * than the number being compared against as well as the number itself
         **/
         int[] range = new int[numberRange];
-        int[] compareToRange = new int[numberRange * 2+1];
+        int[] compareToRange = new int[numberRange * 2 + 1];
 
         //put the number being compared against in the middle of the array
         int middleIndex = compareToRange.Length / 2 - 1;
@@ -197,7 +385,7 @@ public static class ConsoleOutputHelper
         {
             totalIndex = index;
             compareToRange[index] = numToCompareAgainst - index;
-            
+
         }
         //Add this number to numToCompareAgainst
         int rangeCounter = numberRange;
@@ -208,9 +396,9 @@ public static class ConsoleOutputHelper
          * adding rangeCounter to numToCompareAgainst then decreasing
          * range counter. Repeat untill rangeCounter is zero
         **/
-        for (int index = totalIndex; index < compareToRange.Length - 1 ; index++)
+        for (int index = totalIndex; index < compareToRange.Length - 1; index++)
         {
-            
+
             compareToRange[index] = numToCompareAgainst + rangeCounter;
             rangeCounter--;
         }
@@ -227,7 +415,7 @@ public static class ConsoleOutputHelper
          **/
         for (int index = totalIndex; index < compareToRange.Length - 1 / 2; index++)
         {
-            
+
             compareToRange[index] = numToCompareAgainst - rangeCounter;
             rangeCounter--;
         }
@@ -275,7 +463,7 @@ public static class ConsoleOutputHelper
         int[] bgColor = new int[3];
         int[] fgColor = new int[3];
 
-        
+
         for (int index = 0; index < chars.Length; index++)
         {
             //If char is a space, don't color it
@@ -336,7 +524,7 @@ public static class ConsoleOutputHelper
 
         if (newLine == false || newLine == null)
         {
-            
+
             Console.Write($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{boldedC}\x1b[0m");
 
         }
@@ -382,7 +570,7 @@ public static class ConsoleOutputHelper
         }
     }
 
-# endregion
+    #endregion
 
 
     /// <summary>
@@ -396,7 +584,84 @@ public static class ConsoleOutputHelper
     //PrintWeapons
 
     //Print combatant party
+    /// <summary>
+    /// Prints a party of Person objects, Enemy objects including Bosses
+    /// </summary>
+    /// <param name="party">The party of Person objects to print</param>
+    public static void PrintCombatantParty(Person[] party)
+    {
+        //If first array element is a hero, its the hero party, else if enemy party
+        if (party[0].IsHero)
+        {
+            Console.WriteLine("Hero Party\n");
+        }
+        else
+        {
+            Console.WriteLine("Enemy Party\n");
+        }
 
+
+        foreach (Person person in party)
+        {
+
+
+            ///Name
+            ///is a hero
+            if (person.IsHero)
+            {
+                Console.WriteLine($"Name: {person.Name}");
+            }
+            else if (person != null && person is Enemy)
+            {
+                //is a boss
+                Enemy enemy = person as Enemy;
+                if (enemy.IsBoss)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                    Console.Write($"Boss Name: {enemy.Name}");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+                else
+                {
+                    //Is an enemy
+                    Console.WriteLine($"Name: {enemy.Name}");
+                }
+            }
+
+
+            //Health
+            if (person is Enemy)
+            {
+                
+                Enemy enemy = (person as Enemy);
+                if (enemy.IsBoss)
+                {
+                    //Is a boss
+                    PrintHealthBar(enemy, enemy.IsBoss);
+                }
+                else
+                {
+                    //is regular enemy
+                    PrintHealthBar(person);
+                }
+
+            }
+            else
+            {
+                //is a hero
+                PrintHealthBar(person);
+            }
+
+            //Weapon Place holder
+            Console.WriteLine("Weapon: {player.Weapon}");
+            ///speed
+            Console.WriteLine($"Speed: {person.Speed}");
+            ///damage
+            Console.WriteLine($"Damage: {person.Damage} \n");
+        }
+    }
     //Print wave information
 }
+
 
