@@ -57,7 +57,7 @@ namespace TheCoders
         }
 
         //asks for shape of the blade and length of the handle, as well as materials for both. Then returns a weapon with those parameters.
-        public Weapon createWeapon()
+        public static Weapon createWeapon()
         {
             Blade.BladeType bladetype;
             String bladetypeStr;
@@ -225,13 +225,12 @@ namespace TheCoders
                     {
                         setEnchantment(enchantment, damageIndex.Value);
                     }
-                    else
-                    {
-                        enchantmentList.Add(enchantment);
-                        enchantmentList[enchantmentList.Count - 1].setDetails();
-                    }
+                    return;
                 }
             }
+            enchantmentList.Add(enchantment);
+            enchantmentList[enchantmentList.Count - 1].setDetails();
+            
         }
 
         //sets the damage type to an enchantment that changes the type
