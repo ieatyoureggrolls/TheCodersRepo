@@ -56,7 +56,7 @@ namespace TheCoders
             }
         }
 
-        //asks for shape of the blade and length of the handle, as well as materials for both. Then returns a blade with those parameters.
+        //asks for shape of the blade and length of the handle, as well as materials for both. Then returns a weapon with those parameters.
         public Weapon createWeapon()
         {
             Blade.BladeType bladetype;
@@ -228,6 +228,7 @@ namespace TheCoders
                     else
                     {
                         enchantmentList.Add(enchantment);
+                        enchantmentList[enchantmentList.Count - 1].setDetails();
                     }
                 }
             }
@@ -256,37 +257,44 @@ namespace TheCoders
             }
         }
 
-
+        //replaces the enchantment at a given index with the given enchantment
         public void setEnchantment(Enchantments enchantment, int index)
         {
+            enchantPoints += enchantmentList[index].getEnchCost();
+            enchantPoints -= enchantment.getEnchCost();
             enchantmentList[index] = enchantment;
+            enchantmentList[index].setDetails();
             updateDamageType();
         }
         
+        //displays the stats of a weapon
         public void displayWeaponInfo()
         {
             if (isBroken)
             {
-                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: broken, Rarity: {rarity}");
+                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: broken, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}");
             }
             else
             {
-                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: {durability}/{maxDurability}, Rarity: {rarity}");
+                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: {durability}/{maxDurability}, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}");
             }
             
         }
 
-        public void displayEnchantments(Weapon weapon)
+        //displays the list of enchantments on a weapon
+        public void displayEnchantments()
         {
             Console.WriteLine($"Weapon Enchantments: {enchantmentList.ToList}");
         }
 
+        //sets the weapon durability back to max. Sets isBroken to false
         public void repairWeapon()
         {
             durability = maxDurability;
             isBroken = false;
         }
 
+        //lowers the weapon durability by one. If the weapon durability is less than or equal to zero, sets isBroken to true.
         public void damageWeapon()
         {
             durability--;

@@ -37,6 +37,7 @@ namespace TheCoders.models
             this.enchantmentType = enchantmentType;
         }
 
+        //Sets the description, tier, and cost to the appropriate values depending on the enchantment 
         public void setDetails()
         {
             switch (enchantmentType)

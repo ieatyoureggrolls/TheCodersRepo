@@ -24,7 +24,6 @@ namespace TheCoders.models
 
         PieceType pieceType;
         Material material;
-        string pieceName;
         int attack;
         int speed;
         int durability;
@@ -68,10 +67,6 @@ namespace TheCoders.models
         {
             return pieceType;
         }
-        public string getPieceName()
-        {
-            return pieceName;
-        }
         public int getEnchantTier()
         {
             return enchantTier;
@@ -108,10 +103,6 @@ namespace TheCoders.models
         {
             this.material = material;
         }
-        public void setPieceName()
-        {
-            pieceName = material + " " + pieceType;
-        }
         public void setPieceType(PieceType pieceType)
         {
             this.pieceType = pieceType;
@@ -120,8 +111,11 @@ namespace TheCoders.models
         {
             this.enchantTier = enchantTier;
         }
+
+        //Adds the stats given by the piece and material to total stats
         public abstract void combineStats();
 
+        //Shows the information of the piece
         public abstract void DisplayPieceInfo();
     }
 
@@ -229,7 +223,6 @@ namespace TheCoders.models
             setPieceType(PieceType.blade);
             setMaterial(material);
             combineStats();
-            setPieceName();
         }
     }
     public class Handle : Pieces
@@ -317,7 +310,6 @@ namespace TheCoders.models
             setHandleType(handleType);
             setMaterial(material);
             combineStats();
-            setPieceName();
         }
     }
 
