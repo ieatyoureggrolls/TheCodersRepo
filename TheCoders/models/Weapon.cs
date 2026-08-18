@@ -190,7 +190,6 @@ namespace TheCoders
             return new Weapon(blade,handle);
         }
 
-        //TODO: finish addEnchantment()
         //adds the enchantment onto the weapon. If the weapon has elemental damage and you add an enchantment that changes the damage type,
         //it will ask if you want to replace the enchantment with the new one.
         public void addEnchantment(Enchantments enchantment)
@@ -202,7 +201,8 @@ namespace TheCoders
                 Console.WriteLine("You already have this enchantment!");
                 return;
             }
-            if (damageIndex != null)
+            if (damageIndex != null && (enchantment.getEnchantmentType().Equals(Enchantments.EnchantmentType.fire) || enchantment.getEnchantmentType().Equals(Enchantments.EnchantmentType.water)
+                || enchantment.getEnchantmentType().Equals(Enchantments.EnchantmentType.earth)))
             {
                 Console.WriteLine("You already have elemental damage on this weapon. Adding a new damage type onto the weapon will override the current one. Are you sure?");
                 do
@@ -218,10 +218,19 @@ namespace TheCoders
                 {
                     return;
                 }
-                setEnchantment(enchantment, damageIndex.Value);
+                else
+                {
+                    if (enchantment.getEnchantmentType().Equals(Enchantments.EnchantmentType.fire) || enchantment.getEnchantmentType().Equals(Enchantments.EnchantmentType.water)
+                || enchantment.getEnchantmentType().Equals(Enchantments.EnchantmentType.earth))
+                    {
+                        setEnchantment(enchantment, damageIndex.Value);
+                    }
+                    else
+                    {
+                        enchantmentList.Add(enchantment);
+                    }
+                }
             }
-            
-            
         }
 
         //sets the damage type to an enchantment that changes the type
@@ -229,7 +238,21 @@ namespace TheCoders
         {
             if (damageIndex != null)
             {
-                
+                switch (enchantmentList[damageIndex.Value].getEnchantmentType())
+                {
+                    case Enchantments.EnchantmentType.fire:
+                        damageType = Weapon.DamageType.fire;
+                        break;
+                    case Enchantments.EnchantmentType.water:
+                        damageType = Weapon.DamageType.water;
+                        break;
+                    case Enchantments.EnchantmentType.earth:
+                        damageType = Weapon.DamageType.earth;
+                        break;
+                    default:
+                        damageType = Weapon.DamageType.normal;
+                        break;
+                }
             }
         }
 
