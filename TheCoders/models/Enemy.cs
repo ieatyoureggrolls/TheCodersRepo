@@ -10,7 +10,7 @@ namespace TheCoders.models
         public bool IsBoss { get; set; } = false;
 
         public Enemy(string name, int maxHealth, int speed, int damage) : base(name, maxHealth, speed, damage, false) { }
-
+        public Enemy(string name, bool isBoss, int maxHealth, int speed, int damage) : base(name, maxHealth, speed, damage, false) { IsBoss = isBoss; }
         public Enemy(string name, int maxHealth, int speed, int damage, Element element) : base(name, maxHealth, speed, damage, false) 
         {
             Element = element;

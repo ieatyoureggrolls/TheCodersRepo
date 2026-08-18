@@ -9,6 +9,8 @@ namespace TheCoders.models
         private const float statScaler = 1.04f;
         private const int baseDamage = 1;
         private const int baseSpeed = 3;
+
+        private const int baseHealth = 100;
         private static Random random = new Random();
         /// <summary>
         /// Generates a random enemy with stats scaled to the current level by the formula "1.04^level"
@@ -21,7 +23,8 @@ namespace TheCoders.models
             int health = (int)Math.Round((baseHealth + random.Next(11) - 5) * scale);
             int damage = (int)Math.Round((baseDamage + random.Next(2)) * scale);
             int speed = (int)Math.Round((baseSpeed + random.Next(5) - 2) * scale);
-            return new Enemy("Izak (he really wanted his name first but wont admit it), Lucas, Austin, Zach | Roots", health, damage, speed, Element.normal);
+            return new Enemy("temp", 4,1, 2);
+            //return new Enemy("Izak (he really wanted his name first but wont admit it), Lucas, Austin, Zach | Roots", health, damage, speed, Element.normal);
         }
 
         /// <summary>
