@@ -27,7 +27,7 @@ public static class ConsoleOutputHelper
 
         Enemy[] enemyParty = EnemyGenerator.GenerateEnemies(5, 4);
         Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
-        boss.CurrentHealth -= 55;
+        
         Enemy[] enemyPartyTwo = new Enemy[enemyParty.Length + 1];
         for (int index = 0; index < enemyParty.Length; index++)
         {
@@ -638,7 +638,8 @@ public static class ConsoleOutputHelper
                 if (enemy.IsBoss)
                 {
                     //Is a boss
-                    PrintHealthBar(enemy, enemy.IsBoss);
+                    //PrintHealthBar(enemy, enemy.IsBoss);
+                    PrintHealthBar(enemy);
                 }
                 else
                 {
