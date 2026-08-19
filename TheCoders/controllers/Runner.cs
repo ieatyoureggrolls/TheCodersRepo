@@ -203,11 +203,10 @@ public class Runner
             Console.WriteLine("\n\n---------------------------\nCurrentStandings");
             foreach (Person person in attackOrder)
             {
-                COH.PrintHealthBar(person);
-                Console.WriteLine();
                 if (person.CurrentHealth > 0)
                     alivePeople.Add(person);
             }
+            COH.PrintCombatantParty(alivePeople);
             Console.WriteLine("---------------------------\n\n");
             attackOrder = alivePeople;
 
