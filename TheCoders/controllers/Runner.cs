@@ -206,7 +206,7 @@ public class Runner
                 if (person.CurrentHealth > 0)
                     alivePeople.Add(person);
             }
-            COH.PrintCombatantParty(alivePeople);
+            COH.PrintCombatantParty(alivePeople.ToArray());
             Console.WriteLine("---------------------------\n\n");
             attackOrder = alivePeople;
 
