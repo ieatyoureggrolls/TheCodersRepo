@@ -35,7 +35,7 @@ namespace TheCoders
         public int getRarity() { return rarity; }
         public int getMaxThreshold() { return maxThreshold; }
         public int getEnchantPoints() { return enchantPoints; }
-        private bool getBroken() { return isBroken; }
+        public bool getBroken() { return isBroken; }
         public Weapon(Blade blade, Handle handle)
         {
             attack = blade.getAttack() + handle.getAttack();

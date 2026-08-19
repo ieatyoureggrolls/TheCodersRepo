@@ -36,17 +36,14 @@ namespace TheCoders.models
         {
             return enchantThreshold;
         }
-
         public int getPrice()
         {
             return price;
         }
-
         public int getRarity()
         {
             return rarity;
         }
-
         public int getAttack()
         {
             return attack;
@@ -71,22 +68,18 @@ namespace TheCoders.models
         {
             return enchantTier;
         }
-
         public void setThreshold(int threshold)
         {
             enchantThreshold = threshold;
         }
-
         public void setPrice(int price)
         {
             this.price = price;
         }
-
         public void setRarity(int rarity)
         {
             this.rarity = rarity;
         }
-
         public void setAttack(int attack)
         {
             this.attack = attack;
