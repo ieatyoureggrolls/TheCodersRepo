@@ -26,9 +26,16 @@ namespace TheCoders
         private int maxThreshold;
         private int enchantPoints;
         private bool isBroken = false;
-
         private int? damageIndex = null;
 
+        public int getAttack() { return attack; }
+        public int getSpeed() { return speed; }
+        public int getDurability() { return durability; }
+        public int getMaxDurability() { return maxDurability; }
+        public int getRarity() { return rarity; }
+        public int getMaxThreshold() { return maxThreshold; }
+        public int getEnchantPoints() { return enchantPoints; }
+        private bool getBroken() { return isBroken; }
         public Weapon(Blade blade, Handle handle)
         {
             attack = blade.getAttack() + handle.getAttack();
@@ -56,6 +63,8 @@ namespace TheCoders
             }
         }
 
+
+
         //asks for shape of the blade and length of the handle, as well as materials for both. Then returns a weapon with those parameters.
         public static Weapon createWeapon()
         {
@@ -71,13 +80,13 @@ namespace TheCoders
             String conStr;
             do
             {
-                Console.WriteLine("Select a shape for the blade:\nShort\nLong\nGreat\n");
+                Console.WriteLine("Select a shape for the blade:\nShort (Attack-, Speed+)\nLong (No Bonuses)\nGreat (Attack+, Speed-)\n");
                 do
                 {
                     bladetypeStr = Console.ReadLine();
 
                 } while (bladetypeStr.Trim().ToLower() != "short" && bladetypeStr.Trim().ToLower() != "long" && bladetypeStr.Trim().ToLower() != "great");
-                Console.WriteLine("Select a material for the blade:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril\n");
+                Console.WriteLine("Select a material for the blade:\nWood (Durability: 10)\nStone (Durability: 20)\nBronze (Durability: 30)\nSteel (Durability: 40)\nGold (Durability: 10, Speed+)\nAdamantine (Durability: 50)\nMithril (Durability: 40)\n");
                 do
                 {
                     bladeMaterialStr = Console.ReadLine();
@@ -85,13 +94,13 @@ namespace TheCoders
                 } while (bladeMaterialStr.Trim().ToLower() != "wood" && bladeMaterialStr.Trim().ToLower() != "stone" && bladeMaterialStr.Trim().ToLower() != "bronze" &&
                 bladeMaterialStr.Trim().ToLower() != "steel" && bladeMaterialStr.Trim().ToLower() != "gold" && bladeMaterialStr.Trim().ToLower() != "adamantine" &&
                 bladeMaterialStr.Trim().ToLower() != "mithril");
-                Console.WriteLine("Select a length for the handle:\nShort\nMedium\nLong\n");
+                Console.WriteLine("Select a length for the handle:\nShort (Speed+)\nMedium (No Bonuses)\nLong (Speed-)\n");
                 do
                 {
                     handletypeStr = Console.ReadLine();
 
                 } while (handletypeStr.Trim().ToLower() != "short" && handletypeStr.Trim().ToLower() != "long" && handletypeStr.Trim().ToLower() != "medium");
-                Console.WriteLine("Select a material for the handle:\nwood\nstone\nbronze\nsteel\ngold\nadamantine\nmithril\n");
+                Console.WriteLine("Select a material for the handle:\nWood (Durability: 10)\nStone (Durability: 20)\nBronze (Durability: 30)\nSteel (Durability: 40)\nGold (Durability: 10, Speed+)\nAdamantine (Durability: 50)\nMithril (Durability: 40)\n");
                 do
                 {
                     handleMaterialStr = Console.ReadLine();

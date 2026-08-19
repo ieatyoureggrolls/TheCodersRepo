@@ -151,6 +151,7 @@ namespace TheCoders.models
                     break;
                 case BladeType.Great:
                     setAttack(5);
+                    setSpeed(0);
                     break;
             }
             switch (getMaterial())
@@ -213,7 +214,6 @@ namespace TheCoders.models
                     break;
             }
         }
-
         override public void DisplayPieceInfo()
         {
             Console.WriteLine($"Blade Stats: Type: {getBladeType()}, Material: {getMaterial()}, Attack: {getAttack()}, Speed: {getSpeed()}, Durability: {getDurability()}, Rarity: {getRarity()}, Enchant Tier: {getEnchantTier()}, Price: {getPrice()}");
@@ -269,33 +269,38 @@ namespace TheCoders.models
                     setRarity(2);
                     setDurability(getDurability() + 20);
                     setPrice(20);
-
+                    setThreshold(200);
                     break;
                 case Material.bronze:
                     setRarity(3);
                     setDurability(getDurability() + 30);
                     setPrice(30);
+                    setThreshold(300);
                     break;
                 case Material.steel:
                     setRarity(4);
                     setDurability(getDurability() + 40);
                     setPrice(40);
+                    setThreshold(400);
                     break;
                 case Material.gold:
                     setRarity(4);
                     setDurability(getDurability() + 10);
-                    setSpeed(getSpeed() + 2);
+                    setSpeed(getSpeed() + 3);
                     setPrice(40);
+                    setThreshold(600);
                     break;
                 case Material.adamantine:
                     setRarity(5);
                     setDurability(getDurability() + 50);
                     setPrice(50);
+                    setThreshold(600);
                     break;
                 case Material.mithril:
                     setRarity(5);
                     setDurability(getDurability() + 40);
                     setPrice(50);
+                    setThreshold(800);
                     break;
             }
         }
