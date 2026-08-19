@@ -504,7 +504,7 @@ public static class ConsoleOutputHelper
     /// Prints a party of Person objects, Enemy objects including Bosses
     /// </summary>
     /// <param name="party">The party of Person objects to print</param>
-    public static void PrintCombatantParty(List<Person> party)
+    public static void PrintCombatantParty(Person[] party)
     {
         //If first array element is a hero, its the hero party, else if enemy party
         if (party[0].IsHero)
