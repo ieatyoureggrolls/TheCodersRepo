@@ -119,7 +119,8 @@ namespace TheCoders.models
 
         private static void Level1(Person[] theParty)
         {
-            
+
+           Enemy[] enemies =  EnemyGenerator.GenerateEnemies(1, 2);
 
             const int currentLevel = 1;
 
@@ -131,25 +132,36 @@ namespace TheCoders.models
            
                    
 
-            Console.WriteLine("\n\n im gonna make the first weapon so pay attention.\n from the following choice below im going to pick 'placeholder' as our 'placeholder'");
+            Console.WriteLine("\n\n im gonna make the first weapon so pay attention.\n from the following choice below im going to pick 'placeholder' as our 'placeholder'\n");
 
             // write code that finds all the options for step one of the weapon building
 
-            //ConsoleOutputHelper.PrintCombatantParty(enemy array goes here if you want to see that or hero array to see them);
-            //ConsoleOutputHelper.PrintBattleStanding(theParty, theEnemyParty);
+            //Weapon tutorialWeapon = new Weapon();
+
+            Weapon tutorialWeapon = Weapon.createWeapon();
+
+            theParty[0].EquipWeapon(tutorialWeapon);
+
+             
+            ConsoleOutputHelper.PrintCombatantParty(enemies);
+
+            //ConsoleOutputHelper.PrintBattleStanding(theParty, enemies); this method doesnt exist yet
             
 
-            whoGetsAWeapon(theParty);
+            //whoGetsAWeapon(theParty);
             
 
             Console.WriteLine("\n\n 'placeholder' has 'placeholder' as its stats keep those stats in mind when making weapons ");
-            Console.WriteLine("\nnow that the wepon is made one of the heroes will automatically equip it\n");
+            Console.WriteLine("\nnow that the wepon is made i'll equip it to one of the heroes\n");
 
             
 
 
-            Console.WriteLine("once the wepons are made just sit back and watch the show");
+            Console.WriteLine("once the wepons are made and equiped just sit back and watch the show");
 
+
+            Runner runner = new Runner();
+            runner.Battle(enemies.ToList());
             //call the method that does auto battle
 
 

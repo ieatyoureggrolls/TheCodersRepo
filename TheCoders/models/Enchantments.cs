@@ -24,6 +24,12 @@ namespace TheCoders.models
         String description = "No Enchantment has been applied yet.";
         int enchCost = 0;
 
+        public Enchantments(EnchantmentType type)
+        {
+            setEnchantmentType(type);
+            setDetails();
+        }
+
         public EnchantmentType getEnchantmentType()
         {
             return enchantmentType;
@@ -32,9 +38,15 @@ namespace TheCoders.models
         {
             return enchCost;
         }
+
+        public static IEnumerable<String> allEnchants()
+        {
+            return ["Fire", "Water", "Earth", "Lifesteal", "Poisonous", "Splash", "Weaken", "Shatter"];
+        }
         public void setEnchantmentType(EnchantmentType enchantmentType)
         {
             this.enchantmentType = enchantmentType;
+            setDetails();
         }
 
         //Sets the description, tier, and cost to the appropriate values depending on the enchantment 
@@ -53,7 +65,7 @@ namespace TheCoders.models
                     enchCost = 100;
                     break;
                 case EnchantmentType.earth:
-                    enchantTier= 1;
+                    enchantTier = 1;
                     description = "Changes the weapon's damage type to earth. Earth damage deals 1.5x damage to water creatures, but deals 0.5x damage to fire creatures.";
                     enchCost = 100;
                     break;
@@ -85,5 +97,10 @@ namespace TheCoders.models
             }
         }
 
+        public void listDetails()
+        {
+            Console.WriteLine($"{enchantmentType.ToString().ToUpper()}\nDescription: {description}\nEnchanting Cost: {enchCost}\nTier: {enchantTier}");
+
+        }
     }
 }
