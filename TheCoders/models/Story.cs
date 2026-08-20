@@ -165,17 +165,17 @@ namespace TheCoders.models
 
             Console.WriteLine("\n these guys are tought try making something better than a wooden sword");
 
-            Weapon newWeapon = Weapon.createWeapon();
+            Weapon newWeapon = Weapon.createWeapon(); // find a way to limit the materials available to the player
             Console.WriteLine("\n");
             newWeapon.displayWeaponInfo();
             Console.WriteLine("\n thats a great weapon for our new hero");
             whoGetsAWeapon(theParty,newWeapon);
 
-            Console.WriteLine("\n\n2 vs 2 is much more of a fair fight");
+            Console.WriteLine("\n\n2 vs 2 is much more of a fair fight\n\n");
 
-            //call auto battler method
+            LevelLoop.Battle(enemies.ToList(), theParty);
 
-            
+
 
             winOrLose(theParty, currentLevel);
 
@@ -348,11 +348,13 @@ namespace TheCoders.models
         private static void whoGetsAWeapon(Person[] theParty, Weapon weapon) 
         {
 
+            //i need to find a way to restrict names that already have weapons or atleast display those that are equipped
+
             ConsoleOutputHelper.PrintHeroNames(theParty);
 
             int heroSlot = CIO.PromptForInt($"which of the heroes from slot 1 to {theParty.Length} do you want to recieve the weapon", 1, theParty.Length); 
                
-            theParty[heroSlot].EquipWeapon(weapon);
+            theParty[heroSlot].EquipWeapon(weapon); 
 
         }
 
