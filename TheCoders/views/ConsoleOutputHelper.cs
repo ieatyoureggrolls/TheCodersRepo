@@ -14,6 +14,7 @@ namespace TheCoders.views;
 //Make sure methods are documented with XML comments
 //Add menu design
 //Print name of hero and slot
+//Possible cursor animation
 
 
 public static class ConsoleOutputHelper
@@ -22,14 +23,25 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
-        Enemy boss = new Enemy("Boss",true, 100,1,1);
-        do
+        List<Person> heroParty = new List<Person>
         {
-            boss.CurrentHealth -= 5;
-            PrintHealthBar(boss, true);
-        }
-        while (boss.CurrentHealth > 0);
+            new Person("Hero1", 100, 10, 5, true),
+            new Person("Hero2", 80, 12, 6, true),
+            new Person("Hero3", 90, 8, 4, true)
+        };
+        PrintHeroNames(heroParty);
+        //PrintBanner("Welcome to The Coders!");
     }
+
+    public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
+    {
+        Console.WriteLine("Hero Party\n");
+        for (int i = 0; i < heroParty.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}: {heroParty[i].Name}");
+        }
+    }
+    
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
     /// </summary>
@@ -37,7 +49,6 @@ public static class ConsoleOutputHelper
     public static void PrintHealthBar(Person person)
     {
         //Value errors are handled in Person setters
-
         string square = "\u25A0";
         double maxHealth = person.MaxHealth;
         double currentHealth = person.CurrentHealth;
@@ -273,11 +284,44 @@ public static class ConsoleOutputHelper
         }
     
     //Print battle standings
-    public static void PrintBattleStanding(Person[] playerParty, Person[] enemyParty)
+    public static void PrintBattleStanding(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty)
     {
 
     }
     //Print banner
+
+    public static void PrintLeftRect(int cursorLeft, int cursorTop, string topLeftArch, string bottomLeftArch, string verticalLine)
+    {
+        int oldLeft = Console.CursorLeft;
+        int oldTop = Console.CursorTop;
+        
+        //Console.SetCursorPosition(cursorLeft, cursorTop);
+
+        Console.WriteLine(verticalLine);
+        Console.SetCursorPosition(cursorLeft, cursorTop +1);
+        Console.Write(topLeftArch);
+        Console.SetCursorPosition(oldLeft, oldTop);
+        Console.SetCursorPosition(cursorLeft, cursorTop-1);
+        Console.Write(bottomLeftArch);
+        Console.SetCursorPosition(oldLeft, oldTop);
+
+    }
+    public static void PrintRightRect(int cursorLeft, int cursorTop, string topRightArch, string bottomRightArch, string verticalLine)
+    {
+        
+        int oldLeft = Console.CursorLeft;
+        int oldTop = Console.CursorTop;
+
+        Console.WriteLine(verticalLine);
+        Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+        Console.Write(topRightArch);
+
+        Console.SetCursorPosition(cursorLeft, cursorTop - 1);
+        Console.Write(bottomRightArch);
+        Console.SetCursorPosition(oldLeft, oldTop);
+
+
+    }
 
     public static void PrintBanner(string message)
     {
@@ -285,7 +329,73 @@ public static class ConsoleOutputHelper
         //Figure out char length of Terminal
         //Print message in the top center
         //Fill the left and right sides with -----
+        string bottomLeftArch = "\u2554";
+        string bottomRightArch = "\u2557";
+        string topLeftArch = "\u255A";
+        string topRightArch = "\u255D";
+        string verticalLine = "\u2551";
+        string horizontalLine = "\u2550";
+
+
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+
+        int terminalWidth = Console.WindowWidth;
+        int messageLength = message.Length;
+        int centerPosition  = (terminalWidth - messageLength) / 2;
+        int padding = (terminalWidth - messageLength) / 2;
+
+        
+        
+        Console.SetCursorPosition(0, 1);
+
+        for (int index = 0; index < terminalWidth; index++)
+        {
+            if(index == padding - 1 || index == padding + 1)
+            {
+                Console.Write(" ");
+            }
+            else if(index == padding - 2 || index == padding + 2)
+            {
+
+                int oldLeft = Console.CursorLeft;
+                int oldTop = Console.CursorTop;
+
+                
+                
+
+                if (index == padding - 2)
+                {
+                    PrintLeftRect(oldLeft, oldTop, topLeftArch, bottomLeftArch, verticalLine);
+                }
+                else if (index == padding + 2)
+                {
+                    PrintRightRect(oldLeft, oldTop, topRightArch, bottomRightArch, verticalLine);
+                }
+                
+                
+            }
+            
+            else if(index == padding)
+            {
+                Console.Write(message);
+                //Console.WriteLine(Console.GetCursorPosition());
+            }
+            else
+            {
+                
+                Console.Write(horizontalLine);
+            }
+            
+        }
+        
+
+
+        Console.WriteLine();
     }
+
+    
 
     //Battle Summary
 
@@ -408,7 +518,6 @@ public static class ConsoleOutputHelper
             compareToRange[index] = numToCompareAgainst + rangeCounter;
             rangeCounter--;
         }
-
 
         //Resets rangeInt back to numberRange to start comparison
         rangeCounter = numberRange;
