@@ -125,26 +125,22 @@ namespace TheCoders.models
             const int currentLevel = 1;
 
            Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
-
-                   
-                      
            Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
-           
-                   
-
            Console.WriteLine("\n\nim gonna make the first weapon so pay attention\n");
 
-           
 
-           Weapon tutorialWeapon = SimulateWeaponCreate("short","wood","short","wood");
+            Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long,Pieces.Material.wood,Handle.HandleType.Long,Pieces.Material.wood);
+          
+           tutorialWeapon.displayWeaponInfo();
 
-           Console.WriteLine("\nas you can see the weapon above is as simple and basic as it gets, pay attention to its stats because the materials you pick will affect it stats");
+            Console.WriteLine("\nas you can see the weapon above is as simple and basic as it gets, pay attention to its stats because the materials you pick will affect it stats");
             Console.WriteLine("\nNow pick which hero will get this weapon before the battle begins\n");
+           
             whoGetsAWeapon(theParty);
 
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
-            //ConsoleOutputHelper.PrintBattleStanding(theParty, enemies); this method doesnt exist yet
+            //ConsoleOutputHelper.PrintBattleStanding(theParty, enemies); // this method doesnt exist yet
 
 
 
