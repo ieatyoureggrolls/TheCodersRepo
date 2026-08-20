@@ -122,9 +122,9 @@ namespace TheCoders.models
         private static void Level1(Person[] theParty)
         {
 
+            ConsoleOutputHelper.ClearScreen();
 
-
-           Enemy[] enemies =  EnemyGenerator.GenerateEnemies(1, 2);
+            Enemy[] enemies =  EnemyGenerator.GenerateEnemies(1, 2);
 
            const int currentLevel = 1;
 
@@ -138,32 +138,16 @@ namespace TheCoders.models
 
             Console.WriteLine("\n I don't have time to explain things to you right now take this sword");
             tutorialWeapon.displayWeaponInfo();
-            Console.WriteLine("\nNow pick which hero will get this weapon before the battle begins\n");
+            Console.WriteLine("\nNow pick which hero will get this weapon, once you do the battle will begin\n");
                         
-            whoGetsAWeapon(theParty);
+            whoGetsAWeapon(theParty, tutorialWeapon);
 
             ConsoleOutputHelper.ClearScreen();
 
             LevelLoop.Battle(enemies.ToList(), theParty);
 
-
-
-
-
-
-
-
             winOrLose(theParty, currentLevel);
-
-            if (availableLevels == currentLevel)
-            {
-
-                availableLevels++;
-
-            }
-
-
-
+            increaseAvailableLevel(currentLevel);          
             wantNextLevel(currentLevel, theParty);
 
 
@@ -171,16 +155,23 @@ namespace TheCoders.models
 
         private static void Level2(Person[] theParty) 
         {
+            ConsoleOutputHelper.ClearScreen();
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(2,2);
             const int currentLevel = 2;
 
-            Console.WriteLine("More enemies are coming one hero won't be enought to hold them off its time for you to make a weapon too\n before every battle you get to see what you're up against");
+            Console.WriteLine("More enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too\n");
 
-            //call enemy inspect method
+            ConsoleOutputHelper.PrintCombatantParty(enemies);
 
+            Console.WriteLine("\n these guys are tought try making something better than a wooden sword");
 
-            //call the make weapon method
+            Weapon newWeapon = Weapon.createWeapon();
+            Console.WriteLine("\n");
+            newWeapon.displayWeaponInfo();
+            Console.WriteLine("\n thats a great weapon for our new hero");
+            whoGetsAWeapon(theParty,newWeapon);
 
-            Console.WriteLine("\n\ngood job, having two heroes makes this much more of a fair fight");
+            Console.WriteLine("\n\n2 vs 2 is much more of a fair fight");
 
             //call auto battler method
 
@@ -200,6 +191,7 @@ namespace TheCoders.models
 
         private static void Level3(Person[] theParty) 
         {
+            ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 3;
 
             Console.WriteLine("\n\n It seems like your weapons are low on durability sometimes its better to repair them than to make new ones");
@@ -225,6 +217,7 @@ namespace TheCoders.models
 
         private static void Level4(Person[] theParty)
         {
+            ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 4;
 
             Console.WriteLine("\n\n from here on out its all you im sure you can handle whatevers coming");
@@ -253,6 +246,7 @@ namespace TheCoders.models
 
         private static void Level5(Person[] theParty)
         {
+            ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 5;
 
             Console.WriteLine("\n\n Good job defeating that boss, now that the village is defended its time to go on the offensive");
@@ -297,19 +291,22 @@ namespace TheCoders.models
                 Console.WriteLine("All the heros have fallen they cannot continue\n\n Game Over!");
 
 
-                string input = CIO.PromptForInput("\n\nWould you like to restart the level?\nYes: Y\n No: N ",false);
+                string input = CIO.PromptForInput("\n\nWould you like to restart the level?\nYes: Y\n No: N ", false);
 
                 if (input == "Y" || input == "YES")
                 {
                     takeToLevel(currentLevel, theParty);
                 }
-                else 
+                else
                 {
                     returnToMainMenu();
 
                 }
 
 
+            }
+            else {
+                Console.WriteLine("\n==============\n!!!VICTORY!!!\n==============\n");
             }
 
         }
@@ -348,32 +345,42 @@ namespace TheCoders.models
 
         }
 
-        private static void whoGetsAWeapon(Person[] theParty) 
+        private static void whoGetsAWeapon(Person[] theParty, Weapon weapon) 
         {
 
             ConsoleOutputHelper.PrintHeroNames(theParty);
 
             int heroSlot = CIO.PromptForInt($"which of the heroes from slot 1 to {theParty.Length} do you want to recieve the weapon", 1, theParty.Length); 
                
-
-
-            //Weapon weapon = new Weapon.createWeapon();
-            //theParty[heroSlot].EquipWeapon(weapon);
+            theParty[heroSlot].EquipWeapon(weapon);
 
         }
 
+        
 
-       
-
-        private static void battlerLoop(Enemy[] enemies, Person[] theParty) 
+        private static void battlerLoop(Enemy[] enemies, Person[] theParty, Weapon weapon) 
         {
 
             ConsoleOutputHelper.ClearScreen();
-
+            Weapon newWeapon = Weapon.createWeapon();
+            ConsoleOutputHelper.ClearScreen();
+            
+            Console.WriteLine("\n\n");
+            whoGetsAWeapon(theParty, weapon);
+            ConsoleOutputHelper.ClearScreen();
             LevelLoop.Battle(enemies.ToList(), theParty);
 
         }
 
+        private static void increaseAvailableLevel(int currentLevel) 
+        {
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+        }
 
         private static void returnToMainMenu() 
         {
