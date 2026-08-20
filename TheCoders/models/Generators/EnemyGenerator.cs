@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TheCoders.models
+namespace TheCoders.models.Generators
 {
     public static class EnemyGenerator
     {
-        private static readonly string[] possibleNames = { "Bartholomew", "Dewy", "Travis Scott", "Kevin Lamar", "Katy Perry", "Jeffery Dalmer", "Donald Trump", "Donald Of Trump", "Freddie Mercury", "Orel", "Sid", "Sid The Sloth", "Turbo The Snail", "Lady Gaga", "Talor Swift", "Sony The Company", "Data Center", "Geofery Bezos", "Helen Keller", "Hellen Degenerate", "Person with glasses", "Imposter", "Sam Altmen"};
+        private static readonly string[] possibleNames = { "Bartholomew", "Dewy", "Travis Scott", "Kevin Lamar", "Katy Perry", "Jeffery Dalmer", "Donald Trump", "Donald Of Trump", "Freddie Mercury", "Orel", "Sid", "Sid The Sloth", "Turbo The Snail", "Lady Gaga", "Talor Swift", "Sony The Company", "Data Center", "Geofery Bezos", "Helen Keller", "Hellen Degenerate", "Person with glasses", "Imposter", "Sam Altmen", "Adam Sandler", "Tom Cruise", "Mr. Krebs", "Herobrine From Minecraft", "Mr. Krabs"};
         private const float statScaler = 1.04f;
         private const int baseDamage = 1;
         private const int baseSpeed = 3;

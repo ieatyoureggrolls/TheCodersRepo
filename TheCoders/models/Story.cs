@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml;
 using TheCoders.controllers;
 using TheCoders.views;
+using TheCoders.models.Generators;
+
 
 namespace TheCoders.models
 {
@@ -151,7 +153,8 @@ namespace TheCoders.models
                                
 
             Runner runner = new Runner();
-            runner.Battle(enemies.ToList());
+            LevelLoop.Battle(enemies.ToList());
+           
             //call the method that does auto battle
 
 

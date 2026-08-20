@@ -22,8 +22,16 @@ namespace TheCoders.models
         }
         public int MaxHealth { get; private set; }
         public int Speed { get; private set; }
-        public int Damage { get; private set; }
         public float critChance { get; private set; } = .025f;
+        public int Damage { 
+            get
+            {
+                if (heldWeapon == null || heldWeapon.getBroken())
+                    return 1;
+                else
+                    return heldWeapon.getAttack();
+            }
+            set; }
         public float critMult { get; private set; } = 1.5f;
         public bool IsHero { get; private set; }
 
@@ -36,7 +44,6 @@ namespace TheCoders.models
             MaxHealth = maxHealth;
             CurrentHealth = maxHealth;
             Speed = speed;
-            Damage = damage;
             IsHero = isHero;
         }
 
@@ -58,12 +65,7 @@ namespace TheCoders.models
        
         public int[] DealDamage()
         {
-            int damage;
-            if (heldWeapon != null/* || heldWeapon.attack*/)
-                //baseDamage = heldWeapon.damageWeapon
-                damage = Damage;
-            else
-                damage = Damage;
+            int damage = Damage;
 
             bool isCrit = new Random().NextDouble() <= critChance;
 
@@ -90,7 +92,22 @@ namespace TheCoders.models
 
         public override string ToString()
         {
-            return $"{Name} - Health: {CurrentHealth} | Speed: {Speed} | Damage: {Damage}";
+            int damage;
+            int durability;
+            int maxDurability;
+            if (heldWeapon == null || heldWeapon.getBroken())
+            {
+                damage = 1;
+                durability = 0;
+                maxDurability = 0;
+            }
+            else
+            {
+                damage = heldWeapon.getAttack();
+                durability = heldWeapon.getDurability();
+                maxDurability = heldWeapon.getMaxDurability();
+            }
+            return $"{Name} - Health: {CurrentHealth} | Speed: {Speed}\nWeapon Damage: {damage}";
         }
     }
 }
