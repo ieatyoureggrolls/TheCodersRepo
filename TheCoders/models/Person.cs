@@ -26,6 +26,8 @@ namespace TheCoders.models
         public int Damage { 
             get
             {
+                if (!IsHero)
+                    return field;
                 if (heldWeapon == null || heldWeapon.getBroken())
                     return 1;
                 else
@@ -44,6 +46,7 @@ namespace TheCoders.models
             MaxHealth = maxHealth;
             CurrentHealth = maxHealth;
             Speed = speed;
+            Damage = damage;
             IsHero = isHero;
         }
 
@@ -92,22 +95,19 @@ namespace TheCoders.models
 
         public override string ToString()
         {
-            int damage;
             int durability;
             int maxDurability;
             if (heldWeapon == null || heldWeapon.getBroken())
             {
-                damage = 1;
                 durability = 0;
                 maxDurability = 0;
             }
             else
             {
-                damage = heldWeapon.getAttack();
                 durability = heldWeapon.getDurability();
                 maxDurability = heldWeapon.getMaxDurability();
             }
-            return $"{Name} - Health: {CurrentHealth} | Speed: {Speed}\nWeapon Damage: {damage}";
+            return $"{Name} - Health: {CurrentHealth} | Speed: {Speed}\nWeapon Damage: {Damage}";
         }
     }
 }

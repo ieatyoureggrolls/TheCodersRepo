@@ -21,7 +21,7 @@ namespace TheCoders.controllers
         /// <param name="level">The level to scale enemies stats around</param>
         /// <param name="enemies">Used for if you want pregenerated enemies opposed to randomly generated enemies</param>
         /// <returns>True if the heroes won | False if the enemies won</returns>
-        public static bool Wave(int level, Person[] party , List<Enemy>? enemies = null)
+        public static bool Wave(int level, Person[] party, List<Enemy>? enemies = null)
         {
             partyMembers = party;
             Console.WriteLine($"Wave: {level}");
@@ -52,32 +52,39 @@ namespace TheCoders.controllers
         /// <summary>
         /// Controls the crafting weapon stage of the game
         /// </summary>
-        public static void HandleWeapons(Person[] party = null)
+        public static void HandleWeapons(List<Weapon> weaponStorage, Person[] party = null)
         {
             if (party != null)
                 partyMembers = party;
-            Console.WriteLine("What would you like to do?");
-            string[] possibleMenus = { "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon", "Enchant Weapon" };
-            int selection = CIO.PromptForMenuSelection(possibleMenus, false);
-
-            switch (selection)
+            bool isCrafting = true;
+            do
             {
-                case 1:
-                    CraftWeapon();
-                    break;
-                case 2:
-                    RepairWeapon();
-                    break;
-                case 3:
-                    ReplaceWeapon();
-                    break;
-                case 4:
-                    UpgradeWeapon();
-                    break;
-                case 5:
-                    EnchantWeapon();
-                    break;
-            }
+                Console.WriteLine("What would you like to do?");
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon", "Enchant Weapon" };
+                int selection = CIO.PromptForMenuSelection(possibleMenus, false);
+
+                switch (selection)
+                {
+                    case 1:
+                        isCrafting = false;
+                        break;
+                    case 2:
+                        CraftWeapon();
+                        break;
+                    case 3:
+                        RepairWeapon();
+                        break;
+                    case 4:
+                        ReplaceWeapon(weaponStorage);
+                        break;
+                    case 5:
+                        UpgradeWeapon();
+                        break;
+                    case 6:
+                        EnchantWeapon();
+                        break;
+                }
+            } while (isCrafting);
         }
 
         /// <summary>
@@ -103,19 +110,43 @@ namespace TheCoders.controllers
             if (party != null)
                 partyMembers = party;
             List<string> weapons = new List<string>();
-            foreach (Person person in partyMembers)
+            Console.WriteLine("Whoes weapon would you like to repair?");
+            for (int i = 0; i < partyMembers.Length; i++)
             {
-                if (person.heldWeapon == null)
+                if (partyMembers[i].heldWeapon == null)
                     continue;
-                //weapons.Add(person.heldWeapon.durability);
+                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} - Weapon:");
+                partyMembers[i].heldWeapon.displayWeaponInfo();
             }
+            int weaponToRepair = CIO.PromptForInt("", 1, partyMembers.Length) - 1;
+            partyMembers[weaponToRepair].heldWeapon.repairWeapon();
         }
 
-        public static void ReplaceWeapon(Person[] party = null)
+        public static void ReplaceWeapon(List<Weapon> weaponInventory, Person[] party = null)
         {
             if (party != null)
                 partyMembers = party;
+            Console.WriteLine("Whoes weapon would you like to replace?");
+            for (int i = 0; i < partyMembers.Length; i++)
+            {
+                if (partyMembers[i].heldWeapon == null)
+                    continue;
+                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} - Weapon:");
+                partyMembers[i].heldWeapon.displayWeaponInfo();
+            }
+            int weaponToReplace = CIO.PromptForInt("", 1, partyMembers.Length) - 1;
 
+            Console.WriteLine("Which weapon would you like them to start using?");
+            for (int i = 0; i < weaponInventory.Count; i++)
+            {
+                Console.Write($"{i + 1}. ");
+                weaponInventory[i].displayWeaponInfo();
+            }
+            int weaponReplacing = CIO.PromptForInt("", 1, weaponInventory.Count) - 1;
+            Weapon weaponToStorage = partyMembers[weaponToReplace].heldWeapon;
+            partyMembers[weaponToReplace].EquipWeapon(weaponInventory[weaponReplacing]);
+            weaponInventory.RemoveAt(weaponToReplace);
+            weaponInventory.Add(weaponToStorage);
         }
 
         public static void UpgradeWeapon(Person[] party = null)
@@ -146,9 +177,22 @@ namespace TheCoders.controllers
             people.AddRange(enemies);
             people.AddRange(partyMembers);
             List<Person> attackOrder = people.OrderByDescending(p => p.Speed).ToList();
+            int round = 1;
 
             do
             {
+                List<Person> alivePeople = new List<Person>();
+                Console.WriteLine($"\n\n---------------------------\nCurrentStandings\nCurrent Round: {round}");
+                foreach (Person person in attackOrder)
+                {
+                    if (person.CurrentHealth > 0)
+                        alivePeople.Add(person);
+                }
+                COH.PrintCombatantParty(alivePeople.ToArray());
+                Console.WriteLine("---------------------------\n\n");
+                CIO.PromptForInput("Press enter to continue", true);
+                attackOrder = alivePeople;
+
                 foreach (Person person in attackOrder)
                 {
                     int defenderIndex = random.Next(person.IsHero ? enemies.Count : partyMembers.Length);
@@ -159,17 +203,7 @@ namespace TheCoders.controllers
                     Thread.Sleep(1000);
                 }
 
-                List<Person> alivePeople = new List<Person>();
-                Console.WriteLine("\n\n---------------------------\nCurrentStandings");
-                foreach (Person person in attackOrder)
-                {
-                    if (person.CurrentHealth > 0)
-                        alivePeople.Add(person);
-                }
-                COH.PrintCombatantParty(alivePeople.ToArray());
-                Console.WriteLine("---------------------------\n\n");
-                attackOrder = alivePeople;
-
+                round++;
             } while (isBattleOver(partyMembers, enemies.ToArray()));
             return enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
         }
