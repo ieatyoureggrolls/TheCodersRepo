@@ -122,40 +122,35 @@ namespace TheCoders.models
         private static void Level1(Person[] theParty)
         {
 
+
+
            Enemy[] enemies =  EnemyGenerator.GenerateEnemies(1, 2);
 
-            const int currentLevel = 1;
+           const int currentLevel = 1;
 
            Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
            Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
-           Console.WriteLine("\n\nim gonna make the first weapon so pay attention\n");
-
-
-            Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long,Pieces.Material.wood,Handle.HandleType.Long,Pieces.Material.wood);
-          
-           tutorialWeapon.displayWeaponInfo();
-
-            Console.WriteLine("\nas you can see the weapon above is as simple and basic as it gets, pay attention to its stats because the materials you pick will affect it stats");
-            Console.WriteLine("\nNow pick which hero will get this weapon before the battle begins\n");
-           
-            whoGetsAWeapon(theParty);
+           Console.WriteLine("\n\nTake a look the enemies are quickly approaching\n");
 
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
-            //ConsoleOutputHelper.PrintBattleStanding(theParty, enemies); // this method doesnt exist yet
+            Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long,Pieces.Material.wood,Handle.HandleType.Long,Pieces.Material.wood);
+
+            Console.WriteLine("\n I don't have time to explain things to you right now take this sword");
+            tutorialWeapon.displayWeaponInfo();
+            Console.WriteLine("\nNow pick which hero will get this weapon before the battle begins\n");
+                        
+            whoGetsAWeapon(theParty);
+
+            ConsoleOutputHelper.ClearScreen();
+
+            LevelLoop.Battle(enemies.ToList(), theParty);
 
 
 
 
 
-            Console.WriteLine("\n\n the battle was easy this time but that weapon won't last much longer ");
 
-                               
-
-            Runner runner = new Runner();
-            LevelLoop.Battle(enemies.ToList());
-           
-            //call the method that does auto battle
 
 
             winOrLose(theParty, currentLevel);
@@ -356,7 +351,9 @@ namespace TheCoders.models
         private static void whoGetsAWeapon(Person[] theParty) 
         {
 
-            int heroSlot = CIO.PromptForInt($"which of the heroes from slot 0 to {theParty.Length - 1} do you want to recieve the weapon", 0, theParty.Length - 1); 
+            ConsoleOutputHelper.PrintHeroNames(theParty);
+
+            int heroSlot = CIO.PromptForInt($"which of the heroes from slot 1 to {theParty.Length} do you want to recieve the weapon", 1, theParty.Length); 
                
 
 
@@ -366,35 +363,16 @@ namespace TheCoders.models
         }
 
 
-        static Weapon SimulateWeaponCreate(string first, string second, string third, string fourth)
+       
+
+        private static void battlerLoop(Enemy[] enemies, Person[] theParty) 
         {
-            // Define simulated lines separated by newlines
-            string simulatedInput = $"{first}\n{second}\n{third}\n{fourth}\nYes";
 
-            using (StringReader reader = new StringReader(simulatedInput))
-            {
-                // Redirect standard input inside this static context
-                Console.SetIn(reader);
+            ConsoleOutputHelper.ClearScreen();
 
-                // The code reads the simulated text seamlessly
-                //string option1 = Console.ReadLine();
-                //string option2 = Console.ReadLine();
-                //string option3 = Console.ReadLine();
-                //string option4 = Console.ReadLine();
+            LevelLoop.Battle(enemies.ToList(), theParty);
 
-                Weapon test = Weapon.createWeapon();
-
-                test.displayWeaponInfo();
-
-                StreamReader standardInput = new StreamReader(Console.OpenStandardInput());
-                Console.SetIn(standardInput);
-
-                return test;
-
-            }
         }
-
-
 
 
         private static void returnToMainMenu() 
