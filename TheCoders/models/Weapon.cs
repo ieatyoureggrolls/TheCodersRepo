@@ -35,6 +35,7 @@ namespace TheCoders
         private int level = 1;
         private int repairCost = 0;
 
+        public String getName() { return name; }
         public int getRepair() {  return repairCost; }
         public int getValue() { return value; }
         public int getLevel() { return level; }
@@ -400,7 +401,7 @@ namespace TheCoders
             updateDamageType();
         }
         
-        //displays the stats of a weapon
+        //displays the stats of a weapon. If a weapon is below half durability, the durability will have a warning
         public void displayWeaponInfo()
         {
             if (name != null)
@@ -408,6 +409,10 @@ namespace TheCoders
                 if (isBroken)
                 {
                     Console.WriteLine($"{name}'s Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: BROKEN, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}, Value: {value}");
+                }
+                else if (halfDurablility)
+                {
+                    Console.WriteLine($"{name}'s Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, !Durability: {durability}/{maxDurability}!, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}, Value: {value}");
                 }
                 else
                 {
