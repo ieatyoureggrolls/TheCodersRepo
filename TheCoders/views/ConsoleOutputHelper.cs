@@ -38,10 +38,19 @@ public static class ConsoleOutputHelper
         Console.WriteLine("Hero Party\n");
         for (int i = 0; i < heroParty.Count; i++)
         {
-            Console.WriteLine($"{i + 1}: {heroParty[i].Name}");
+            if (heroParty[i].heldWeapon == null)
+            {
+                Console.WriteLine($"{i + 1}: {heroParty[i].Name}");
+            }
+            else
+            {
+                Console.WriteLine($"{i + 1}: {heroParty[i].Name} Weilding: {heroParty[i].heldWeapon.getName}");
+            }
+
+
         }
     }
-    
+
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
     /// </summary>

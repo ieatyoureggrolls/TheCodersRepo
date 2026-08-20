@@ -14,12 +14,13 @@ namespace TheCoders.models
     {
         static int availableLevels = 1;
         const int minimumLevels = 1;
+        private static Person[] theParty = { new Person("hero:Bob", 100, 5, 1, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
 
-        public static void main(Person[] theParty)
+        public static void main()
         {
             
 
-            chooseLevel(theParty, availableLevels);
+            chooseLevel(availableLevels);
 
             
         }
@@ -28,11 +29,8 @@ namespace TheCoders.models
          * tasks needed to complete:
          * 
          * methods
-         * takeToLevel should take a player to a level without requiring inputs (complete but needs testing)
-         * winOrLose on a loss the player is asked if they would like to restart the level or go to main menu (complete but needs testing)
-         * returnToMainMenu() return to the main menu where the player can select story or endless mode (complete but needs testing)
-         * 
-         * level1 player spectates the computer making a weapon and sees the auto battler (partially complete)
+         
+         * level1 player spectates the computer making a weapon and sees the auto battler (complete)
          * level2 player makes a weapon for the second hero and watches auto battler (partially complete)
          * level3 weapons are low on durability so player learns to repair weapons (partially complete)
          * level4 player learns to replace weapons (partially complete)
@@ -47,29 +45,29 @@ namespace TheCoders.models
          */
 
 
-        private static void takeToLevel(int levelSelect, Person[] theParty)
+        private static void takeToLevel(int levelSelect)
         {
 
             switch (levelSelect)
             {
                 case (1):
-                    Level1(theParty);
+                    Level1();
                     break;
 
                 case (2):
-                    Level2(theParty);
+                    Level2();
                     break;
 
                 case (3):
-                    Level3(theParty);
+                    Level3();
                     break;
 
                 case (4):
-                    Level4(theParty);
+                    Level4();
                     break;
 
                 case (5):
-                    Level5(theParty);
+                    Level5();
                     break;
                 default:
                     Console.WriteLine("Sorry that wasn't a proper level");
@@ -79,7 +77,7 @@ namespace TheCoders.models
 
         }
 
-        private static void chooseLevel(Person[] theParty, int availableLevels)
+        private static void chooseLevel(int availableLevels)
         {
 
             
@@ -90,28 +88,28 @@ namespace TheCoders.models
                 switch (selectedLevel)
                 {
                     case (1):
-                        Level1(theParty);
+                        Level1();
                         break;
 
                     case (2):
-                        Level2(theParty);
+                        Level2();
                         break;
 
                     case (3):
-                        Level3(theParty);
+                        Level3();
                         break;
 
                     case (4):
-                        Level4(theParty);
+                        Level4();
                         break;
 
                     case (5):
-                        Level5(theParty);
+                        Level5();
                         break;
 
                 default:
                         Console.WriteLine("Sorry that wasn't a proper level choose something else");
-                        chooseLevel(theParty, availableLevels);
+                        chooseLevel(availableLevels);
                         break;
 
                 }
@@ -119,12 +117,12 @@ namespace TheCoders.models
                        
         }
 
-        private static void Level1(Person[] theParty)
+        private static void Level1()
         {
 
             ConsoleOutputHelper.ClearScreen();
 
-            Enemy[] enemies =  EnemyGenerator.GenerateEnemies(1, 2);
+            Enemy[] enemies =  EnemyGenerator.GenerateEnemies(1, 1);
 
            const int currentLevel = 1;
 
@@ -136,7 +134,7 @@ namespace TheCoders.models
 
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long,Pieces.Material.wood,Handle.HandleType.Long,Pieces.Material.wood);
 
-            Console.WriteLine("\n I don't have time to explain things to you right now take this sword");
+            Console.WriteLine("\n I don't have time to explain things to you right now take this sword\n");
             tutorialWeapon.displayWeaponInfo();
             Console.WriteLine("\nNow pick which hero will get this weapon, once you do the battle will begin\n");
                         
@@ -148,12 +146,12 @@ namespace TheCoders.models
 
             winOrLose(theParty, currentLevel);
             increaseAvailableLevel(currentLevel);          
-            wantNextLevel(currentLevel, theParty);
+            wantNextLevel(currentLevel);
 
 
         }
 
-        private static void Level2(Person[] theParty) 
+        private static void Level2() 
         {
             ConsoleOutputHelper.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(2,2);
@@ -185,11 +183,11 @@ namespace TheCoders.models
 
             }
 
-            wantNextLevel(currentLevel, theParty);
+            wantNextLevel(currentLevel);
 
         }
 
-        private static void Level3(Person[] theParty) 
+        private static void Level3() 
         {
             ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 3;
@@ -211,11 +209,11 @@ namespace TheCoders.models
 
             }
 
-            wantNextLevel(currentLevel, theParty);
+            wantNextLevel(currentLevel);
 
         }
 
-        private static void Level4(Person[] theParty)
+        private static void Level4()
         {
             ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 4;
@@ -240,11 +238,11 @@ namespace TheCoders.models
 
             }
 
-            wantNextLevel(currentLevel,theParty);
+            wantNextLevel(currentLevel);
 
         }
 
-        private static void Level5(Person[] theParty)
+        private static void Level5()
         {
             ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 5;
@@ -268,7 +266,7 @@ namespace TheCoders.models
 
             }
 
-            wantNextLevel(currentLevel, theParty);
+            wantNextLevel(currentLevel);
 
         }
 
@@ -295,7 +293,7 @@ namespace TheCoders.models
 
                 if (input == "Y" || input == "YES")
                 {
-                    takeToLevel(currentLevel, theParty);
+                    takeToLevel(currentLevel);
                 }
                 else
                 {
@@ -311,7 +309,7 @@ namespace TheCoders.models
 
         }
 
-        private static void wantNextLevel(int currentLevel, Person[] theParty)
+        private static void wantNextLevel(int currentLevel)
         {
 
 
@@ -324,14 +322,14 @@ namespace TheCoders.models
                     case 1:
 
                     ConsoleOutputHelper.ClearScreen();
-                    takeToLevel(currentLevel + 1, theParty);
+                    takeToLevel(currentLevel + 1);
                         break;
 
                     case 2:
 
 
                     ConsoleOutputHelper.ClearScreen();
-                    chooseLevel(theParty, availableLevels);
+                    chooseLevel(availableLevels);
                         break;
 
                     default:
@@ -359,6 +357,7 @@ namespace TheCoders.models
         }
 
         
+
 
         private static void battlerLoop(Enemy[] enemies, Person[] theParty, Weapon weapon) 
         {
