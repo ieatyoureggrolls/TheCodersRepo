@@ -214,6 +214,7 @@ namespace TheCoders.models
         public Blade(BladeType bladeType, Material material)
         {
             setPieceType(PieceType.blade);
+            setBladeType(bladeType);
             setMaterial(material);
             combineStats();
         }
@@ -305,6 +306,7 @@ namespace TheCoders.models
 
         public Handle(HandleType handleType, Material material)
         {
+            setPieceType(PieceType.handle);
             setHandleType(handleType);
             setMaterial(material);
             combineStats();
