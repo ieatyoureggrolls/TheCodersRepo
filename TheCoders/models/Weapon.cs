@@ -428,12 +428,20 @@ namespace TheCoders
         //displays the list of enchantments on a weapon
         public void displayEnchantments()
         {
+            if (enchantmentList.Count < 1)
+            {
+                Console.WriteLine($"{name} doesn't have any enchantments");
+            }
+            else
+            {
             Console.WriteLine($"Weapon Enchantments: ");
             foreach (Enchantments e in enchantmentList)
             {
                 Console.Write($"[{e.getEnchantmentType().ToString().ToUpper()}] ");
             }
             Console.WriteLine();
+            }
+
         }
 
         //sets the weapon durability back to max. Sets isBroken to false
@@ -476,6 +484,11 @@ namespace TheCoders
             value += 5;
             attack += 5;
             speed += 5;
+        }
+
+        //sets the weapon name to newName
+        public void renameWeapon(String newName) {
+        name = newName;
         }
 
     }
