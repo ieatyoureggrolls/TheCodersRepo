@@ -21,7 +21,7 @@ namespace TheCoders.controllers
         /// <param name="level">The level to scale enemies stats around</param>
         /// <param name="enemies">Used for if you want pregenerated enemies opposed to randomly generated enemies</param>
         /// <returns>True if the heroes won | False if the enemies won</returns>
-        public static bool Wave(int level, Person[] party, List<Enemy>? enemies = null)
+        public static bool Wave(int level, Person[] party, List<Weapon> weaponStorage, List<Enemy>? enemies = null)
         {
             partyMembers = party;
             Console.WriteLine($"Wave: {level}");
@@ -30,7 +30,7 @@ namespace TheCoders.controllers
 
             PrintEnemies(enemies.ToArray());
 
-            HandleWeapons();
+            HandleWeapons(weaponStorage);
 
             bool partySurvives = Battle(enemies);
             return partySurvives;
