@@ -7,7 +7,7 @@ namespace TheCoders.models
 {
     public static class Endless
     {
-        public static int currentLevel;
+        public static int currentLevel = 1;
         public static Person[] partyMembers = { new Person("Bob", 10000, 250, 250, true), new Person("Billy", 25, 3, 6, true), new Person("Joe", 50, 1, 1, true) };
 
         public static void StartEndless()
@@ -16,7 +16,7 @@ namespace TheCoders.models
             bool partyAlive;
             do
             {
-                partyAlive = LevelLoop.Wave(currentLevel, partyMembers);
+                partyAlive = LevelLoop.Wave(currentLevel, partyMembers, new List<Weapon>());
                 currentLevel++;
             } while (partyAlive);
         }
