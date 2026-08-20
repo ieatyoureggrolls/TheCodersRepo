@@ -8,6 +8,13 @@ namespace TheCoders.views;
 
 //Console Output Helper
 
+//Pause inbetween dialogs
+//Delay text method
+//Make sure methods are broken up into small methods
+//Make sure methods are documented with XML comments
+//Add menu design
+//Print name of hero and slot
+
 
 public static class ConsoleOutputHelper
 {
@@ -15,26 +22,13 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
-        Person Jeff = new Person("Jeff", 100, 10, 100, true);
-        Person Jack = new Person("Jack", 100, 10, 100, true);
-        Person Mort = new Person("Mort", 100, 10, 100, true);
-        Person Jor = new Person("Jor", 100, 10, 100, true);
-        Jeff.CurrentHealth = 77;
-        Jack.CurrentHealth = 23;
-        Mort.CurrentHealth = 1;
-        Person[] heroParty = new Person[4] { Jeff, Jack, Mort, Jor };
-        //PrintCombatantParty(heroParty);
-
-        Enemy[] enemyParty = EnemyGenerator.GenerateEnemies(5, 4);
-        Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
-        
-        Enemy[] enemyPartyTwo = new Enemy[enemyParty.Length + 1];
-        for (int index = 0; index < enemyParty.Length; index++)
+        Enemy boss = new Enemy("Boss",true, 100,1,1);
+        do
         {
-            enemyPartyTwo[index] = enemyParty[index];
+            boss.CurrentHealth -= 5;
+            PrintHealthBar(boss, true);
         }
-        enemyPartyTwo[4] = boss;
-        //PrintCombatantParty(enemyPartyTwo);
+        while (boss.CurrentHealth > 0);
     }
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
@@ -71,13 +65,12 @@ public static class ConsoleOutputHelper
         Console.WriteLine($" {currentHealth}/{maxHealth} ({healthPercentage}%)");
     }
 
-    public static void PrintHealthBar(Enemy enemy)
-    {
-        Person person = enemy as Person;
-        PrintHealthBar(person);
-    }
-    //Print Boss health bar
 
+    /// <summary>
+    /// Prints a string a certain number of times, with a new line at the end
+    /// </summary>
+    /// <param name="printMe">The string to print</param>
+    /// <param name="quantity">The number of times to print the string</param>
     public static void Repeat(string printMe, int quantity)
     {
         for (int i = 0; i < quantity; i++)
@@ -93,6 +86,12 @@ public static class ConsoleOutputHelper
             
         }
     }
+    /// <summary>
+    /// Prints a string a certain number of times, with a new line at the end, in a specific rgb color
+    /// </summary>
+    /// <param name="printMe">The string to print</param>
+    /// <param name="quantity">The number of times to print the string</param>
+    /// <param name="rgb">The rgb color to use</param>
     public static void Repeat(string printMe, int quantity, int[] rgb)
     {
         for (int i = 0;i < quantity; i++)
@@ -110,6 +109,115 @@ public static class ConsoleOutputHelper
         }
     }
 
+    /// <summary>
+    /// Checks which layer the healthbar is currently in, then returns the current layer
+    /// </summary>
+    /// <param name="totalFilledSquares">The total number of filled squares in the healthbar</param>
+    /// <param name="totalEmptySquaresInLayerThree">The total number of empty squares in layer three</param>
+    /// <param name="totalEmptySquaresInLayerTwo">The total number of empty squares in layer two</param>
+    /// <param name="totalEmptySquaresInLayerOne">The total number of empty squares in layer one</param>
+    /// <returns>The current layer</returns>
+    public static int LayerCheck(int totalFilledSquares, int totalEmptySquaresInLayerThree, int totalEmptySquaresInLayerTwo, int totalEmptySquaresInLayerOne)
+    {
+        if (totalFilledSquares >= 60)
+        {
+            return 3;
+        }
+        else if (totalFilledSquares > 30 && totalFilledSquares < 60)
+        {
+            return 2;
+        }
+        else if (totalFilledSquares <= 30)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// Prints a layer of the healthbar, with empty squares printed first, then filled squares printed
+    /// </summary>
+    /// <param name="currentLayer">The current layer to print</param>
+    /// <param name="totalEmptySquares">The total number of empty squares in the layer</param>
+    /// <param name="totalFilledSquares">The total number of filled squares in the layer</param>
+    /// <param name="square">The character to use for the squares</param>
+    public static void PrintLayer(int currentLayer, int totalEmptySquares, int totalFilledSquares, string square)
+    {
+        //Keeps track of how many squares have been printed
+        int layerTracker = 1;
+
+        //Sets the color of the empty squares based on the current layer
+        if (currentLayer == 3)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        }
+        else if(currentLayer == 2)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+        }
+        else if(currentLayer == 1)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+        }
+
+        //Prints the empty squares, with a new line after every 10 squares
+        for (int i = 0; i < totalEmptySquares; i++)
+        {
+            if (layerTracker % 10 == 0)
+            {
+                Console.WriteLine(square);
+            }
+            else
+            {
+                Console.Write(square);
+            }
+            
+            layerTracker++;
+        }
+
+        //Resets the color of the console to default
+        Console.ResetColor();
+
+        //Sets the color of the filled squares based on the current layer
+        if (currentLayer == 3)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+
+        }
+        else if (currentLayer == 2)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        }
+        else if (currentLayer == 1)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+        }
+
+        //Prints the filled squares, with a new line after every 10 squares
+        for (int i = 0; i < totalFilledSquares; i++)
+        {
+            if (layerTracker % 10 == 0)
+            {
+                Console.WriteLine(square);
+            }
+            else
+            {
+                Console.Write(square);
+            }
+
+            layerTracker++;
+        }
+        Console.ResetColor();
+    }
+
+    /// <summary>
+    /// Prints an Emeny Bosses multi-layered healthbar
+    /// </summary>
+    /// <param name="boss">The Enemy Boss whose healthbar is being printed</param>
+    /// <param name="isBoss">If the Enemy is a boss</param>
     public static void PrintHealthBar(Enemy boss, bool isBoss)
     {
         string square = "\u25A0";
@@ -120,67 +228,49 @@ public static class ConsoleOutputHelper
         const int totalSquaresInALayer = 30;
         const int rows = 3;
         const int numOfHealthSquaresInARow = 10;
-        Console.WriteLine($"Number of layers: {numOfLayers }");
-        Console.WriteLine($"Total squares: {totalSquares}");
-        Console.WriteLine($"Total squares in a layer: {totalSquaresInALayer}");
 
         double healthPercentage = (currentHealth / maxHealth);
 
         int totalFilledSquares = (int)Math.Ceiling(totalSquares * healthPercentage);
         int totalEmptySquares = totalSquares - totalFilledSquares;
+        int remainingFilledSquares = totalFilledSquares;
+        int remainingEmptySquares = totalEmptySquares;
 
-        Console.WriteLine($"Health percentage: {healthPercentage}");
-        Console.WriteLine($"{totalFilledSquares} total filled squares");
-        Console.WriteLine($"{totalEmptySquares} total empty squares");
+        //Individually calculates the amount of squares filled and empty per layer
+        //This is very un-optimized, but it works. Will optimize if given the time.
 
         int filledSquaresInLayerThree = (totalFilledSquares > 60) ? totalFilledSquares - 60 : 0;
-        totalFilledSquares -= filledSquaresInLayerThree;
+        remainingFilledSquares-= filledSquaresInLayerThree;
+        int totalEmptySquaresInLayerThree = 30 - filledSquaresInLayerThree;
+        remainingEmptySquares -= totalEmptySquaresInLayerThree;
+
         int filledSquaresInLayerTwo = (totalFilledSquares > 30) ? totalFilledSquares - 30 : 0;
-        totalFilledSquares -= filledSquaresInLayerTwo;
+        remainingFilledSquares  -= filledSquaresInLayerTwo;
+        int totalEmptySquaresInLayerTwo = 30 - filledSquaresInLayerTwo;
+        remainingEmptySquares -= totalEmptySquaresInLayerTwo;
+
         int filledSquaresInLayerOne = totalFilledSquares;
-        //Total filled == 80
+        int totalEmptySquaresInLayerOne = 30 - filledSquaresInLayerOne;
+        remainingFilledSquares -= filledSquaresInLayerOne;
+        remainingEmptySquares -= totalEmptySquaresInLayerOne;
 
-        //l1 green 20 filled
-        //l2 yellow 30 filled
-        //l3 orange 30 filled
-
-
-
-        
-
-        //Subtract
-
-
-        Console.WriteLine($"{filledSquaresInLayerThree} filled in layer three");
-        Console.WriteLine($"{filledSquaresInLayerTwo} filled in layer two");
-        Console.WriteLine($"{filledSquaresInLayerOne} filled in layer one");
-        
-        //Console.WriteLine($"{totalEmptySquaresInLayerOne} emptied in layer one");
-
-
-
-
-        
-        //Console.WriteLine($"{totalEmptySquaresInLayerThree} emptied in layer three");
-        
-
-
-        //Green -> Yellow -> Orange -> red
-        //Keep track of layers
-        //Print the previos layes color in empty squares
-        //3 layers of 30
-
-
+        //Checks which layer the healthbar is currently in, then prints the appropriate layer
+        int currentLayer = LayerCheck(totalFilledSquares, totalEmptySquaresInLayerThree, totalEmptySquaresInLayerTwo, totalEmptySquaresInLayerOne);
+        if(currentLayer == 3)
+        {
+            PrintLayer(currentLayer, totalEmptySquaresInLayerThree, filledSquaresInLayerThree, square);
+        }
+        else if(currentLayer == 2)
+        {
+            PrintLayer(currentLayer, totalEmptySquaresInLayerTwo, filledSquaresInLayerTwo, square);
+        }
+        else if(currentLayer == 1)
+        {
+            PrintLayer(currentLayer, totalEmptySquaresInLayerOne, filledSquaresInLayerOne, square);
+        }
 
         Console.ResetColor();
         }
-    
-            
-
-        
-        //Multi-Rowed
-        //Shifts through different colors
-
     
     //Print battle standings
     public static void PrintBattleStanding(Person[] playerParty, Person[] enemyParty)
@@ -503,9 +593,11 @@ public static class ConsoleOutputHelper
     /// <summary>
     /// Prints a party of Person objects, Enemy objects including Bosses
     /// </summary>
-    /// <param name="party">The party of Person objects to print</param>
-    public static void PrintCombatantParty(Person[] party)
+    /// <param name="party">The party of Person or Enemy objects to print</param>
+    public static void PrintCombatantParty(IReadOnlyList<Person> party)
     {
+        
+    
         //If first array element is a hero, its the hero party, else if enemy party
         if (party[0].IsHero)
         {
@@ -554,8 +646,8 @@ public static class ConsoleOutputHelper
                 if (enemy.IsBoss)
                 {
                     //Is a boss
-                    //PrintHealthBar(enemy, enemy.IsBoss);
-                    PrintHealthBar(enemy);
+                    PrintHealthBar(enemy, enemy.IsBoss);
+                    //PrintHealthBar(enemy);
                 }
                 else
                 {
