@@ -42,6 +42,7 @@ public static class ConsoleOutputHelper
         }
     }
     
+
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
     /// </summary>
@@ -87,6 +88,7 @@ public static class ConsoleOutputHelper
         for (int i = 0; i < quantity; i++)
         {
             if(i == quantity -1)
+            if (i == quantity - 1)
             {
                 Console.WriteLine(printMe);
             }
@@ -95,6 +97,7 @@ public static class ConsoleOutputHelper
                 Console.Write(printMe);
             }
             
+
         }
     }
     /// <summary>
@@ -105,9 +108,9 @@ public static class ConsoleOutputHelper
     /// <param name="rgb">The rgb color to use</param>
     public static void Repeat(string printMe, int quantity, int[] rgb)
     {
-        for (int i = 0;i < quantity; i++)
+        for (int i = 0; i < quantity; i++)
         {
-            if(i == quantity)
+            if (i == quantity)
             {
 
                 Console.WriteLine($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
@@ -116,7 +119,7 @@ public static class ConsoleOutputHelper
             {
                 Console.Write($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
             }
-            
+
         }
     }
 
@@ -165,11 +168,11 @@ public static class ConsoleOutputHelper
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
         }
-        else if(currentLayer == 2)
+        else if (currentLayer == 2)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
         }
-        else if(currentLayer == 1)
+        else if (currentLayer == 1)
         {
             Console.ForegroundColor = ConsoleColor.DarkRed;
         }
@@ -185,7 +188,7 @@ public static class ConsoleOutputHelper
             {
                 Console.Write(square);
             }
-            
+
             layerTracker++;
         }
 
@@ -251,12 +254,12 @@ public static class ConsoleOutputHelper
         //This is very un-optimized, but it works. Will optimize if given the time.
 
         int filledSquaresInLayerThree = (totalFilledSquares > 60) ? totalFilledSquares - 60 : 0;
-        remainingFilledSquares-= filledSquaresInLayerThree;
+        remainingFilledSquares -= filledSquaresInLayerThree;
         int totalEmptySquaresInLayerThree = 30 - filledSquaresInLayerThree;
         remainingEmptySquares -= totalEmptySquaresInLayerThree;
 
         int filledSquaresInLayerTwo = (totalFilledSquares > 30) ? totalFilledSquares - 30 : 0;
-        remainingFilledSquares  -= filledSquaresInLayerTwo;
+        remainingFilledSquares -= filledSquaresInLayerTwo;
         int totalEmptySquaresInLayerTwo = 30 - filledSquaresInLayerTwo;
         remainingEmptySquares -= totalEmptySquaresInLayerTwo;
 
@@ -267,22 +270,22 @@ public static class ConsoleOutputHelper
 
         //Checks which layer the healthbar is currently in, then prints the appropriate layer
         int currentLayer = LayerCheck(totalFilledSquares, totalEmptySquaresInLayerThree, totalEmptySquaresInLayerTwo, totalEmptySquaresInLayerOne);
-        if(currentLayer == 3)
+        if (currentLayer == 3)
         {
             PrintLayer(currentLayer, totalEmptySquaresInLayerThree, filledSquaresInLayerThree, square);
         }
-        else if(currentLayer == 2)
+        else if (currentLayer == 2)
         {
             PrintLayer(currentLayer, totalEmptySquaresInLayerTwo, filledSquaresInLayerTwo, square);
         }
-        else if(currentLayer == 1)
+        else if (currentLayer == 1)
         {
             PrintLayer(currentLayer, totalEmptySquaresInLayerOne, filledSquaresInLayerOne, square);
         }
 
         Console.ResetColor();
-        }
-    
+    }
+
     //Print battle standings
     public static void PrintBattleStanding(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty)
     {
@@ -290,41 +293,82 @@ public static class ConsoleOutputHelper
     }
     //Print banner
 
-    public static void PrintLeftRect(int cursorLeft, int cursorTop, string topLeftArch, string bottomLeftArch, string verticalLine)
+    public static void PrintLeftRect(int cursorLeft, int cursorTop, string topLeftArch, string bottomLeftArch, string verticalLine, int[] curserCords)
     {
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
-        
+
         //Console.SetCursorPosition(cursorLeft, cursorTop);
 
-        Console.WriteLine(verticalLine);
-        Console.SetCursorPosition(cursorLeft, cursorTop +1);
+        Console.Write(verticalLine);
+        Console.SetCursorPosition(cursorLeft, cursorTop + 1);
         Console.Write(topLeftArch);
+        curserCords[0] = Console.CursorLeft;
+        curserCords[1] = Console.CursorTop;
         Console.SetCursorPosition(oldLeft, oldTop);
-        Console.SetCursorPosition(cursorLeft, cursorTop-1);
+        Console.SetCursorPosition(oldLeft, oldTop - 1);
         Console.Write(bottomLeftArch);
-        Console.SetCursorPosition(oldLeft, oldTop);
+        Console.SetCursorPosition(oldLeft + 1, oldTop);
+
 
     }
     public static void PrintRightRect(int cursorLeft, int cursorTop, string topRightArch, string bottomRightArch, string verticalLine)
     {
-        
+
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
 
-        Console.WriteLine(verticalLine);
+        Console.Write(verticalLine);
         Console.SetCursorPosition(cursorLeft, cursorTop + 1);
         Console.Write(topRightArch);
-
-        Console.SetCursorPosition(cursorLeft, cursorTop - 1);
-        Console.Write(bottomRightArch);
         Console.SetCursorPosition(oldLeft, oldTop);
+        Console.SetCursorPosition(oldLeft, oldTop - 1);
+        Console.Write(bottomRightArch);
+        Console.SetCursorPosition(oldLeft + 1, oldTop);
+
 
 
     }
 
+    public static void PrintHorizontalEdges(string edge, int length, int cursorLeft, int cursorTop)
+    {
+        for (int index = 0; index < length + 2; index++)
+        {
+            Console.Write(edge);
+            Console.SetCursorPosition(cursorLeft + index, cursorTop - 2);
+            Console.Write(edge);
+            Console.SetCursorPosition(cursorLeft + index, cursorTop);
+            Console.Write(edge);
+        }
+
+        //extra removal
+        Console.SetCursorPosition(0, 2);
+        for(int index = 0; index != length; index++)
+        {
+            Console.Write(" ");
+        }
+
+        //for (int index = 0; cursorLeft >= 0; index++)
+        //{
+              
+
+        //}
+
+
+     
+
+    }
+    /// <summary>
+    /// Prints a banner with a message in the center of the terminal, with a border around it
+    /// </summary>
+    /// <param name="message">The message to display in the banner</param>
     public static void PrintBanner(string message)
     {
+        //ClearScreen();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+
         //Banner has different thickness or font size
         //Figure out char length of Terminal
         //Print message in the top center
@@ -343,59 +387,61 @@ public static class ConsoleOutputHelper
 
         int terminalWidth = Console.WindowWidth;
         int messageLength = message.Length;
-        int centerPosition  = (terminalWidth - messageLength) / 2;
+        int centerPosition = (terminalWidth - messageLength) / 2;
         int padding = (terminalWidth - messageLength) / 2;
+        int[] curserCords = new int[2];
 
-        
-        
+
+
         Console.SetCursorPosition(0, 1);
 
         for (int index = 0; index < terminalWidth; index++)
         {
-            if(index == padding - 1 || index == padding + 1)
+            if (index == padding - 1 || index == padding + 1)
             {
+
                 Console.Write(" ");
+                //PrintHorizontalEdges(horizontalLine);
             }
-            else if(index == padding - 2 || index == padding + 2)
+            else if (index == padding - 2 || index == padding + 2)
             {
 
                 int oldLeft = Console.CursorLeft;
                 int oldTop = Console.CursorTop;
 
-                
-                
+
+
 
                 if (index == padding - 2)
                 {
-                    PrintLeftRect(oldLeft, oldTop, topLeftArch, bottomLeftArch, verticalLine);
+                    PrintLeftRect(oldLeft, oldTop, topLeftArch, bottomLeftArch, verticalLine, curserCords);
                 }
                 else if (index == padding + 2)
                 {
                     PrintRightRect(oldLeft, oldTop, topRightArch, bottomRightArch, verticalLine);
                 }
-                
-                
+
+
             }
-            
-            else if(index == padding)
+
+            else if (index == padding)
             {
                 Console.Write(message);
+                //PrintHorizontalEdges(horizontalLine);
                 //Console.WriteLine(Console.GetCursorPosition());
             }
-            else
+            else if (index != terminalWidth)
             {
-                
+
                 Console.Write(horizontalLine);
             }
-            
+
         }
-        
+        PrintHorizontalEdges(horizontalLine, messageLength, curserCords[0], curserCords[1]);
 
-
-        Console.WriteLine();
     }
 
-    
+
 
     //Battle Summary
 
@@ -705,8 +751,8 @@ public static class ConsoleOutputHelper
     /// <param name="party">The party of Person or Enemy objects to print</param>
     public static void PrintCombatantParty(IReadOnlyList<Person> party)
     {
-        
-    
+
+
         //If first array element is a hero, its the hero party, else if enemy party
         if (party[0].IsHero)
         {
@@ -750,7 +796,7 @@ public static class ConsoleOutputHelper
             //Health
             if (person is Enemy)
             {
-                
+
                 Enemy enemy = (person as Enemy);
                 if (enemy.IsBoss)
                 {
