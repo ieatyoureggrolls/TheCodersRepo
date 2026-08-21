@@ -8,7 +8,7 @@ namespace TheCoders.controllers;
 
 public class Runner
 {
-    public Person[] partyMembers = { new Person("Bob", 10000, 250, 250, true), new Person("Billy", 25, 3, 6, true), new Person("Joe", 50, 1, 1, true) };
+    
     public void Run()
     {
         ChooseMode();
@@ -38,7 +38,7 @@ public class Runner
     public void Story()
     {
         Console.WriteLine("Story");
-        Storymode.main(partyMembers);
+        Storymode.main();
     }
 }
 

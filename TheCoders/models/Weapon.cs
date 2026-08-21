@@ -19,6 +19,8 @@ namespace TheCoders
 
         private DamageType damageType;
         List<Enchantments> enchantmentList = new List<Enchantments>();
+
+        private String name = null;
         private int attack;
         private int speed;
         private int durability;
@@ -27,8 +29,16 @@ namespace TheCoders
         private int maxThreshold;
         private int enchantPoints;
         private bool isBroken = false;
+        private bool halfDurablility = false;
         private int? damageIndex = null;
+        private int value = 0;
+        private int level = 1;
+        private int repairCost = 0;
 
+        public String getName() { return name; }
+        public int getRepair() {  return repairCost; }
+        public int getValue() { return value; }
+        public int getLevel() { return level; }
         public int getAttack() { return attack; }
         public int getSpeed() { return speed; }
         public int getDurability() { return durability; }
@@ -37,12 +47,16 @@ namespace TheCoders
         public int getMaxThreshold() { return maxThreshold; }
         public int getEnchantPoints() { return enchantPoints; }
         public bool getBroken() { return isBroken; }
+        public bool isHalf() {  return halfDurablility; }
+
+       
         public Weapon(Blade blade, Handle handle)
         {
             attack = blade.getAttack() + handle.getAttack();
             speed = blade.getSpeed() + handle.getSpeed();
             durability = blade.getDurability() + handle.getDurability();
             maxDurability = blade.getDurability()+handle.getDurability();
+            value = blade.getPrice() + handle.getPrice();
 
             if (blade.getThreshold() > handle.getThreshold())
             {
@@ -69,8 +83,10 @@ namespace TheCoders
         //asks for shape of the blade and length of the handle, as well as materials for both. Then returns a weapon with those parameters.
         public static Weapon createWeapon()
         {
+            Weapon sword;
+            Blade blade;
+            Handle handle;
             Blade.BladeType bladetype;
-
             String bladetypeStr = "";
             Handle.HandleType handletype;
             String handletypeStr = "";
@@ -81,12 +97,12 @@ namespace TheCoders
             bool confirm;
             do
             {
-                int bladetypeint = CIO.PromptForInt("Select a shape for the blade:\n1. Short (Attack-, Speed+)\n2. Long (No Bonuses)\n3. Great (Attack+, Speed-)\n", 1, 3);
-                int bladeMaterialInt = CIO.PromptForInt("Select a material for the blade:\n1. Wood (Durability: 10)\n2. Stone (Durability: 20)\n3. Bronze (Durability: 30)\n" +
-                    "4. Steel (Durability: 40)\n5. Gold (Durability: 10, Speed+)\n6. Adamantine (Durability: 50)\n7. Mithril (Durability: 40)\n", 1, 7);
-                int handleTypeInt = CIO.PromptForInt("Select a length for the handle:\n1. Short (Speed+)\n2. Medium (No Bonuses)\n3. Long (Speed-)\n", 1, 3);
-                int handleMaterialInt = CIO.PromptForInt("Select a material for the handle:\n1. Wood (Durability: 10)\n2. Stone (Durability: 20)\n3. Bronze (Durability: 30)\n" +
-                    "4. Steel (Durability: 40)\n5. Gold (Durability: 10, Speed+)\n6. Adamantine (Durability: 50)\n7. Mithril (Durability: 40)\n", 1, 7);
+                int bladetypeint = CIO.PromptForInt("Select a shape for the blade:\n1. Short\n2. Long\n3. Great\n", 1, 3);
+                int bladeMaterialInt = CIO.PromptForInt("Select a material for the blade:\n1. Wood\n2. Stone\n3. Bronze\n" +
+                    "4. Steel\n5. Gold\n6. Adamantine\n7. Mithril\n", 1, 7);
+                int handleTypeInt = CIO.PromptForInt("Select a length for the handle:\n1. Short\n2. Medium\n3. Long\n", 1, 3);
+                int handleMaterialInt = CIO.PromptForInt("Select a material for the handle:\n1. Wood\n2. Stone\n3. Bronze\n" +
+                    "4. Steel\n5. Gold\n6. Adamantine\n7. Mithril\n", 1, 7);
                 switch (bladetypeint)
                 {
                     case 1:
@@ -159,101 +175,107 @@ namespace TheCoders
                         handleMaterialStr = "mithril";
                         break;
                 }
-                confirm = CIO.PromptForBool($"You chose the {bladeMaterialStr} {bladetypeStr}sword blade and the {handleMaterialStr} {handletypeStr} handle. Is this what you want?\n1. Yes\n2. No", "1", "2");
+                switch (bladetypeStr.Trim().ToLower())
+                {
+                    case "short":
+                        bladetype = Blade.BladeType.Short;
+                        break;
+                    case "long":
+                        bladetype = Blade.BladeType.Long;
+                        break;
+                    case "great":
+                        bladetype = Blade.BladeType.Great;
+                        break;
+                    default:
+                        bladetype = Blade.BladeType.Short;
+                        break;
+                }
+                switch (bladeMaterialStr.Trim().ToLower())
+                {
+                    case "wooden":
+                        bladeMaterial = Pieces.Material.wood;
+                        break;
+                    case "stone":
+                        bladeMaterial = Pieces.Material.stone;
+                        break;
+                    case "bronze":
+                        bladeMaterial = Pieces.Material.bronze;
+                        break;
+                    case "steel":
+                        bladeMaterial = Pieces.Material.steel;
+                        break;
+                    case "gold":
+                        bladeMaterial = Pieces.Material.gold;
+                        break;
+                    case "adamantine":
+                        bladeMaterial = Pieces.Material.adamantine;
+                        break;
+                    case "mithril":
+                        bladeMaterial = Pieces.Material.mithril;
+                        break;
+                    default:
+                        bladeMaterial = Pieces.Material.wood;
+                        break;
+                }
+                switch (handleMaterialStr.Trim().ToLower())
+                {
+                    case "wooden":
+                        handleMaterial = Pieces.Material.wood;
+                        break;
+                    case "stone":
+                        handleMaterial = Pieces.Material.stone;
+                        break;
+                    case "bronze":
+                        handleMaterial = Pieces.Material.bronze;
+                        break;
+                    case "steel":
+                        handleMaterial = Pieces.Material.steel;
+                        break;
+                    case "gold":
+                        handleMaterial = Pieces.Material.gold;
+                        break;
+                    case "adamantine":
+                        handleMaterial = Pieces.Material.adamantine;
+                        break;
+                    case "mithril":
+                        handleMaterial = Pieces.Material.mithril;
+                        break;
+                    default:
+                        handleMaterial = Pieces.Material.wood;
+                        break;
+                }
+                switch (handletypeStr.Trim().ToLower())
+                {
+                    case "short":
+                        handletype = Handle.HandleType.Short;
+                        break;
+                    case "long":
+                        handletype = Handle.HandleType.Long;
+                        break;
+                    case "medium":
+                        handletype = Handle.HandleType.Medium;
+                        break;
+                    default:
+                        handletype = Handle.HandleType.Short;
+                        break;
+                }
+                blade = new Blade(bladetype, bladeMaterial);
+                handle = new Handle(handletype, handleMaterial);
+                sword = new Weapon(blade, handle);
+                Console.WriteLine($"You chose the {bladeMaterialStr} {bladetypeStr}sword blade and the {handleMaterialStr} {handletypeStr} handle. Is this what you want?");
+                sword.displayWeaponInfo();
+                confirm = CIO.PromptForBool("1.Yes\n2.No", "1", "2");
             } while (!confirm);
-            switch (bladetypeStr.Trim().ToLower())
-            {
-                case "short":
-                    bladetype = Blade.BladeType.Short;
-                    break;
-                case "long":
-                    bladetype = Blade.BladeType.Long;
-                    break;
-                case "great":
-                    bladetype = Blade.BladeType.Great;
-                    break;
-                default:
-                    bladetype = Blade.BladeType.Short;
-                    break;
-            }
-            switch (bladeMaterialStr.Trim().ToLower())
-            {
-                case "wooden":
-                    bladeMaterial = Pieces.Material.wood;
-                    break;
-                case "stone":
-                    bladeMaterial = Pieces.Material.stone;
-                    break;
-                case "bronze":
-                    bladeMaterial = Pieces.Material.bronze;
-                    break;
-                case "steel":
-                    bladeMaterial = Pieces.Material.steel;
-                    break;
-                case "gold":
-                    bladeMaterial = Pieces.Material.gold;
-                    break;
-                case "adamantine":
-                    bladeMaterial = Pieces.Material.adamantine;
-                    break;
-                case "mythril":
-                    bladeMaterial = Pieces.Material.mithril;
-                    break;
-                default:
-                    bladeMaterial = Pieces.Material.wood;
-                    break;
-            }
-            switch (handleMaterialStr.Trim().ToLower())
-            {
-                case "wooden":
-                    handleMaterial = Pieces.Material.wood;
-                    break;
-                case "stone":
-                    handleMaterial = Pieces.Material.stone;
-                    break;
-                case "bronze":
-                    handleMaterial = Pieces.Material.bronze;
-                    break;
-                case "steel":
-                    handleMaterial = Pieces.Material.steel;
-                    break;
-                case "gold":
-                    handleMaterial = Pieces.Material.gold;
-                    break;
-                case "adamantine":
-                    handleMaterial = Pieces.Material.adamantine;
-                    break;
-                case "mythril":
-                    handleMaterial = Pieces.Material.mithril;
-                    break;
-                default:
-                    handleMaterial = Pieces.Material.wood;
-                    break;
-            }
-            switch (handletypeStr.Trim().ToLower())
-            {
-                case "short":
-                    handletype = Handle.HandleType.Short;
-                    break;
-                case "long":
-                    handletype = Handle.HandleType.Long;
-                    break;
-                case "medium":
-                    handletype = Handle.HandleType.Medium;
-                    break;
-                default:
-                    handletype = Handle.HandleType.Short;
-                    break;
-            }
+            sword.name = CIO.PromptForInput("What will you name this weapon?", false);
 
-            Blade blade = new Blade(bladetype,bladeMaterial);
-            Handle handle = new Handle(handletype,handleMaterial);
+
 
 
             
-            return new Weapon(blade,handle);
+            return sword;
         }
 
+        //gives out a weapon for free (for tutorials and scripted weapon obtaining)
         public static Weapon giveWeapon(Blade.BladeType bType, Blade.Material bMaterial, Handle.HandleType hType, Handle.Material hMaterial)
         {
             return new Weapon(new Blade(bType,bMaterial), new Handle(hType,hMaterial));
@@ -261,11 +283,11 @@ namespace TheCoders
 
         //adds the enchantment onto the weapon. If the weapon has elemental damage and you add an enchantment that changes the damage type,
         //it will ask if you want to replace the enchantment with the new one.
-
         public void addEnchantment()
         {
             
             bool conf = false;
+            bool replace = false;
             Enchantments type = new Enchantments(Enchantments.EnchantmentType.none);
             do
             {
@@ -303,20 +325,47 @@ namespace TheCoders
                         return;
                 }
                 type.setDetails();
-                type.listDetails();
-                conf = CIO.PromptForBool("Are you sure?\n1. yes\n2. no", "1", "2");
+                if (type.getEnchCost() <= getEnchantPoints())
+                {
+                    type.listDetails();
+                    Console.WriteLine($"Enchanting Points left: {enchantPoints}");
+                    conf = CIO.PromptForBool("Are you sure?\n1. yes\n2. no", "1", "2");
 
-                if (enchantmentList.Contains(type))
-                {
-                    Console.WriteLine("You already have this enchantment!");
-                    conf = false;
+
+                    if (enchantmentList.Contains(type))
+                    {
+                        Console.WriteLine("You already have this enchantment!");
+                        conf = false;
+                        type.setEnchantmentType(Enchantments.EnchantmentType.none);
+                    }
+                    if (damageIndex != null && type.getEnchantmentType() == Enchantments.EnchantmentType.fire || damageIndex != null && type.getEnchantmentType() == Enchantments.EnchantmentType.water || damageIndex != null && type.getEnchantmentType() == Enchantments.EnchantmentType.earth)
+                    {
+                        conf = CIO.PromptForBool("You already have an elemental enchantment. Adding the selected enchantment will remove the previous elemental enchantment. Are you sure you want to do this?\n1. Yes\n2. No", "1", "2");
+                        if (conf)
+                        {
+                            replace = true;
+                        }
+                    }
                 }
-                if (damageIndex != null)
+                else
                 {
-                    conf = CIO.PromptForBool("You already have an elemental enchantment. Adding the selected enchantment will remove the previous elemental enchantment. Are you sure you want to do this?\n1. Yes\n2. No", "1", "2");
+                    Console.WriteLine("You don't have enough enchantment points!");
                 }
             } while (!conf);
-            enchantmentList.Add(type);
+            if (replace)
+            {
+                setEnchantment(type, damageIndex.Value);
+            }
+            else
+            {
+
+                enchantmentList.Add(type);
+                enchantPoints -= type.getEnchCost();
+                if (type.getEnchantmentType() == Enchantments.EnchantmentType.fire|| type.getEnchantmentType() == Enchantments.EnchantmentType.water|| type.getEnchantmentType() == Enchantments.EnchantmentType.earth)
+                {
+                    damageIndex = enchantmentList.Count() - 1;
+                }
+            }
         }
 
         //sets the damage type to an enchantment that changes the type
@@ -352,24 +401,47 @@ namespace TheCoders
             updateDamageType();
         }
         
-        //displays the stats of a weapon
+        //displays the stats of a weapon. If a weapon is below half durability, the durability will have a warning
         public void displayWeaponInfo()
         {
-            if (isBroken)
+            if (name != null)
             {
-                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: BROKEN, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}");
+                if (isBroken)
+                {
+                    Console.WriteLine($"{name}'s Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: BROKEN, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}, Value: {value}");
+                }
+                else if (halfDurablility)
+                {
+                    Console.WriteLine($"{name}'s Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, !Durability: {durability}/{maxDurability}!, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}, Value: {value}");
+                }
+                else
+                {
+                    Console.WriteLine($"{name}'s Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: {durability}/{maxDurability}, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}, Value: {value}");
+                }
             }
             else
             {
-                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: {durability}/{maxDurability}, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}");
+                Console.WriteLine($"Weapon Stats: Damage Type: {damageType}, Attack: {attack}, Speed: {speed}, Durability: {maxDurability}, Rarity: {rarity}, Enchantment Points: {enchantPoints}/{maxThreshold}, Value: {value}");
             }
-            
         }
 
         //displays the list of enchantments on a weapon
         public void displayEnchantments()
         {
-            Console.WriteLine($"Weapon Enchantments: {enchantmentList.ToList}");
+            if (enchantmentList.Count < 1)
+            {
+                Console.WriteLine($"{name} doesn't have any enchantments");
+            }
+            else
+            {
+            Console.WriteLine($"Weapon Enchantments: ");
+            foreach (Enchantments e in enchantmentList)
+            {
+                Console.Write($"[{e.getEnchantmentType().ToString().ToUpper()}] ");
+            }
+            Console.WriteLine();
+            }
+
         }
 
         //sets the weapon durability back to max. Sets isBroken to false
@@ -377,17 +449,46 @@ namespace TheCoders
         {
             durability = maxDurability;
             isBroken = false;
+            halfDurablility = false;
         }
 
-        //lowers the weapon durability by one. If the weapon durability is less than or equal to zero, sets isBroken to true.
+        //lowers the weapon durability by one. If the weapon durability is less than or equal to zero, calls breakWeapon()
         public void damageWeapon()
         {
             durability--;
-            if (durability <= 0)
+            repairCost = (maxDurability - durability) / 2;
+            if (durability < maxDurability/2 && durability>0)
             {
-                Console.WriteLine("The weapon broke in half!");
-                isBroken = true;
+                halfDurablility = true;
             }
+            else if (durability <= 0)
+            {
+                breakWeapon();
+            }
+        }
+
+        //sets isBroken to true as well as lowers stats.
+        public void breakWeapon()
+        {
+            Console.WriteLine("The weapon broke in half!");
+            isBroken = true;
+            halfDurablility = false;
+            attack = 0;
+            value = value / 2;
+        }
+
+        //increases the stats of a weapon
+        public void upgradeWeapon()
+        {
+            level++;
+            value += 5;
+            attack += 5;
+            speed += 5;
+        }
+
+        //sets the weapon name to newName
+        public void renameWeapon(String newName) {
+        name = newName;
         }
 
     }

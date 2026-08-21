@@ -10,7 +10,6 @@ namespace TheCoders.models
         water,
         earth,
         fire,
-        air,
-        LongAgoTheFourNationsUsedToLiveInHarmony___ThenTheFireNationAttacked
+        air
     }
 }

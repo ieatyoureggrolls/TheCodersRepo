@@ -121,7 +121,6 @@ namespace TheCoders.models
             Great
         }
         private BladeType bladeType;
-
         public void setBladeType(BladeType bladeType)
         {
             this.bladeType = bladeType;
@@ -214,6 +213,7 @@ namespace TheCoders.models
         public Blade(BladeType bladeType, Material material)
         {
             setPieceType(PieceType.blade);
+            setBladeType(bladeType);
             setMaterial(material);
             combineStats();
         }
@@ -227,7 +227,6 @@ namespace TheCoders.models
             Medium
         }
         private HandleType handleType;
-
         public void setHandleType(HandleType handleType)
         {
             this.handleType = handleType;
@@ -297,14 +296,13 @@ namespace TheCoders.models
                     break;
             }
         }
-
         override public void DisplayPieceInfo()
         {
             Console.WriteLine($"Handle Stats: Type: {getHandleType()}, Material: {getMaterial()}, Speed: {getSpeed()}, Durability: {getDurability()}, Rarity: {getRarity()}, Price: {getPrice()}");
         }
-
         public Handle(HandleType handleType, Material material)
         {
+            setPieceType(PieceType.handle);
             setHandleType(handleType);
             setMaterial(material);
             combineStats();
