@@ -27,10 +27,6 @@ public static class ConsoleOutputHelper
         {
             new Person("Hero1", 100, 10, 5, true),
             new Person("Hero2", 80, 12, 6, true),
-            new Person("Hero3", 90, 8, 4, true)
-        };
-        PrintHeroNames(heroParty);
-        //PrintBanner("Welcome to The Coders!");
     }
 
     public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
@@ -41,7 +37,6 @@ public static class ConsoleOutputHelper
             Console.WriteLine($"{i + 1}: {heroParty[i].Name}");
         }
     }
-    
 
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
@@ -87,7 +82,6 @@ public static class ConsoleOutputHelper
     {
         for (int i = 0; i < quantity; i++)
         {
-            if(i == quantity -1)
             if (i == quantity - 1)
             {
                 Console.WriteLine(printMe);
@@ -96,7 +90,6 @@ public static class ConsoleOutputHelper
             {
                 Console.Write(printMe);
             }
-            
 
         }
     }
