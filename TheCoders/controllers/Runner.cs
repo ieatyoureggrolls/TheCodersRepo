@@ -11,11 +11,12 @@ public class Runner
     
     public void Run()
     {
+        Console.ResetColor();
         Console.WriteLine("PRESS ENTER IF YOU ARE IN FULLSCREEN");
         Console.ReadLine();
         
-        //COH.Test();
-        ChooseMode();
+        COH.Test();
+        //ChooseMode();
     }
 
     /// <summary>

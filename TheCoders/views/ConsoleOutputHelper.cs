@@ -23,7 +23,24 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
-        PrintBanner("This is a test banner");
+        Person hero1 = new Person("one", 100, 1, 1, true);
+        Person hero2 = new Person("two", 100, 1, 1, true);
+        Person hero3 = new Person("three", 100, 1, 1, true);
+        List<Person> pList = new List<Person>();
+        pList.Add(hero1);
+        pList.Add(hero2);
+        pList.Add(hero3);
+
+        List<Enemy> eList = new List<Enemy>();
+        Enemy boss = new Enemy("Bossy Dude",true, 100, 1, 1);
+        Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
+        Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
+        eList.Add(e1);
+        eList.Add(e2);
+        eList.Add(boss);
+
+        PrintBattleStanding(pList, eList);
+
     }
 
     public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
@@ -44,6 +61,7 @@ public static class ConsoleOutputHelper
         }
     }
 
+    #region PrintHealthBar methods
     /// <summary>
     /// Prints a health bar made of squares corresponding to how much health a player has
     /// </summary>
@@ -84,11 +102,11 @@ public static class ConsoleOutputHelper
     /// </summary>
     /// <param name="printMe">The string to print</param>
     /// <param name="quantity">The number of times to print the string</param>
-    public static void Repeat(string printMe, int quantity)
+    public static void Repeat(string printMe, int quantity, bool newLine)
     {
         for (int i = 0; i < quantity; i++)
         {
-            if (i == quantity - 1)
+            if (i == quantity - 1 && newLine)
             {
                 Console.WriteLine(printMe);
             }
@@ -105,11 +123,11 @@ public static class ConsoleOutputHelper
     /// <param name="printMe">The string to print</param>
     /// <param name="quantity">The number of times to print the string</param>
     /// <param name="rgb">The rgb color to use</param>
-    public static void Repeat(string printMe, int quantity, int[] rgb)
+    public static void Repeat(string printMe, int quantity,bool newLine, int[] rgb)
     {
         for (int i = 0; i < quantity; i++)
         {
-            if (i == quantity)
+            if (i == quantity && newLine)
             {
 
                 Console.WriteLine($"\u001b[38;2;{rgb[0]};{rgb[1]};{rgb[2]}m{printMe}");
@@ -159,6 +177,9 @@ public static class ConsoleOutputHelper
     /// <param name="square">The character to use for the squares</param>
     public static void PrintLayer(int currentLayer, int totalEmptySquares, int totalFilledSquares, string square)
     {
+        int cursorLeft = 0;
+        int cursorTop = 0;
+
         //Keeps track of how many squares have been printed
         int layerTracker = 1;
 
@@ -179,7 +200,7 @@ public static class ConsoleOutputHelper
         //Prints the empty squares, with a new line after every 10 squares
         for (int i = 0; i < totalEmptySquares; i++)
         {
-            if (layerTracker % 10 == 0)
+            if (layerTracker % 10 == 0 && layerTracker != 30)
             {
                 Console.WriteLine(square);
             }
@@ -212,14 +233,27 @@ public static class ConsoleOutputHelper
         //Prints the filled squares, with a new line after every 10 squares
         for (int i = 0; i < totalFilledSquares; i++)
         {
-            if (layerTracker % 10 == 0)
+            if(i == 0)
+            {
+                cursorLeft = Console.CursorLeft;
+                cursorTop = Console.CursorTop;
+            }
+            
+
+
+            if (layerTracker % 10 == 0 && layerTracker != 30)
             {
                 Console.WriteLine(square);
+                Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+                cursorTop = Console.CursorTop;
+                
+
             }
             else
             {
                 Console.Write(square);
             }
+
 
             layerTracker++;
         }
@@ -233,6 +267,8 @@ public static class ConsoleOutputHelper
     /// <param name="isBoss">If the Enemy is a boss</param>
     public static void PrintHealthBar(Enemy boss, bool isBoss)
     {
+        int cursorLeft;
+        int cursorTop;
         string square = "\u25A0";
         double maxHealth = boss.MaxHealth;
         double currentHealth = boss.CurrentHealth;
@@ -269,12 +305,16 @@ public static class ConsoleOutputHelper
 
         //Checks which layer the healthbar is currently in, then prints the appropriate layer
         int currentLayer = LayerCheck(totalFilledSquares, totalEmptySquaresInLayerThree, totalEmptySquaresInLayerTwo, totalEmptySquaresInLayerOne);
+        cursorLeft = Console.CursorLeft;
+        cursorTop = Console.CursorTop;
         if (currentLayer == 3)
         {
+            
             PrintLayer(currentLayer, totalEmptySquaresInLayerThree, filledSquaresInLayerThree, square);
         }
         else if (currentLayer == 2)
         {
+            
             PrintLayer(currentLayer, totalEmptySquaresInLayerTwo, filledSquaresInLayerTwo, square);
         }
         else if (currentLayer == 1)
@@ -283,14 +323,30 @@ public static class ConsoleOutputHelper
         }
 
         Console.ResetColor();
+        
+        Console.WriteLine($"{boss.CurrentHealth}/{boss.MaxHealth} ({healthPercentage * 100}%)");
+
     }
 
+#endregion
     //Print battle standings
     public static void PrintBattleStanding(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty)
     {
+        PrintBanner("Current Battle Standing");
+        
+        Console.Write($"\t\t Hero Party");
+        Repeat("\t", 16, false);
+        Console.WriteLine("Enemy Party");
+        int cursorLeft = Console.CursorLeft;
+        int cursorTop = Console.CursorTop;
+
+        PrintCombatantParty(heroParty);
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+        Repeat("\t", 17, false);
+        PrintCombatantParty(enemyParty, true);
 
     }
-    //Print banner
+#region Print banner methods
 
     public static void PrintLeftRect(int cursorLeft, int cursorTop, string topLeftArch, string bottomLeftArch, string verticalLine, int[] curserCords)
     {
@@ -384,7 +440,7 @@ public static class ConsoleOutputHelper
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
-        Console.WriteLine(Console.GetCursorPosition());
+        Console.WriteLine();
 
         int terminalWidth = Console.WindowWidth;
         int messageLength = message.Length;
@@ -439,9 +495,12 @@ public static class ConsoleOutputHelper
 
         }
         PrintHorizontalEdges(horizontalLine, messageLength, curserCords[0], curserCords[1]);
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
 
     }
-
+#endregion methoods
 
 
     //Battle Summary
@@ -462,7 +521,7 @@ public static class ConsoleOutputHelper
 
     }
 
-    #region coloring
+#region coloring
 
     /// <summary>
     /// Generates an int array that can be used as a rgb color
@@ -750,81 +809,144 @@ public static class ConsoleOutputHelper
     /// Prints a party of Person objects, Enemy objects including Bosses
     /// </summary>
     /// <param name="party">The party of Person or Enemy objects to print</param>
-    public static void PrintCombatantParty(IReadOnlyList<Person> party)
+    public static void PrintCombatantParty(IReadOnlyList<Person> party, bool sidePrint = false)
     {
 
 
         //If first array element is a hero, its the hero party, else if enemy party
-        if (party[0].IsHero)
-        {
-            Console.WriteLine("Hero Party\n");
-        }
-        else
-        {
-            Console.WriteLine("Enemy Party\n");
-        }
-
+      
 
         foreach (Person person in party)
         {
+            int cursorLeft = Console.CursorLeft;
+            int cursorTop = Console.CursorTop;
 
-
-            ///Name
-            ///is a hero
-            if (person.IsHero)
+            if (sidePrint)
             {
-                Console.WriteLine($"Name: {person.Name}");
-            }
-            else if (person != null && person is Enemy)
-            {
-                //is a boss
-                Enemy enemy = person as Enemy;
-                if (enemy.IsBoss)
+                if (person != null && person is Enemy)
                 {
-                    Console.BackgroundColor = ConsoleColor.DarkRed;
-                    Console.Write($"Boss Name: {enemy.Name}");
-                    Console.ResetColor();
-                    Console.WriteLine();
+                    //is a boss
+                    Enemy enemy = person as Enemy;
+                    if (enemy.IsBoss)
+                    {
+                        
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.Write($"Boss Name: {enemy.Name}");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        //Is an enemy
+                        Console.WriteLine($"Name: {enemy.Name}");
+                    }
+                }
+                Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+
+
+                //Health
+                if (person is Enemy)
+                {
+
+                    Enemy enemy = (person as Enemy);
+                    if (enemy.IsBoss)
+                    {
+                        //Is a boss
+
+                        PrintHealthBar(enemy, enemy.IsBoss);
+                        Console.SetCursorPosition(cursorLeft, Console.CursorTop);
+
+
+                        //PrintHealthBar(enemy);
+                    }
+                    else
+                    {
+                        //is regular enemy
+                        PrintHealthBar(person);
+                    }
+
                 }
                 else
                 {
-                    //Is an enemy
-                    Console.WriteLine($"Name: {enemy.Name}");
-                }
-            }
-
-
-            //Health
-            if (person is Enemy)
-            {
-
-                Enemy enemy = (person as Enemy);
-                if (enemy.IsBoss)
-                {
-                    //Is a boss
-                    PrintHealthBar(enemy, enemy.IsBoss);
-                    //PrintHealthBar(enemy);
-                }
-                else
-                {
-                    //is regular enemy
+                    //is a hero
                     PrintHealthBar(person);
                 }
+           
+                
+                    
+                
+               
 
+                
+                ///speed
+                Console.Write($"Speed: {person.Speed}");
+                Console.SetCursorPosition(cursorLeft, Console.CursorTop + 1);
+
+                ///damage
+                Console.Write($"Damage: {person.Damage} \n");
+                Console.SetCursorPosition(cursorLeft, Console.CursorTop + 1);
             }
             else
             {
-                //is a hero
-                PrintHealthBar(person);
-            }
+                ///Name
+                ///is a hero
+                if (person.IsHero)
+                {
+                    Console.WriteLine($"Name: {person.Name}");
+                }
+                else if (person != null && person is Enemy)
+                {
+                    //is a boss
+                    Enemy enemy = person as Enemy;
+                    if (enemy.IsBoss)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.Write($"Boss Name: {enemy.Name}");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        //Is an enemy
+                        Console.WriteLine($"Name: {enemy.Name}");
+                    }
+                }
 
-            //Weapon Place holder
-            Console.WriteLine("Weapon: {player.Weapon}");
-            ///speed
-            Console.WriteLine($"Speed: {person.Speed}");
-            ///damage
-            Console.WriteLine($"Damage: {person.Damage} \n");
+
+                //Health
+                if (person is Enemy)
+                {
+
+                    Enemy enemy = (person as Enemy);
+                    if (enemy.IsBoss)
+                    {
+                        //Is a boss
+                        PrintHealthBar(enemy, enemy.IsBoss);
+                        //PrintHealthBar(enemy);
+                    }
+                    else
+                    {
+                        //is regular enemy
+                        PrintHealthBar(person);
+                    }
+
+                }
+                else
+                {
+                    //is a hero
+                    PrintHealthBar(person);
+                }
+
+                //Weapon Place holder
+                Console.WriteLine("Weapon: {player.Weapon}");
+                ///speed
+                Console.WriteLine($"Speed: {person.Speed}");
+                ///damage
+                Console.WriteLine($"Damage: {person.Damage} \n");
+            }
         }
+
+            
     }
     //Print wave information
 }
