@@ -23,10 +23,7 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
-        List<Person> heroParty = new List<Person>
-        {
-            new Person("Hero1", 100, 10, 5, true),
-            new Person("Hero2", 80, 12, 6, true),
+        PrintBanner("This is a test banner");
     }
 
     public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
@@ -344,7 +341,7 @@ public static class ConsoleOutputHelper
         }
 
         //extra removal
-        Console.SetCursorPosition(0, 2);
+        Console.SetCursorPosition(0, cursorTop);
         for(int index = 0; index != length; index++)
         {
             Console.Write(" ");
@@ -366,6 +363,7 @@ public static class ConsoleOutputHelper
     /// <param name="message">The message to display in the banner</param>
     public static void PrintBanner(string message)
     {
+        ;
         //ClearScreen();
         Console.WriteLine();
         Console.WriteLine();
@@ -386,6 +384,7 @@ public static class ConsoleOutputHelper
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
+        Console.WriteLine(Console.GetCursorPosition());
 
         int terminalWidth = Console.WindowWidth;
         int messageLength = message.Length;
@@ -395,7 +394,7 @@ public static class ConsoleOutputHelper
 
 
 
-        Console.SetCursorPosition(0, 1);
+        //Console.SetCursorPosition(0, 1);
 
         for (int index = 0; index < terminalWidth; index++)
         {
