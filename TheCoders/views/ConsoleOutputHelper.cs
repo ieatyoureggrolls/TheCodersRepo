@@ -23,27 +23,34 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
+        Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
         Person hero1 = new Person("one", 100, 1, 1, true);
         Person hero2 = new Person("two", 100, 1, 1, true);
         Person hero3 = new Person("three", 100, 1, 1, true);
-        
+        hero1.EquipWeapon(weapon);
+        hero2.EquipWeapon(weapon);
+        hero3.EquipWeapon(weapon);
+
         List<Person> pList = new List<Person>();
         pList.Add(hero1);
         pList.Add(hero2);
         pList.Add(hero3);
 
         List<Enemy> eList = new List<Enemy>();
-        Enemy boss = new Enemy("Bossy Dude",true, 100, 1, 1);
-        Enemy boss2 = new Enemy("Bossy Dude",true, 100, 1, 1);
-        Enemy boss3 = new Enemy("Bossy Dude",true, 100, 1, 1);
+        Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
+        Enemy boss2 = new Enemy("Bossy Dude", true, 100, 1, 1);
+        Enemy boss3 = new Enemy("Bossy Dude", true, 100, 1, 1);
         Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
         Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
         eList.Add(e1);
-       eList.Add(e2);
-        eList.Add(boss); 
-        eList.Add(boss2); 
-        eList.Add(boss3); 
+        eList.Add(e2);
+        eList.Add(boss);
+        eList.Add(boss2);
+        eList.Add(boss3);
 
+        PrintBattleStanding(pList, eList);
+        Console.WriteLine();
+        Console.WriteLine();
         PrintBattleStanding(pList, eList);
 
     }
@@ -128,7 +135,7 @@ public static class ConsoleOutputHelper
     /// <param name="printMe">The string to print</param>
     /// <param name="quantity">The number of times to print the string</param>
     /// <param name="rgb">The rgb color to use</param>
-    public static void Repeat(string printMe, int quantity,bool newLine, int[] rgb)
+    public static void Repeat(string printMe, int quantity, bool newLine, int[] rgb)
     {
         for (int i = 0; i < quantity; i++)
         {
@@ -238,12 +245,12 @@ public static class ConsoleOutputHelper
         //Prints the filled squares, with a new line after every 10 squares
         for (int i = 0; i < totalFilledSquares; i++)
         {
-            if(i == 0)
+            if (i == 0)
             {
                 cursorLeft = Console.CursorLeft;
                 cursorTop = Console.CursorTop;
             }
-            
+
 
 
             if (layerTracker % 10 == 0 && layerTracker != 30)
@@ -251,7 +258,7 @@ public static class ConsoleOutputHelper
                 Console.WriteLine(square);
                 Console.SetCursorPosition(cursorLeft, cursorTop + 1);
                 cursorTop = Console.CursorTop;
-                
+
 
             }
             else
@@ -314,12 +321,12 @@ public static class ConsoleOutputHelper
         cursorTop = Console.CursorTop;
         if (currentLayer == 3)
         {
-            
+
             PrintLayer(currentLayer, totalEmptySquaresInLayerThree, filledSquaresInLayerThree, square);
         }
         else if (currentLayer == 2)
         {
-            
+
             PrintLayer(currentLayer, totalEmptySquaresInLayerTwo, filledSquaresInLayerTwo, square);
         }
         else if (currentLayer == 1)
@@ -328,7 +335,7 @@ public static class ConsoleOutputHelper
         }
 
         Console.ResetColor();
-        
+
         Console.WriteLine($"{boss.CurrentHealth}/{boss.MaxHealth} ({healthPercentage * 100}%)");
 
     }
@@ -342,7 +349,8 @@ public static class ConsoleOutputHelper
     public static void PrintBattleStanding(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty)
     {
         PrintBanner("Current Battle Standing");
-        
+        Console.WriteLine();
+
         //The weird string format is used because the Terminal Cursor is being used to print the parties side-by-side.
         //Not sure if this is optimal, but it seemed like the easiest way.
         Console.Write($"\t\t Hero Party");
@@ -373,9 +381,10 @@ public static class ConsoleOutputHelper
         //Saves the cursor position so it can be reset before printing certain parts
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
-
         
-        Console.Write(verticalLine);
+
+
+        Console.WriteLine(verticalLine);
         Console.SetCursorPosition(cursorLeft, cursorTop + 1);
         Console.Write(topLeftArch);
         curserCords[0] = Console.CursorLeft;
@@ -429,7 +438,7 @@ public static class ConsoleOutputHelper
 
         //extra removal
         Console.SetCursorPosition(0, cursorTop);
-        for(int index = 0; index != length; index++)
+        for (int index = 0; index != length; index++)
         {
             Console.Write(" ");
         }
@@ -483,6 +492,7 @@ public static class ConsoleOutputHelper
 
                 if (index == padding - 2)
                 {
+                    
                     PrintLeftRect(oldLeft, oldTop, topLeftArch, bottomLeftArch, verticalLine, curserCords);
                 }
                 else if (index == padding + 2)
@@ -496,7 +506,7 @@ public static class ConsoleOutputHelper
                 Console.Write(message);
             }
             else if (index != terminalWidth)
-            { 
+            {
                 Console.Write(horizontalLine);
             }
         }
@@ -507,7 +517,7 @@ public static class ConsoleOutputHelper
         Console.WriteLine();
 
     }
-#endregion
+    #endregion
 
     //Battle Summary
 
@@ -527,7 +537,7 @@ public static class ConsoleOutputHelper
 
     }
 
-#region coloring
+    #region coloring
 
     /// <summary>
     /// Generates an int array that can be used as a rgb color
@@ -820,7 +830,7 @@ public static class ConsoleOutputHelper
 
 
         //If first array element is a hero, its the hero party, else if enemy party
-      
+
 
         foreach (Person person in party)
         {
@@ -835,7 +845,7 @@ public static class ConsoleOutputHelper
                     Enemy enemy = person as Enemy;
                     if (enemy.IsBoss)
                     {
-                        
+
                         Console.BackgroundColor = ConsoleColor.DarkRed;
                         Console.Write($"Boss Name: {enemy.Name}");
                         Console.ResetColor();
@@ -847,7 +857,7 @@ public static class ConsoleOutputHelper
                         Console.WriteLine($"Name: {enemy.Name}");
                     }
                 }
-                Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+                Console.SetCursorPosition(cursorLeft, Console.CursorTop);
 
 
                 //Health
@@ -953,9 +963,7 @@ public static class ConsoleOutputHelper
             }
         }
 
-            
+
     }
     //Print wave information
 }
-
-
