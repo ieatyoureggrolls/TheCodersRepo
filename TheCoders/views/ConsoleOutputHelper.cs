@@ -13,7 +13,7 @@ namespace TheCoders.views;
 //Make sure methods are broken up into small methods
 //Make sure methods are documented with XML comments
 //Add menu design
-//Print name of hero and slot
+
 //Possible cursor animation
 
 
@@ -26,6 +26,7 @@ public static class ConsoleOutputHelper
         Person hero1 = new Person("one", 100, 1, 1, true);
         Person hero2 = new Person("two", 100, 1, 1, true);
         Person hero3 = new Person("three", 100, 1, 1, true);
+        
         List<Person> pList = new List<Person>();
         pList.Add(hero1);
         pList.Add(hero2);
@@ -944,7 +945,7 @@ public static class ConsoleOutputHelper
                 }
 
                 //Weapon Place holder
-                Console.WriteLine("Weapon: {player.Weapon}");
+                Console.WriteLine($"Weapon: {person.heldWeapon.getName()}");
                 ///speed
                 Console.WriteLine($"Speed: {person.Speed}");
                 ///damage
