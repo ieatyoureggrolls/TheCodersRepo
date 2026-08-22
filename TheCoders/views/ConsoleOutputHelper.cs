@@ -33,11 +33,15 @@ public static class ConsoleOutputHelper
 
         List<Enemy> eList = new List<Enemy>();
         Enemy boss = new Enemy("Bossy Dude",true, 100, 1, 1);
+        Enemy boss2 = new Enemy("Bossy Dude",true, 100, 1, 1);
+        Enemy boss3 = new Enemy("Bossy Dude",true, 100, 1, 1);
         Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
         Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
         eList.Add(e1);
-        eList.Add(e2);
-        eList.Add(boss);
+       eList.Add(e2);
+        eList.Add(boss); 
+        eList.Add(boss2); 
+        eList.Add(boss3); 
 
         PrintBattleStanding(pList, eList);
 
@@ -328,15 +332,21 @@ public static class ConsoleOutputHelper
 
     }
 
-#endregion
-    //Print battle standings
+    #endregion
+    /// <summary>
+    /// Prints the current battle standing of the hero party and enemy party, including their names, health bars, speed, damage, and wapons.
+    /// </summary>
+    /// <param name="heroParty">The hero party</param>
+    /// <param name="enemyParty">The enemy party</param>
     public static void PrintBattleStanding(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty)
     {
         PrintBanner("Current Battle Standing");
         
+        //The weird string format is used because the Terminal Cursor is being used to print the parties side-by-side.
+        //Not sure if this is optimal, but it seemed like the easiest way.
         Console.Write($"\t\t Hero Party");
         Repeat("\t", 16, false);
-        Console.WriteLine("Enemy Party");
+        Console.WriteLine("Enemy Party \n");
         int cursorLeft = Console.CursorLeft;
         int cursorTop = Console.CursorTop;
 
@@ -346,15 +356,24 @@ public static class ConsoleOutputHelper
         PrintCombatantParty(enemyParty, true);
 
     }
-#region Print banner methods
+    #region Print banner methods
 
+    /// <summary>
+    /// Prints the left side of a rectangle, with a top left arch, bottom left arch, and vertical line
+    /// </summary>
+    /// <param name="cursorLeft">The left position of the cursor</param>
+    /// <param name="cursorTop">The top position of the cursor</param>
+    /// <param name="topLeftArch">The top left arch of the rectangle</param>
+    /// <param name="bottomLeftArch">The bottom left arch of the rectangle</param>
+    /// <param name="verticalLine">The vertical line of the rectangle</param>
+    /// <param name="curserCords">A set of cursor cooridinates that need to be modified during the method</param>
     public static void PrintLeftRect(int cursorLeft, int cursorTop, string topLeftArch, string bottomLeftArch, string verticalLine, int[] curserCords)
     {
+        //Saves the cursor position so it can be reset before printing certain parts
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
 
-        //Console.SetCursorPosition(cursorLeft, cursorTop);
-
+        
         Console.Write(verticalLine);
         Console.SetCursorPosition(cursorLeft, cursorTop + 1);
         Console.Write(topLeftArch);
@@ -364,12 +383,19 @@ public static class ConsoleOutputHelper
         Console.SetCursorPosition(oldLeft, oldTop - 1);
         Console.Write(bottomLeftArch);
         Console.SetCursorPosition(oldLeft + 1, oldTop);
-
-
     }
+
+    /// <summary>
+    /// Prints the right side of a rectangle, with a top right arch, bottom right arch, and vertical line
+    /// </summary>
+    /// <param name="cursorLeft">The left position of the cursor</param>
+    /// <param name="cursorTop">The top position of the cursor</param>
+    /// <param name="topRightArch">The top right arch of the rectangle</param>
+    /// <param name="bottomRightArch">The bottom right arch of the rectangle</param>
+    /// <param name="verticalLine">The vertical Edgeof the rectangle</param>
     public static void PrintRightRect(int cursorLeft, int cursorTop, string topRightArch, string bottomRightArch, string verticalLine)
     {
-
+        //Saves the cursor position so it can be reset before printing certain parts
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
 
@@ -380,11 +406,15 @@ public static class ConsoleOutputHelper
         Console.SetCursorPosition(oldLeft, oldTop - 1);
         Console.Write(bottomRightArch);
         Console.SetCursorPosition(oldLeft + 1, oldTop);
-
-
-
     }
 
+    /// <summary>
+    /// Prints the horizontal edges of a rectangle, with a top and bottom edge
+    /// </summary>
+    /// <param name="edge">The character to use for the edge</param>
+    /// <param name="length">The length of the edge</param>
+    /// <param name="cursorLeft">The left position of the cursor</param>
+    /// <param name="cursorTop">The top position of the cursor</param>
     public static void PrintHorizontalEdges(string edge, int length, int cursorLeft, int cursorTop)
     {
         for (int index = 0; index < length + 2; index++)
@@ -402,17 +432,8 @@ public static class ConsoleOutputHelper
         {
             Console.Write(" ");
         }
-
-        //for (int index = 0; cursorLeft >= 0; index++)
-        //{
-              
-
-        //}
-
-
-     
-
     }
+
     /// <summary>
     /// Prints a banner with a message in the center of the terminal, with a border around it
     /// </summary>
@@ -436,7 +457,6 @@ public static class ConsoleOutputHelper
         string verticalLine = "\u2551";
         string horizontalLine = "\u2550";
 
-
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
@@ -448,26 +468,17 @@ public static class ConsoleOutputHelper
         int padding = (terminalWidth - messageLength) / 2;
         int[] curserCords = new int[2];
 
-
-
-        //Console.SetCursorPosition(0, 1);
-
         for (int index = 0; index < terminalWidth; index++)
         {
             if (index == padding - 1 || index == padding + 1)
             {
-
                 Console.Write(" ");
-                //PrintHorizontalEdges(horizontalLine);
             }
             else if (index == padding - 2 || index == padding + 2)
             {
 
                 int oldLeft = Console.CursorLeft;
                 int oldTop = Console.CursorTop;
-
-
-
 
                 if (index == padding - 2)
                 {
@@ -477,31 +488,25 @@ public static class ConsoleOutputHelper
                 {
                     PrintRightRect(oldLeft, oldTop, topRightArch, bottomRightArch, verticalLine);
                 }
-
-
             }
 
             else if (index == padding)
             {
                 Console.Write(message);
-                //PrintHorizontalEdges(horizontalLine);
-                //Console.WriteLine(Console.GetCursorPosition());
             }
             else if (index != terminalWidth)
-            {
-
+            { 
                 Console.Write(horizontalLine);
             }
-
         }
+
         PrintHorizontalEdges(horizontalLine, messageLength, curserCords[0], curserCords[1]);
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
 
     }
-#endregion methoods
-
+#endregion
 
     //Battle Summary
 
@@ -871,14 +876,15 @@ public static class ConsoleOutputHelper
                     //is a hero
                     PrintHealthBar(person);
                 }
-           
-                
-                    
-                
-               
 
-                
+
+
+
+
+
+
                 ///speed
+                Console.SetCursorPosition(cursorLeft, Console.CursorTop);
                 Console.Write($"Speed: {person.Speed}");
                 Console.SetCursorPosition(cursorLeft, Console.CursorTop + 1);
 
