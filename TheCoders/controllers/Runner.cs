@@ -14,9 +14,10 @@ public class Runner
         Console.ResetColor();
         Console.WriteLine("PRESS ENTER IF YOU ARE IN FULLSCREEN");
         Console.ReadLine();
+        COH.ClearScreen();
 
         COH.Test();
-        //ChooseMode();
+        ChooseMode();
         
     }
 

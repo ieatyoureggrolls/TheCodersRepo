@@ -8,7 +8,7 @@ namespace TheCoders.views;
 
 //Console Output Helper
 
-//Pause inbetween dialogs
+
 //Delay text method
 //Make sure methods are broken up into small methods
 //Make sure methods are documented with XML comments
@@ -23,46 +23,77 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
-        Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
-        Person hero1 = new Person("one", 100, 1, 1, true);
-        Person hero2 = new Person("two", 100, 1, 1, true);
-        Person hero3 = new Person("three", 100, 1, 1, true);
-        hero1.EquipWeapon(weapon);
-        hero2.EquipWeapon(weapon);
-        hero3.EquipWeapon(weapon);
+        DialogDelay("This is a test of the dialog delay method. It should print each character with a delay of 50 milliseconds.", 50, true);
 
-        List<Person> pList = new List<Person>();
-        pList.Add(hero1);
-        pList.Add(hero2);
-        pList.Add(hero3);
+        //Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
+        //Person hero1 = new Person("one", 100, 1, 1, true);
+        //Person hero2 = new Person("two", 100, 1, 1, true);
+        //Person hero3 = new Person("three", 100, 1, 1, true);
+        //hero1.EquipWeapon(weapon);
+        //hero2.EquipWeapon(weapon);
+        //hero3.EquipWeapon(weapon);
 
-        List<Enemy> eList = new List<Enemy>();
-        Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
-        Enemy boss2 = new Enemy("Bossy Dude", true, 100, 1, 1);
-        Enemy boss3 = new Enemy("Bossy Dude", true, 100, 1, 1);
-        Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
-        Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
-        eList.Add(e1);
-        eList.Add(e2);
-        eList.Add(boss);
+        //List<Person> pList = new List<Person>();
+        //pList.Add(hero1);
+        //pList.Add(hero2);
+        //pList.Add(hero3);
+
+        //List<Enemy> eList = new List<Enemy>();
+        //Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
+        //Enemy boss2 = new Enemy("Bossy Dude", true, 100, 1, 1);
+        //Enemy boss3 = new Enemy("Bossy Dude", true, 100, 1, 1);
+        //Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
+        //Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
+        //eList.Add(e1);
+        //eList.Add(e2);
+        //eList.Add(boss);
 
 
-        do
+        //do
+        //{
+        //    foreach (Person person in pList)
+        //    {
+        //        person.CurrentHealth -= rand.Next(1, 10);
+        //    }
+        //    foreach (Enemy enemy in eList)
+        //    {
+        //        enemy.CurrentHealth -= rand.Next(1, 10);
+        //    }
+        //    PrintBattleStanding(pList, eList);
+        //    Thread.Sleep(1000);
+        //} while (pList.Any(p => p.CurrentHealth > 0) && eList.Any(e => e.CurrentHealth > 0));
+
+
+
+    }
+    /// <summary>
+    /// Prints a message to the console with a delay between each character, and optionally pauses for user input after the message is printed.
+    /// </summary>
+    /// <param name="message">The message to print.</param>
+    /// <param name="delay">The delay between each character in milliseconds.</param>
+    /// <param name="pause">Whether to pause for user input after the message is printed.</param>
+    public static void DialogDelay(string message, int delay = 50, bool pause = false)
+    {
+        foreach (char c in message)
         {
-            foreach (Person person in pList)
-            {
-                person.CurrentHealth -= rand.Next(1, 10);
-            }
-            foreach (Enemy enemy in eList)
-            {
-                enemy.CurrentHealth -= rand.Next(1, 10);
-            }
-            PrintBattleStanding(pList, eList);
-            Thread.Sleep(1000);
-        } while (pList.Any(p => p.CurrentHealth > 0) && eList.Any(e => e.CurrentHealth > 0));
-        
-        
-
+            Console.Write(c);
+            Thread.Sleep(delay);
+        }
+        Console.WriteLine();
+        if(pause)
+        {
+            DialogPause(message);
+        }
+    }
+    
+    /// <summary>
+    /// Pauses the console and waits for the user to press a key.
+    /// </summary>
+    /// <param name="message">The message to display before pausing.</param>
+    public static void DialogPause(string message)
+    {
+        Console.WriteLine("Press Enter to continue");
+        Console.ReadKey();
     }
 
     public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
