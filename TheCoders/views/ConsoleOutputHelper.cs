@@ -45,13 +45,23 @@ public static class ConsoleOutputHelper
         eList.Add(e1);
         eList.Add(e2);
         eList.Add(boss);
-        eList.Add(boss2);
-        eList.Add(boss3);
 
-        PrintBattleStanding(pList, eList);
-        Console.WriteLine();
-        Console.WriteLine();
-        PrintBattleStanding(pList, eList);
+
+        do
+        {
+            foreach (Person person in pList)
+            {
+                person.CurrentHealth -= rand.Next(1, 10);
+            }
+            foreach (Enemy enemy in eList)
+            {
+                enemy.CurrentHealth -= rand.Next(1, 10);
+            }
+            PrintBattleStanding(pList, eList);
+            Thread.Sleep(1000);
+        } while (pList.Any(p => p.CurrentHealth > 0) && eList.Any(e => e.CurrentHealth > 0));
+        
+        
 
     }
 
@@ -105,7 +115,7 @@ public static class ConsoleOutputHelper
             Console.Write(square);
             Console.ResetColor();
         }
-        Console.WriteLine($" {currentHealth}/{maxHealth} ({healthPercentage}%)");
+        Console.WriteLine($" {currentHealth}/{maxHealth} ({healthPercentage:F0}%)");
     }
 
 
@@ -189,8 +199,9 @@ public static class ConsoleOutputHelper
     /// <param name="square">The character to use for the squares</param>
     public static void PrintLayer(int currentLayer, int totalEmptySquares, int totalFilledSquares, string square)
     {
-        int cursorLeft = 0;
-        int cursorTop = 0;
+        int cursorLeft = Console.CursorLeft;
+        int cursorTop = Console.CursorTop;
+        
 
         //Keeps track of how many squares have been printed
         int layerTracker = 1;
@@ -214,7 +225,9 @@ public static class ConsoleOutputHelper
         {
             if (layerTracker % 10 == 0 && layerTracker != 30)
             {
-                Console.WriteLine(square);
+                Console.Write(square);
+                Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+                cursorTop = cursorTop + 1;
             }
             else
             {
@@ -245,11 +258,7 @@ public static class ConsoleOutputHelper
         //Prints the filled squares, with a new line after every 10 squares
         for (int i = 0; i < totalFilledSquares; i++)
         {
-            if (i == 0)
-            {
-                cursorLeft = Console.CursorLeft;
-                cursorTop = Console.CursorTop;
-            }
+         
 
 
 
@@ -336,7 +345,7 @@ public static class ConsoleOutputHelper
 
         Console.ResetColor();
 
-        Console.WriteLine($"{boss.CurrentHealth}/{boss.MaxHealth} ({healthPercentage * 100}%)");
+        Console.WriteLine($"{boss.CurrentHealth}/{boss.MaxHealth} ({healthPercentage * 100:F0}%)");
 
     }
 
@@ -348,6 +357,8 @@ public static class ConsoleOutputHelper
     /// <param name="enemyParty">The enemy party</param>
     public static void PrintBattleStanding(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty)
     {
+        Console.SetCursorPosition(0, 0);
+        ClearScreen();
         PrintBanner("Current Battle Standing");
         Console.WriteLine();
 
