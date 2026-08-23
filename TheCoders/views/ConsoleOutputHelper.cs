@@ -1,8 +1,9 @@
 using System.Drawing;
-using TheCoders.models;
 using System.Linq.Expressions;
-using TheCoders.extensions;
 using System.Runtime.CompilerServices;
+using TheCoders.extensions;
+using TheCoders.models;
+using static TheCoders.models.Pieces;
 
 namespace TheCoders.views;
 
@@ -23,30 +24,32 @@ public static class ConsoleOutputHelper
 
     public static void Test()
     {
-        DialogDelay("This is a test of the dialog delay method. It should print each character with a delay of 50 milliseconds.", 50, true);
 
-        //Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
-        //Person hero1 = new Person("one", 100, 1, 1, true);
-        //Person hero2 = new Person("two", 100, 1, 1, true);
-        //Person hero3 = new Person("three", 100, 1, 1, true);
-        //hero1.EquipWeapon(weapon);
-        //hero2.EquipWeapon(weapon);
-        //hero3.EquipWeapon(weapon);
 
-        //List<Person> pList = new List<Person>();
-        //pList.Add(hero1);
-        //pList.Add(hero2);
-        //pList.Add(hero3);
+        Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
+        Person hero1 = new Person("one", 100, 1, 1, true);
+        Person hero2 = new Person("two", 100, 1, 1, true);
+        Person hero3 = new Person("three", 100, 1, 1, true);
+        hero1.EquipWeapon(weapon);
+        hero2.EquipWeapon(weapon);
+        hero3.EquipWeapon(weapon);
 
-        //List<Enemy> eList = new List<Enemy>();
-        //Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
-        //Enemy boss2 = new Enemy("Bossy Dude", true, 100, 1, 1);
-        //Enemy boss3 = new Enemy("Bossy Dude", true, 100, 1, 1);
-        //Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
-        //Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
-        //eList.Add(e1);
-        //eList.Add(e2);
-        //eList.Add(boss);
+        List<Person> pList = new List<Person>();
+        pList.Add(hero1);
+        pList.Add(hero2);
+        pList.Add(hero3);
+
+        List<Enemy> eList = new List<Enemy>();
+        Enemy boss = new Enemy("Bossy Dude", true, 100, 1, 1);
+        Enemy boss2 = new Enemy("Bossy Dude", true, 100, 1, 1);
+        Enemy boss3 = new Enemy("Bossy Dude", true, 100, 1, 1);
+        Enemy e1 = new Enemy("Enemy 1", 100, 1, 1);
+        Enemy e2 = new Enemy("Enemy 2", 100, 1, 1);
+        eList.Add(e1);
+        eList.Add(e2);
+        eList.Add(boss);
+
+        PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
 
 
         //do
@@ -66,6 +69,74 @@ public static class ConsoleOutputHelper
 
 
     }
+
+    /// <summary>
+    /// Prints a summary of the battle, including the hero party's health, weapon durability, materials dropped, and gold dropped.
+    /// </summary>
+    /// <param name="heroParty">The list of heroes in the party.</param>
+    /// <param name="enemyParty">The list of enemies in the party.</param>
+    /// <param name="battleWon">Indicates whether the battle was won.</param>
+    /// <param name="materialsDropped">The list of materials dropped by the enemies.</param>
+    /// <param name="goldDropped">The amount of gold dropped by the enemies.</param>
+    public static void PrintBattleSummary(IReadOnlyList<Person> heroParty, IReadOnlyList<Person> enemyParty, bool battleWon, IReadOnlyList<Pieces.Material> materialsDropped, int goldDropped)
+    {
+        if (battleWon)
+        {
+            PrintBanner("Battle Won!");
+
+            //Hero HP
+            Console.WriteLine("\nHero Party HP:");
+            foreach (Person hero in heroParty)
+            {
+                if (hero.CurrentHealth <= 0)
+                {
+                    hero.CurrentHealth = 0;
+                    Console.WriteLine($"{hero.Name} is Dead \n");
+                }
+                else
+                {
+                    Console.Write($"{hero.Name}'s Health: ");
+                    PrintHealthBar(hero);
+                    Console.WriteLine();
+                }
+            }
+
+            //Weapon Durability
+            foreach (Person hero in heroParty)
+            {
+                if (hero.heldWeapon != null)
+                {
+                    Console.WriteLine($"{hero.Name}'s Weapon Durability:");
+                    Console.WriteLine($"{hero.heldWeapon.getName()} Durability: {hero.heldWeapon.getDurability()}/{hero.heldWeapon.getMaxDurability()}\n");
+                }
+            }
+
+            // Materials dropped
+            if (materialsDropped.Count > 0)
+            {
+                Console.WriteLine("Materials Dropped:");
+                foreach (Pieces.Material material in materialsDropped)
+                {
+                    Console.WriteLine(material);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No materials dropped.");
+            }
+
+            Console.WriteLine($"\nGold dropped: {goldDropped}\n");
+            DialogPause();
+        }
+        else
+        {
+            PrintBanner("Battle Lost!");
+        }
+
+
+
+    }
+
     /// <summary>
     /// Prints a message to the console with a delay between each character, and optionally pauses for user input after the message is printed.
     /// </summary>
@@ -80,17 +151,16 @@ public static class ConsoleOutputHelper
             Thread.Sleep(delay);
         }
         Console.WriteLine();
-        if(pause)
+        if (pause)
         {
-            DialogPause(message);
+            DialogPause();
         }
     }
-    
+
     /// <summary>
     /// Pauses the console and waits for the user to press a key.
     /// </summary>
-    /// <param name="message">The message to display before pausing.</param>
-    public static void DialogPause(string message)
+    public static void DialogPause()
     {
         Console.WriteLine("Press Enter to continue");
         Console.ReadKey();
@@ -232,7 +302,7 @@ public static class ConsoleOutputHelper
     {
         int cursorLeft = Console.CursorLeft;
         int cursorTop = Console.CursorTop;
-        
+
 
         //Keeps track of how many squares have been printed
         int layerTracker = 1;
@@ -289,7 +359,7 @@ public static class ConsoleOutputHelper
         //Prints the filled squares, with a new line after every 10 squares
         for (int i = 0; i < totalFilledSquares; i++)
         {
-         
+
 
 
 
@@ -423,7 +493,7 @@ public static class ConsoleOutputHelper
         //Saves the cursor position so it can be reset before printing certain parts
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
-        
+
 
 
         Console.WriteLine(verticalLine);
@@ -534,7 +604,7 @@ public static class ConsoleOutputHelper
 
                 if (index == padding - 2)
                 {
-                    
+
                     PrintLeftRect(oldLeft, oldTop, topLeftArch, bottomLeftArch, verticalLine, curserCords);
                 }
                 else if (index == padding + 2)
@@ -859,8 +929,6 @@ public static class ConsoleOutputHelper
     {
         Console.Clear();
     }
-
-    //PrintWeapons
 
     //Print combatant party
     /// <summary>
