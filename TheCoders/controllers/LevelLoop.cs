@@ -206,7 +206,7 @@ namespace TheCoders.controllers
 
                     PersonAttacks(person, defender);
                     Console.WriteLine("\n");
-                    //Thread.Sleep(300);
+                    Thread.Sleep(1000);
                 }
 
                 round++;
