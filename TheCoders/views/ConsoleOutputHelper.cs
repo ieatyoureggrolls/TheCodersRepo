@@ -1,6 +1,8 @@
+using CSC160_ConsoleMenu;
 using System.Drawing;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using TheCoders.extensions;
 using TheCoders.models;
 using static TheCoders.models.Pieces;
@@ -13,6 +15,7 @@ namespace TheCoders.views;
 
 //Make sure methods are broken up into small methods
 //Make sure methods are documented with XML comments
+//Print wave information
 //Add menu design
 
 //Possible cursor animation
@@ -50,12 +53,7 @@ public static class ConsoleOutputHelper
         eList.Add(boss);
 
         //PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
-        string[] enemyNames = {"Enemy 1", "Enemy 2", "Bossy Dude"};
-        for (int i = 0; i < 50; i++)
-        {
-            PrintCrit(rand.Next(1, 100), "Hero", enemyNames);
-        }
-
+        PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
 
         //do
         //{
@@ -73,6 +71,120 @@ public static class ConsoleOutputHelper
 
 
 
+    }
+
+    private static void ChooseMode()
+    {
+        int input = CIO.PromptForMenuSelection(["Story Mode", "Endless Mode"], true);
+        switch (input)
+        {
+            case 1:
+                Story();
+                break;
+            case 2:
+                Endless.StartEndless();
+                break;
+            default:
+                //Quit message here
+                break;
+        }
+    }
+    public static void Story()
+    {
+        Console.WriteLine("Story");
+        Storymode.main();
+    }
+
+    public static void MainMenuDesign(string[] mainMenuOptions)
+    {
+        PrintBanner("Main Menu");
+        PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
+
+        //Center the menu options
+
+        //Print a box/Vertical rectangle
+
+        //Print the menu options inside the box
+
+        //Add some color to the menu options
+
+        //Add some Icons
+
+        //Add some Ascii art and/or animations
+    }
+
+    public static void PrintMenuBox(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
+    {
+        string topLeftArch = "\u2554";
+        string topRightArch = "\u2557";
+        string bottomLeftArch = "\u255A";
+        string bottomRightArch = "\u255D";
+        string verticalLine = "\u2551";
+        string horizontalLine = "\u2550";
+        //Repeat(" ", 10, false);
+        // ChooseMode();
+        var originalOut = Console.Out;
+        var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+        CIO.PromptForMenuSelection(options, withQuit);
+        Console.SetOut(originalOut);
+        string output = stringWriter.ToString().TrimEnd('\n');
+        var lines = output.Split('\n');
+        foreach(var line in lines)
+        {
+            Console.WriteLine(line);
+        }
+        int width = 2;
+
+        for (int index = 0; index < height; index++)
+        {
+            int padding;
+            if (centered)
+            {
+                padding = (Console.WindowWidth - width) / 2;
+            }
+            else
+            {
+                padding = 0;
+            }
+            if (index == 0)
+            {
+                Repeat(" ", padding, false);
+                Console.Write(topLeftArch);
+                for (int i = 0; i < width; i++)
+                {
+                    Console.Write(horizontalLine);
+                }
+                Console.WriteLine(topRightArch);
+            }
+            else if(index == height - 1)
+            {
+                Repeat(" ", padding, false);
+                Console.Write(bottomLeftArch);
+                for (int i = 0; i < width; i++)
+                {
+                    Console.Write(horizontalLine);
+                }
+                Console.WriteLine(bottomRightArch);
+            }
+            else if(index == height / 2 - 1)
+            {
+                Repeat(" ", padding, false);
+                Console.Write(verticalLine);
+                Console.Write($" message ");
+                Console.WriteLine(verticalLine);
+            }
+            else
+            {
+                Repeat(" ", padding, false);
+                Console.Write(verticalLine);
+                for (int i = 0; i < width; i++)
+                {
+                    Console.Write(" ");
+                }
+                Console.WriteLine(verticalLine);
+            }
+        }
     }
 
     /// <summary>
@@ -486,7 +598,7 @@ public static class ConsoleOutputHelper
         PrintCombatantParty(enemyParty, true);
 
     }
-    #region Print banner methods
+ #region Print banner methods
 
     /// <summary>
     /// Prints the left side of a rectangle, with a top left arch, bottom left arch, and vertical line
@@ -1020,10 +1132,7 @@ public static class ConsoleOutputHelper
     /// <param name="party">The party of Person or Enemy objects to print</param>
     public static void PrintCombatantParty(IReadOnlyList<Person> party, bool sidePrint = false)
     {
-
-
         //If first array element is a hero, its the hero party, else if enemy party
-
 
         foreach (Person person in party)
         {
@@ -1080,12 +1189,6 @@ public static class ConsoleOutputHelper
                     //is a hero
                     PrintHealthBar(person);
                 }
-
-
-
-
-
-
 
                 ///speed
                 Console.SetCursorPosition(cursorLeft, Console.CursorTop);
@@ -1148,7 +1251,7 @@ public static class ConsoleOutputHelper
                 }
 
                 //Weapon Place holder
-                Console.WriteLine($"Weapon: {person.heldWeapon.getName()}");
+                //Console.WriteLine($"Weapon: {person.heldWeapon.getName()}");
                 ///speed
                 Console.WriteLine($"Speed: {person.Speed}");
                 ///damage
@@ -1158,5 +1261,4 @@ public static class ConsoleOutputHelper
 
 
     }
-    //Print wave information
 }
