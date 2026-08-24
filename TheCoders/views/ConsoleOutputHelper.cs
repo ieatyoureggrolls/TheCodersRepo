@@ -10,7 +10,7 @@ namespace TheCoders.views;
 //Console Output Helper
 
 
-//Delay text method
+
 //Make sure methods are broken up into small methods
 //Make sure methods are documented with XML comments
 //Add menu design
@@ -49,7 +49,12 @@ public static class ConsoleOutputHelper
         eList.Add(e2);
         eList.Add(boss);
 
-        PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
+        //PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
+        string[] enemyNames = {"Enemy 1", "Enemy 2", "Bossy Dude"};
+        for (int i = 0; i < 50; i++)
+        {
+            PrintCrit(rand.Next(1, 100), "Hero", enemyNames);
+        }
 
 
         //do
@@ -166,6 +171,10 @@ public static class ConsoleOutputHelper
         Console.ReadKey();
     }
 
+    /// <summary>
+    /// Prints the names of the heroes in the hero party, along with their held weapons if they have one.
+    /// </summary>
+    /// <param name="heroParty">The list of heroes in the party.</param>
     public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
     {
         Console.WriteLine("Hero Party\n");
@@ -631,7 +640,6 @@ public static class ConsoleOutputHelper
     }
     #endregion
 
-    //Battle Summary
 
     /// <summary>
     /// Prints a message that says how much damage someone was attacked for
@@ -644,12 +652,85 @@ public static class ConsoleOutputHelper
     {
         foreach (string targetName in targetNames)
         {
-            rainbowText($"{attackerName} critically hit {targetName} for {damage} damage!");
+            CalmRainbowText($"{attackerName} critically hit {targetName} for {damage} damage!");
         }
 
     }
 
     #region coloring
+    /// <summary>
+    /// Prints a string with alternating background and foreground colors, with a light background and dark foreground
+    /// </summary>
+    /// <param name="sentence">The sentence to print</param>
+    public static void CalmRainbowText(string sentence)
+    {
+        char[] chars = sentence.ToCharArray();
+        int[] bg = GenerateLightRGB();
+        int[] fg;
+        bool tooSimilar = true;
+        do
+        {
+            fg = GenerateDarkRGB();
+            if(!TooSimilarShade(bg, fg, 30))
+            {
+                
+                tooSimilar = false;
+            }
+        }
+        while (TooSimilarShade(bg, fg, 20));
+
+        foreach (char c in chars)
+        {
+            PrintColoredChar(c, false, fg, bg);
+           
+        }
+        Console.WriteLine();
+    }
+    /// <summary>
+    /// Generates a random rgb color that is dark
+    /// </summary>
+    /// <returns>A dark rgb color</returns>
+    public static int[] GenerateDarkRGB()
+    {
+        bool isDark = false;
+        int[] rgb;
+        double brightnessThreshold = 100.00;
+        do
+        {
+            rgb = new int[] { rand.Next(255), rand.Next(255), rand.Next(255) };
+            double brightness = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]);
+            if (brightness < brightnessThreshold)
+            {
+                isDark = true;
+            }
+        }
+        while (!isDark);
+
+        return rgb;
+    }
+
+    /// <summary>
+    /// Generates a random rgb color that is bright
+    /// </summary>
+    /// <returns></returns>
+    public static int[] GenerateLightRGB()
+    {
+        bool isBright = false;
+        int[] rgb;
+        double brightnessThreshold = 128.00;
+        do
+        {
+            rgb = new int[] { rand.Next(255), rand.Next(255), rand.Next(255) };
+            double brightness = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]);
+            if (brightness > brightnessThreshold)
+            {
+                isBright = true;
+            }
+        }
+        while(!isBright);
+        
+        return rgb;
+    }
 
     /// <summary>
     /// Generates an int array that can be used as a rgb color
@@ -797,9 +878,10 @@ public static class ConsoleOutputHelper
     }
     /// <summary>
     /// Takes in a sentence, then prints each character with alternating Background and Foreground color
+    /// No safeguard on colors
     /// </summary>
     /// <param name="sentence">The sentence to be colorfully printed</param>
-    public static void rainbowText(string sentence)
+    public static void ChaoticRainbowText(string sentence)
     {
         //Breaks string into chars for easy customization
         char[] chars = sentence.ToCharArray();
@@ -869,17 +951,17 @@ public static class ConsoleOutputHelper
         }
 
         //Bolds/thicken character for better visibility
-        string boldedC = ToBold(character);
+        //string boldedC = ToBold(character);
 
         if (newLine == false || newLine == null)
         {
 
-            Console.Write($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{boldedC}\x1b[0m");
+            Console.Write($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{character}\x1b[0m");
 
         }
         else
         {
-            Console.WriteLine($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{boldedC}\x1b[0m");
+            Console.WriteLine($"\x1b[38;2;{fgColor[0]};{fgColor[1]};{fgColor[2]}m\x1b[48;2;{bgColor[0]};{bgColor[1]};{bgColor[2]}m{character}\x1b[0m");
         }
 
     }
