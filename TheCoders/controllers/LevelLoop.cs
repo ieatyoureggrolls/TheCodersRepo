@@ -9,6 +9,7 @@ namespace TheCoders.controllers
 {
     public static class LevelLoop
     {
+        public static int gold;
         public static Person[] partyMembers;
         private static Random random = new Random();
 
@@ -181,30 +182,42 @@ namespace TheCoders.controllers
             do
             {
                 List<Person> alivePeople = new List<Person>();
-                Console.WriteLine($"\n\n---------------------------\nCurrentStandings\nCurrent Round: {round}");
+                List<Person> aliveHeroes = new List<Person>();
+                List<Enemy> aliveEnemies = new List<Enemy>();
                 foreach (Person person in attackOrder)
                 {
                     if (person.CurrentHealth > 0)
                         alivePeople.Add(person);
+                    if (person.IsHero)
+                        aliveHeroes.Add(person);
+                    else
+                        aliveEnemies.Add((Enemy)person);
                 }
-                COH.PrintCombatantParty(alivePeople.ToArray());
-                Console.WriteLine("---------------------------\n\n");
+                COH.PrintBattleStanding(aliveHeroes, aliveEnemies);
                 CIO.PromptForInput("Press enter to continue", true);
                 attackOrder = alivePeople;
 
                 foreach (Person person in attackOrder)
                 {
-                    int defenderIndex = random.Next(person.IsHero ? enemies.Count : partyMembers.Length);
-                    Person defender = person.IsHero ? enemies[defenderIndex] : partyMembers[defenderIndex];
+                    int defenderIndex = random.Next(person.IsHero ? aliveEnemies.Count : aliveHeroes.Count);
+                    Person defender = person.IsHero ? aliveEnemies[defenderIndex] : aliveHeroes[defenderIndex];
 
                     PersonAttacks(person, defender);
                     Console.WriteLine("\n");
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(300);
                 }
 
                 round++;
             } while (isBattleOver(partyMembers, enemies.ToArray()));
-            return enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
+
+            int totalGold = 0;
+            foreach (Enemy enemy in enemies)
+                totalGold += enemy.gold;
+
+            bool battleWon = enemies.OrderByDescending(p => p.CurrentHealth).First().CurrentHealth <= 0;
+            COH.PrintBattleSummary(partyMembers, enemies, battleWon, new List<Pieces.Material>(), totalGold);
+            gold += totalGold;
+            return battleWon;
         }
 
         /// <summary>

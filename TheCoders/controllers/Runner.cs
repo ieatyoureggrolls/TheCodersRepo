@@ -15,9 +15,9 @@ public class Runner
         Console.ReadLine();
         COH.ClearScreen();
 
-        COH.Test();
-        //ChooseMode();
-        
+        //COH.Test();
+        ChooseMode();
+
     }
 
     /// <summary>

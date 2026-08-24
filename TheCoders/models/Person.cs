@@ -74,6 +74,9 @@ namespace TheCoders.models
 
             damage = (int)Math.Round(damage * (isCrit ? critMult : 1));
 
+            if (heldWeapon != null)
+                heldWeapon.damageWeapon();
+
             return new int[]{damage, (isCrit ? 1 : -1)};
         }
 
