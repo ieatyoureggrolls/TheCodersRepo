@@ -14,7 +14,7 @@ namespace TheCoders.models
     {
         static int availableLevels = 1;
         const int minimumLevels = 1;
-        private static Person[] theParty = { new Person("hero:Bob", 100, 5, 1, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
+        private static Person[] theParty = { new Person("hero:Bob", 100, 5, 25, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
 
         public static void main()
         {
@@ -36,12 +36,7 @@ namespace TheCoders.models
          * level4 player learns to replace weapons (partially complete)
          * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
          * 
-         * weapon creation methods-
-         * create weapon
-         * upgrade weapon
-         * give weapon to hero
-         * upgrade weapon from hero
-         * replace weapon from hero
+         *
          */
 
 
@@ -343,16 +338,21 @@ namespace TheCoders.models
 
         }
 
+        private static void limitedCrafting() 
+        {
+        
+        }
+
         private static void whoGetsAWeapon(Person[] theParty, Weapon weapon) 
         {
 
-            //i need to find a way to restrict names that already have weapons or atleast display those that are equipped
+            
 
             ConsoleOutputHelper.PrintHeroNames(theParty);
 
             int heroSlot = CIO.PromptForInt($"which of the heroes from slot 1 to {theParty.Length} do you want to recieve the weapon", 1, theParty.Length); 
                
-            theParty[heroSlot].EquipWeapon(weapon); 
+            theParty[heroSlot - 1].EquipWeapon(weapon); 
 
         }
 
