@@ -187,11 +187,13 @@ namespace TheCoders.controllers
                 foreach (Person person in attackOrder)
                 {
                     if (person.CurrentHealth > 0)
+                    {
                         alivePeople.Add(person);
-                    if (person.IsHero)
-                        aliveHeroes.Add(person);
-                    else
-                        aliveEnemies.Add((Enemy)person);
+                        if (person.IsHero)
+                            aliveHeroes.Add(person);
+                        else
+                            aliveEnemies.Add((Enemy)person);
+                    }
                 }
                 COH.PrintBattleStanding(aliveHeroes, aliveEnemies);
                 CIO.PromptForInput("Press enter to continue", true);
