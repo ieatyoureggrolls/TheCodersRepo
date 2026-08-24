@@ -7,6 +7,7 @@ using TheCoders.controllers;
 using TheCoders.views;
 using TheCoders.models.Generators;
 using System.Xml.Serialization;
+using System.Numerics;
 
 
 namespace TheCoders.models
@@ -33,11 +34,14 @@ namespace TheCoders.models
          
          * level1 player spectates the computer making a weapon and sees the auto battler (complete)
          * level2 player makes a weapon for the second hero and watches auto battler (partially complete) just needs limited crafting
-         * level3 weapons are low on durability so player learns to repair weapons (partially complete)
+         * level3 weapons are low on durability so player learns to repair weapons (partially complete) display weapon durability and then ask player which to repair
          * level4 player learns to replace weapons (partially complete)
          * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
          * 
          *make a method that display weapon durability when the enemy status is being shown
+         *
+         *find a way to delay dialogoue in story mode
+         *
          */
 
 
@@ -161,6 +165,7 @@ namespace TheCoders.models
 
             //Weapon newWeapon = LimitedWeaponCrafting();
 
+
             Weapon newWeapon = Weapon.createWeapon(); // find a way to limit the materials available to the player
             Console.WriteLine("\n");
             newWeapon.displayWeaponInfo();
@@ -193,8 +198,8 @@ namespace TheCoders.models
 
             Console.WriteLine("\n\n It seems like your weapons are low on durability sometimes its better to repair them than to make new ones");
 
-            //repair weapon method  make a whihc weapon to repair method
-            theParty[0].heldWeapon.repairWeapon();
+
+            RepairWhosWeapon(theParty);
 
             Console.WriteLine("\n\ngood now the heroes are able to continue fighting");
 
@@ -382,7 +387,7 @@ namespace TheCoders.models
         //    return null;
         //}
 
-               
+
 
         private static void WhoGetsAWeapon(Person[] theParty, Weapon weapon)
         {
@@ -397,7 +402,7 @@ namespace TheCoders.models
 
         }
 
-        private static void RepairWhosWeapon(Person[] theParty, Weapon weapon)
+        private static void RepairWhosWeapon(Person[] theParty)
         {
 
 
@@ -406,9 +411,34 @@ namespace TheCoders.models
 
             int heroSlot = CIO.PromptForInt($"which heroes' weapon from slot 1 to {theParty.Length} do you want to repair", 1, theParty.Length);
 
-            theParty[heroSlot - 1].heldWeapon.repairWeapon();
+            bool loop = true;
+
+            do
+            {
+                if (theParty[heroSlot - 1].heldWeapon != null)
+                {
+                    if (theParty[heroSlot - 1].heldWeapon.getBroken())
+                    {
+
+                       
+                    }
+                    else 
+                    {
+                        theParty[heroSlot - 1].heldWeapon.repairWeapon();
+
+                        loop = false;
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine($"the hero {theParty[heroSlot - 1].Name} does not have a weapon that need repairing pick someone else");
+                }
+            } while (loop);
+
 
         }
+
 
 
 
