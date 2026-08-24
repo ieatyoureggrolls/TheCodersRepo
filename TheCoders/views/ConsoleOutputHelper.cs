@@ -1,4 +1,3 @@
-using CSC160_ConsoleMenu;
 using System.Drawing;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -15,7 +14,7 @@ namespace TheCoders.views;
 
 //Make sure methods are broken up into small methods
 //Make sure methods are documented with XML comments
-//Print wave information
+//Print wave information enemies only drop gold
 //Add menu design
 
 //Possible cursor animation
@@ -1251,7 +1250,15 @@ public static class ConsoleOutputHelper
                 }
 
                 //Weapon Place holder
-                //Console.WriteLine($"Weapon: {person.heldWeapon.getName()}");
+                if(person.heldWeapon != null)
+                {
+                    Console.WriteLine($"Weapon: {person.heldWeapon.getName()}");
+                }
+                else
+                {
+                    Console.WriteLine($"No Weapon");
+                }
+                
                 ///speed
                 Console.WriteLine($"Speed: {person.Speed}");
                 ///damage

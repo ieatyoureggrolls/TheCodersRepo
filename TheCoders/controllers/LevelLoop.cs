@@ -1,9 +1,8 @@
-﻿using CSC160_ConsoleMenu;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using TheCoders.models;
 using TheCoders.models.Generators;
+using TheCoders.views;
 using COH = TheCoders.views.ConsoleOutputHelper;
 
 namespace TheCoders.controllers

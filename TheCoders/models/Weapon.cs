@@ -1,9 +1,10 @@
-﻿using CSC160_ConsoleMenu;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using TheCoders.models;
+using TheCoders.views;
 
 namespace TheCoders
 {

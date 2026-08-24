@@ -1,4 +1,3 @@
-using CSC160_ConsoleMenu;
 using TheCoders.models;
 using TheCoders.models.Generators;
 using TheCoders.views;
@@ -16,8 +15,8 @@ public class Runner
         Console.ReadLine();
         COH.ClearScreen();
 
-        //COH.Test();
-        ChooseMode();
+        COH.Test();
+        //ChooseMode();
         
     }
 
