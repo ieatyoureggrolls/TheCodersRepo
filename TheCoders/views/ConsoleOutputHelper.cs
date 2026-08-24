@@ -228,7 +228,7 @@ public static class ConsoleOutputHelper
             }
             else
             {
-                Console.WriteLine($"{i + 1}: {heroParty[i].Name} Weilding: {heroParty[i].heldWeapon.getName}");
+                Console.WriteLine($"{i + 1}: {heroParty[i].Name} Weilding: {heroParty[i].heldWeapon.getName()}");
             }
 
 

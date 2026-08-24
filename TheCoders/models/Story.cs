@@ -16,7 +16,7 @@ namespace TheCoders.models
     {
         static int availableLevels = 1;
         const int minimumLevels = 1;
-        private static Person[] theParty = { new Person("hero:Bob", 100, 5, 25, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
+        private static Person[] theParty = { new Person("hero:Bob", 100, 5, 1, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
 
         public static void main()
         {
@@ -133,6 +133,8 @@ namespace TheCoders.models
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
+            tutorialWeapon.renameWeapon("the blade of the gods");
+            //Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
 
             Console.WriteLine("\n I don't have time to explain things to you right now take this sword\n");
             tutorialWeapon.displayWeaponInfo();
@@ -154,7 +156,7 @@ namespace TheCoders.models
         private static void Level2()
         {
             ConsoleOutputHelper.ClearScreen();
-            Enemy[] enemies = EnemyGenerator.GenerateEnemies(2, 2);
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1,1);
             const int currentLevel = 2;
 
             Console.WriteLine("More enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too\n");
@@ -166,7 +168,7 @@ namespace TheCoders.models
             //Weapon newWeapon = LimitedWeaponCrafting();
 
 
-            Weapon newWeapon = Weapon.createWeapon(); // find a way to limit the materials available to the player
+            Weapon newWeapon = Weapon.createWeapon(3); // find a way to limit the materials available to the player
             Console.WriteLine("\n");
             newWeapon.displayWeaponInfo();
             Console.WriteLine("\n thats a great weapon for our new hero");
@@ -439,7 +441,10 @@ namespace TheCoders.models
 
         }
 
-
+        //private static void()
+        //    {
+                
+        //    }
 
 
 
