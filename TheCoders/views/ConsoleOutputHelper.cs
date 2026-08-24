@@ -668,22 +668,23 @@ public static class ConsoleOutputHelper
         int[] bg = GenerateLightRGB();
         int[] fg;
         bool tooSimilar = true;
-        do
-        {
-            fg = GenerateDarkRGB();
-            if(!TooSimilarShade(bg, fg, 30))
-            {
-                
-                tooSimilar = false;
-            }
-        }
-        while (TooSimilarShade(bg, fg, 20));
-
         foreach (char c in chars)
         {
-            PrintColoredChar(c, false, fg, bg);
-           
+
+            do
+            {
+                fg = GenerateDarkRGB();
+                if (!TooSimilarShade(bg, fg, 30))
+                {
+
+                    tooSimilar = false;
+                }
+            }
+            while (TooSimilarShade(bg, fg, 20));
+            PrintColoredChar(c, false, bg, fg);
         }
+
+        
         Console.WriteLine();
     }
     /// <summary>
@@ -694,7 +695,7 @@ public static class ConsoleOutputHelper
     {
         bool isDark = false;
         int[] rgb;
-        double brightnessThreshold = 100.00;
+        double brightnessThreshold = 75.00;
         do
         {
             rgb = new int[] { rand.Next(255), rand.Next(255), rand.Next(255) };
