@@ -7,10 +7,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="BordaZConsoleIO">
-      <HintPath>lib\BordaZConsoleIO.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
