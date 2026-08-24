@@ -52,7 +52,7 @@ public static class ConsoleOutputHelper
         eList.Add(boss);
 
         //PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
-        PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
+        //PrintMainMenu(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);\
 
         //do
         //{
@@ -97,7 +97,7 @@ public static class ConsoleOutputHelper
     public static void MainMenuDesign(string[] mainMenuOptions)
     {
         PrintBanner("Main Menu");
-        PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
+        //PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
 
         //Center the menu options
 
@@ -112,78 +112,9 @@ public static class ConsoleOutputHelper
         //Add some Ascii art and/or animations
     }
 
-    public static void PrintMenuBox(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
+    public static void PrintMainMenu(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
     {
-        string topLeftArch = "\u2554";
-        string topRightArch = "\u2557";
-        string bottomLeftArch = "\u255A";
-        string bottomRightArch = "\u255D";
-        string verticalLine = "\u2551";
-        string horizontalLine = "\u2550";
-        //Repeat(" ", 10, false);
-        // ChooseMode();
-        var originalOut = Console.Out;
-        var stringWriter = new StringWriter();
-        Console.SetOut(stringWriter);
-        CIO.PromptForMenuSelection(options, withQuit);
-        Console.SetOut(originalOut);
-        string output = stringWriter.ToString().TrimEnd('\n');
-        var lines = output.Split('\n');
-        foreach(var line in lines)
-        {
-            Console.WriteLine(line);
-        }
-        int width = 2;
-
-        for (int index = 0; index < height; index++)
-        {
-            int padding;
-            if (centered)
-            {
-                padding = (Console.WindowWidth - width) / 2;
-            }
-            else
-            {
-                padding = 0;
-            }
-            if (index == 0)
-            {
-                Repeat(" ", padding, false);
-                Console.Write(topLeftArch);
-                for (int i = 0; i < width; i++)
-                {
-                    Console.Write(horizontalLine);
-                }
-                Console.WriteLine(topRightArch);
-            }
-            else if(index == height - 1)
-            {
-                Repeat(" ", padding, false);
-                Console.Write(bottomLeftArch);
-                for (int i = 0; i < width; i++)
-                {
-                    Console.Write(horizontalLine);
-                }
-                Console.WriteLine(bottomRightArch);
-            }
-            else if(index == height / 2 - 1)
-            {
-                Repeat(" ", padding, false);
-                Console.Write(verticalLine);
-                Console.Write($" message ");
-                Console.WriteLine(verticalLine);
-            }
-            else
-            {
-                Repeat(" ", padding, false);
-                Console.Write(verticalLine);
-                for (int i = 0; i < width; i++)
-                {
-                    Console.Write(" ");
-                }
-                Console.WriteLine(verticalLine);
-            }
-        }
+        
     }
 
     /// <summary>
@@ -682,8 +613,8 @@ public static class ConsoleOutputHelper
     /// <param name="message">The message to display in the banner</param>
     public static void PrintBanner(string message)
     {
-        ;
-        //ClearScreen();
+        
+        ClearScreen();
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
