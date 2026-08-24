@@ -1,4 +1,3 @@
-using CSC160_ConsoleMenu;
 using TheCoders.models;
 using TheCoders.models.Generators;
 using TheCoders.views;
