@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using COH = TheCoders.views.ConsoleOutputHelper;
+
 
 namespace TheCoders.views
 {
@@ -31,6 +33,82 @@ namespace TheCoders.views
             if (withQuit)
                 sb.Append("0. Quit");
 
+            int input = PromptForInt(sb.ToString(), (withQuit ? 0 : 1), options.Count());
+            return input;
+        }
+        public static int PromptForMenuSelectionInBox(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
+        {
+            if (options == null || (options.Count() == 0 && (!withQuit)))
+                throw new ArgumentException("Options cannot be null or empty with no quit");
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < options.Count(); i++)
+                sb.Append($"{(i + 1)}. {options.ElementAt(i)}\n");
+
+            if (withQuit)
+                sb.Append("0. Quit");
+            string topLeftArch = "\u2554";
+            string topRightArch = "\u2557";
+            string bottomLeftArch = "\u255A";
+            string bottomRightArch = "\u255D";
+            string verticalLine = "\u2551";
+            string horizontalLine = "\u2550";
+            //Repeat(" ", 10, false);
+            // ChooseMode();
+
+
+            int width = 2;
+
+            for (int index = 0; index < height; index++)
+            {
+                int padding;
+                if (centered)
+                {
+                    padding = (Console.WindowWidth - width) / 2;
+                }
+                else
+                {
+                    padding = 0;
+                }
+                if (index == 0)
+                {
+                    ConsoleOutputHelper.Repeat(" ", padding, false);
+                    Console.Write(topLeftArch);
+                    for (int i = 0; i < width; i++)
+                    {
+                        Console.Write(horizontalLine);
+                    }
+                    Console.WriteLine(topRightArch);
+                }
+                else if (index == height - 1)
+                {
+                    COH.Repeat(" ", padding, false);
+                    Console.Write(bottomLeftArch);
+                    for (int i = 0; i < width; i++)
+                    {
+                        Console.Write(horizontalLine);
+                    }
+                    Console.WriteLine(bottomRightArch);
+                }
+                else if (index == height / 2 - 1)
+                {
+                    COH.Repeat(" ", padding, false);
+                    Console.Write(verticalLine);
+                    Console.Write($" message ");
+                    Console.WriteLine(verticalLine);
+                }
+                else
+                {
+                    COH.Repeat(" ", padding, false);
+                    Console.Write(verticalLine);
+                    for (int i = 0; i < width; i++)
+                    {
+                        Console.Write(" ");
+                    }
+                    Console.WriteLine(verticalLine);
+                }
+            }
             int input = PromptForInt(sb.ToString(), (withQuit ? 0 : 1), options.Count());
             return input;
         }
