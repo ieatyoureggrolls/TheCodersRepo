@@ -149,7 +149,7 @@ namespace TheCoders.models
             switch (getMaterial())
             {
                 case Material.wood:
-                    setRarity(1);
+                    setRarity(10);
                     setDurability(getDurability() + 10);
                     setEnchantTier(1);
                     setPrice(10);
@@ -157,7 +157,7 @@ namespace TheCoders.models
                     break;
                 case Material.stone:
                     setRarity(2);
-                    setAttack(getAttack() + 1);
+                    setAttack(getAttack() + 10);
                     setDurability(getDurability() + 20);
                     setEnchantTier(1);
                     setPrice(20);
@@ -165,7 +165,7 @@ namespace TheCoders.models
                     break;
                 case Material.bronze:
                     setRarity(3);
-                    setAttack(getAttack() + 2);
+                    setAttack(getAttack() + 20);
                     setDurability(getDurability() + 30);
                     setEnchantTier(2);
                     setPrice(30);
@@ -173,7 +173,7 @@ namespace TheCoders.models
                     break;
                 case Material.steel:
                     setRarity(4);
-                    setAttack(getAttack() + 3);
+                    setAttack(getAttack() + 30);
                     setDurability(getDurability() + 40);
                     setEnchantTier(2);
                     setPrice(40);
@@ -181,7 +181,7 @@ namespace TheCoders.models
                     break;
                 case Material.gold:
                     setRarity(4);
-                    setAttack(getAttack() + 1);
+                    setAttack(getAttack() + 10);
                     setDurability(getDurability() + 10);
                     setSpeed(getSpeed() + 2);
                     setEnchantTier(3);
@@ -190,7 +190,7 @@ namespace TheCoders.models
                     break;
                 case Material.adamantine:
                     setRarity(5);
-                    setAttack(getAttack() + 5);
+                    setAttack(getAttack() + 50);
                     setDurability(getDurability() + 50);
                     setEnchantTier(3);
                     setPrice(50);
@@ -198,7 +198,7 @@ namespace TheCoders.models
                     break;
                 case Material.mithril:
                     setRarity(5);
-                    setAttack(getAttack() + 2);
+                    setAttack(getAttack() + 20);
                     setDurability(getDurability() + 40);
                     setEnchantTier(4);
                     setPrice(50);
