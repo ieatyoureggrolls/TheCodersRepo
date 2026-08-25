@@ -9,7 +9,7 @@ namespace TheCoders.models
     {
         public static int currentLevel = 1;
         public static int gold = 0;
-        public static Person[] partyMembers = { new Person("Bob", 10000, 250, 250, true), new Person("Billy", 25, 300, 6, true), new Person("Joe", 50, 1000, 1, true) };
+        public static Person[] partyMembers = { new Person("Bob", 100, 5, 1, true), new Person("Billy", 100, 5, 1, true), new Person("Joe", 100, 5, 1, true) };
 
         public static void StartEndless()
         {
