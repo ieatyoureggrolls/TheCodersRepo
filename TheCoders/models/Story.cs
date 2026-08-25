@@ -1,13 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using TheCoders.controllers;
+﻿using TheCoders.controllers;
 using TheCoders.views;
 using TheCoders.models.Generators;
-using System.Xml.Serialization;
-using System.Numerics;
 
 
 namespace TheCoders.models
@@ -35,7 +28,7 @@ namespace TheCoders.models
          
          * level1 player spectates the computer making a weapon and sees the auto battler (complete)
          * level2 player makes a weapon for the second hero and watches auto battler (complete) 
-         * level3 weapons are low on durability so player learns to repair weapons (partially complete) display weapon durability and then ask player which to repair
+         * level3 weapons are low on durability so player learns to repair weapons (partially complete) display weapon durability and then ask player to repair
          * level4 player learns to replace weapons (partially complete)
          * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
          * 
@@ -43,7 +36,7 @@ namespace TheCoders.models
          *
          *find a way to delay dialogoue in story mode (idk)
          *
-         *let the player choose which action tehy would like to perform instead of forcing it (make the method)
+         *let the player choose which action tehy would like to perform instead of forcing it (make the method, in progress)
          *
          */
 
@@ -136,7 +129,7 @@ namespace TheCoders.models
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
-            tutorialWeapon.renameWeapon("the blade of the gods");
+            tutorialWeapon.renameWeapon("wood you like something better?");
 
             //Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
 
@@ -157,10 +150,12 @@ namespace TheCoders.models
 
         }
 
+
+
         private static void Level2()
         {
             ConsoleOutputHelper.ClearScreen();
-            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1,1);
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1,2);
             const int currentLevel = 2;
 
             Console.WriteLine("More enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too\n");
@@ -199,16 +194,21 @@ namespace TheCoders.models
         private static void Level3()
         {
             ConsoleOutputHelper.ClearScreen();
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 2);
             const int currentLevel = 3;
 
-            Console.WriteLine("\n\n It seems like your weapons are low on durability sometimes its better to repair them than to make new ones");
+            theParty[0].heldWeapon.breakWeapon();
+            theParty[0].heldWeapon.displayWeaponInfo();
 
+            ConsoleOutputHelper.PrintCombatantParty(enemies);
 
-            //RepairWhosWeapon();
+            Console.WriteLine($"\n\n you can't win with a broken weapon try repairing {theParty[0].heldWeapon.getName()}'s weapon");
+
+            RepairWeapon();
 
             Console.WriteLine("\n\ngood now the heroes are able to continue fighting");
 
-            //auto battler method
+            LevelLoop.Battle(enemies.ToList(), theParty);
 
             WinOrLose(theParty, currentLevel);
 
@@ -226,18 +226,19 @@ namespace TheCoders.models
         private static void Level4()
         {
             ConsoleOutputHelper.ClearScreen();
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 3);
             const int currentLevel = 4;
 
-            Console.WriteLine("\n\n from here on out its all you im sure you can handle whatevers coming");
+            Console.WriteLine("\n\n from here on out its all you, im sure you can handle whatevers coming");
 
-            //call enemy inspect method
+            ConsoleOutputHelper.PrintCombatantParty(enemies);
 
 
             Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best those guys are tought");
 
             //create wepon method
 
-            //auto battler method
+            LevelLoop.Battle(enemies.ToList(), theParty);
 
             WinOrLose(theParty, currentLevel);
 
@@ -379,7 +380,7 @@ namespace TheCoders.models
             do
             {
                 Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon(work in progress)", "Enchant Weapon(work in progress)" };
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon(work in progress)", "Enchant Weapon(work in progress)", "displayWeaponStats(work in progress)", "Craftpedia(work in progress)" };
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
                 switch (selection)
                 {
@@ -401,6 +402,12 @@ namespace TheCoders.models
                         break;
                     case 6:
                         //  EnchantWeapon(); //not complete but apparently in the weapon class
+                        break;
+                    case 7:
+                        //  displayweaponstats
+                        break;
+                    case 8:
+                        // search the craftpedia
                         break;
                 }
             } while (isCrafting);
