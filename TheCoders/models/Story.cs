@@ -17,11 +17,12 @@ namespace TheCoders.models
         static int availableLevels = 1;
         const int minimumLevels = 1;
         private static Person[] theParty = { new Person("hero:Bob", 100, 5, 1, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
+        private static List<Weapon> weaponStorage = new List<Weapon>();
 
         public static void main()
         {
 
-
+            //playerChoice();
             ChooseLevel(availableLevels);
 
 
@@ -203,7 +204,7 @@ namespace TheCoders.models
             Console.WriteLine("\n\n It seems like your weapons are low on durability sometimes its better to repair them than to make new ones");
 
 
-            RepairWhosWeapon(theParty);
+            //RepairWhosWeapon();
 
             Console.WriteLine("\n\ngood now the heroes are able to continue fighting");
 
@@ -354,48 +355,9 @@ namespace TheCoders.models
         }
 
 
-        //private static Weapon LimitedcraftingLitsV1() 
-        //{
-        //    // CIO.
-
-
-        //    Console.WriteLine("choose what you want 1.)short 2.)medium 3.) long");
-
-        //    if (choice > 5) 
-        //    {
-        //        Console.WriteLine("choose something else");
-        //    }
-
-
-        //    return null;
-        //}
-
-        //private static Weapon LimitedWeaponCrafting(string first, string second, string third, string fourth, string fifth)
-        //{
-        //    // Define simulated lines separated by newlines
-        //    string simulatedInput = $"{first}\n{second}\n{third}\n{fourth}\nYes, \n{fifth}";
-
-
-
-        //    using (StringReader reader = new StringReader(simulatedInput))
-        //    {
-
-        //        // Redirect standard input inside this static context
-        //        Console.SetIn(reader);
-
-
-        //        Weapon test = Weapon.createWeapon();
-
-        //        test.displayWeaponInfo();
-        //    }
-        //    return null;
-        //}
-
-
 
         private static void WhoGetsAWeapon(Person[] theParty, Weapon weapon)
         {
-
 
 
             ConsoleOutputHelper.PrintHeroNames(theParty);
@@ -406,63 +368,108 @@ namespace TheCoders.models
 
         }
 
-        private static void RepairWhosWeapon(Person[] theParty)
+        
+
+
+        public static void playerChoice() 
         {
 
-
-
-            ConsoleOutputHelper.PrintHeroNames(theParty);
-
-            int heroSlot = CIO.PromptForInt($"which heroes' weapon from slot 1 to {theParty.Length} do you want to repair", 1, theParty.Length);
-
-            bool loop = true;
-
+                           
+            bool isCrafting = true;
             do
             {
-                if (theParty[heroSlot - 1].heldWeapon != null)
+                Console.WriteLine("What would you like to do?");
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon(work in progress)", "Enchant Weapon(work in progress)" };
+                int selection = CIO.PromptForMenuSelection(possibleMenus, false);
+                switch (selection)
                 {
-                    if (theParty[heroSlot - 1].heldWeapon.getBroken())
-                    {
-
-                       
-                    }
-                    else 
-                    {
-                        theParty[heroSlot - 1].heldWeapon.repairWeapon();
-
-                        loop = false;
-                    }
-
+                    case 1:
+                        isCrafting = false;
+                        break;
+                    case 2:
+                        MakeWeapon();
+                        
+                        break;
+                    case 3:
+                        RepairWeapon(); 
+                        break;
+                    case 4:
+                        ReplaceWeapon(); //not tested
+                        break;
+                    case 5:
+                     //   UpgradeWeapon(); //not complete but apparently in the weapon class
+                        break;
+                    case 6:
+                        //  EnchantWeapon(); //not complete but apparently in the weapon class
+                        break;
                 }
-                else
-                {
-                    Console.WriteLine($"the hero {theParty[heroSlot - 1].Name} does not have a weapon that need repairing pick someone else");
-                }
-            } while (loop);
-
-
+            } while (isCrafting);
         }
 
-        //private static void()
-        //    {
-                
-        //    }
-
-
-
-        private static void BattlerLoop(Enemy[] enemies, Person[] theParty, Weapon weapon)
+        private static void ReplaceWeapon() 
         {
 
-            ConsoleOutputHelper.ClearScreen();
-            Weapon newWeapon = Weapon.createWeapon();
-            ConsoleOutputHelper.ClearScreen();
+            Console.WriteLine("\n\nWhich weapon would you like to equip");
+            List<string> weaponNames = new List<string>();
+            foreach (Weapon weapon in weaponStorage) 
+            {
+                weaponNames.Add(weapon.getName());
+            }
+
+           int selection = (CIO.PromptForMenuSelection(weaponNames,true)-1);
+           Weapon chosenWeapon = weaponStorage.ElementAt(selection);
+           int heroSlot = ChooseHero();
+
+            weaponStorage.Add(theParty[heroSlot].heldWeapon);
+            theParty[heroSlot].EquipWeapon(chosenWeapon);
+            weaponStorage.RemoveAt(selection);
+
+
 
             Console.WriteLine("\n\n");
-            WhoGetsAWeapon(theParty, weapon);
-            ConsoleOutputHelper.ClearScreen();
-            LevelLoop.Battle(enemies.ToList(), theParty);
+        }
+
+        private static void RepairWeapon()
+        {
+            int heroSlot = ChooseHero();
+
+            if (theParty[heroSlot].heldWeapon != null)
+            {
+
+                theParty[heroSlot].heldWeapon.repairWeapon();
+            }
+            else
+            {
+                Console.WriteLine($"the hero {theParty[heroSlot].Name} does not have a weapon that need repairing");
+            }
+
+            Console.WriteLine("\n\n");
+        }
+
+        private static void MakeWeapon() 
+        {
+            int heroSlot = ChooseHero();
+            Weapon newWeapon = Weapon.createWeapon();
+
+            if (theParty[heroSlot].heldWeapon != null)
+            {
+                weaponStorage.Add(theParty[heroSlot].heldWeapon);
+             
+            }
+
+            theParty[heroSlot].EquipWeapon(newWeapon);
+            Console.WriteLine("\n\n");
+            
 
         }
+        private static int ChooseHero() //not complete
+        {
+            ConsoleOutputHelper.PrintHeroNames(theParty);
+            int heroSlot = CIO.PromptForInt($"which heroes from slot 1 to {theParty.Length} do you want to choose", 1, theParty.Length);
+            return heroSlot-1;
+
+        }
+
 
         private static void IncreaseAvailableLevel(int currentLevel)
         {
@@ -480,13 +487,7 @@ namespace TheCoders.models
             theRunner.Run();
         }
 
-        //private static string Pedia(string material) 
-        //{
-        //    string pedia = "$ material is {material.name} has durability of {material.durability}";
-
-        //     return pedia;
-        //}
-
+      
 
     }
 }
