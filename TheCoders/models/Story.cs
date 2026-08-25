@@ -33,14 +33,16 @@ namespace TheCoders.models
          * methods
          
          * level1 player spectates the computer making a weapon and sees the auto battler (complete)
-         * level2 player makes a weapon for the second hero and watches auto battler (partially complete) just needs limited crafting
+         * level2 player makes a weapon for the second hero and watches auto battler (complete) 
          * level3 weapons are low on durability so player learns to repair weapons (partially complete) display weapon durability and then ask player which to repair
          * level4 player learns to replace weapons (partially complete)
          * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
          * 
-         *make a method that display weapon durability when the enemy status is being shown
+         *make a method that display weapon durability when the enemy status is being shown (light work)
          *
-         *find a way to delay dialogoue in story mode
+         *find a way to delay dialogoue in story mode (idk)
+         *
+         *let the player choose which action tehy would like to perform instead of forcing it (make the method)
          *
          */
 
@@ -134,6 +136,7 @@ namespace TheCoders.models
 
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
             tutorialWeapon.renameWeapon("the blade of the gods");
+
             //Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
 
             Console.WriteLine("\n I don't have time to explain things to you right now take this sword\n");
@@ -165,10 +168,9 @@ namespace TheCoders.models
 
             Console.WriteLine("\n these guys are tought try making something better than a wooden sword");
 
-            //Weapon newWeapon = LimitedWeaponCrafting();
+          
 
-
-            Weapon newWeapon = Weapon.createWeapon(3); // find a way to limit the materials available to the player
+            Weapon newWeapon = Weapon.createWeapon(2); 
             Console.WriteLine("\n");
             newWeapon.displayWeaponInfo();
             Console.WriteLine("\n thats a great weapon for our new hero");
@@ -478,7 +480,12 @@ namespace TheCoders.models
             theRunner.Run();
         }
 
+        //private static string Pedia(string material) 
+        //{
+        //    string pedia = "$ material is {material.name} has durability of {material.durability}";
 
+        //     return pedia;
+        //}
 
 
     }
