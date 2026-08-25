@@ -59,6 +59,7 @@ namespace TheCoders.models
             setDetails();
         }
 
+        //gives the enchantment the given amount of experience
         public void addExp(int points)
         {
             exp += points;
@@ -69,6 +70,7 @@ namespace TheCoders.models
             };
         }
 
+        //increases the stats of the enchantment
         public void levelUp()
         {
             level++;
