@@ -531,6 +531,7 @@ public static class ConsoleOutputHelper
         //The weird string format is used because the Terminal Cursor is being used to print the parties side-by-side.
         //Not sure if this is optimal, but it seemed like the easiest way.
         Console.Write($"\t\t Hero Party");
+        int cursorTopOriginal = Console.CursorTop;
         Repeat("\t", 16, false);
         Console.WriteLine("Enemy Party \n");
         int cursorLeft = Console.CursorLeft;
@@ -540,6 +541,18 @@ public static class ConsoleOutputHelper
         Console.SetCursorPosition(cursorLeft, cursorTop);
         Repeat("\t", 17, false);
         PrintCombatantParty(enemyParty, true);
+        if(enemyParty.Count() > heroParty.Count()) 
+        {
+            Console.SetCursorPosition(0, cursorTop + enemyParty.Count() * 5 + 1);
+        }
+        else
+        {
+            Console.SetCursorPosition(0, cursorTop + heroParty.Count() * 6 + 1);
+        }
+
+
+     
+        
         Console.WriteLine("Press any key to continue...");
         Console.Read();
 
@@ -1210,6 +1223,7 @@ public static class ConsoleOutputHelper
                 Console.WriteLine($"Speed: {person.Speed}");
                 ///damage
                 Console.WriteLine($"Damage: {person.Damage} \n");
+
             }
         }
 
