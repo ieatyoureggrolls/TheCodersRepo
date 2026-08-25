@@ -543,11 +543,11 @@ public static class ConsoleOutputHelper
         PrintCombatantParty(enemyParty, true);
         if(enemyParty.Count() > heroParty.Count()) 
         {
-            Console.SetCursorPosition(0, cursorTop + enemyParty.Count() + 2);
+            Console.SetCursorPosition(0, cursorTop + enemyParty.Count() * 5 + 1);
         }
         else
         {
-            Console.SetCursorPosition(0, cursorTop + heroParty.Count() + 2);
+            Console.SetCursorPosition(0, cursorTop + heroParty.Count() * 6 + 1);
         }
 
 
