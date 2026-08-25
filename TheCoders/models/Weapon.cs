@@ -19,7 +19,7 @@ namespace TheCoders
         }
 
         private DamageType damageType;
-        List<Enchantments> enchantmentList = new List<Enchantments>();
+        public List<Enchantments> enchantmentList = new List<Enchantments>();
 
         private String name = null;
         private int attack;

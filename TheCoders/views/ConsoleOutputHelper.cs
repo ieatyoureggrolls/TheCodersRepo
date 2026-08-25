@@ -27,7 +27,7 @@ public static class ConsoleOutputHelper
     public static void Test()
     {
 
-
+        
         Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
         Person hero1 = new Person("one", 100, 1, 1, true);
         Person hero2 = new Person("two", 100, 1, 1, true);
@@ -50,6 +50,7 @@ public static class ConsoleOutputHelper
         eList.Add(e1);
         eList.Add(e2);
         eList.Add(boss);
+        MainMenuDesign([ "Option 1", "Option 2", "Option 3" ], true);
 
         //PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
         //PrintMainMenu(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);\
@@ -64,7 +65,7 @@ public static class ConsoleOutputHelper
         //    {
         //        enemy.CurrentHealth -= rand.Next(1, 10);
         //    }
-        //    PrintBattleStanding(pList, eList);
+           PrintBattleStanding(pList, eList);
         //    Thread.Sleep(1000);
         //} while (pList.Any(p => p.CurrentHealth > 0) && eList.Any(e => e.CurrentHealth > 0));
 
@@ -93,17 +94,30 @@ public static class ConsoleOutputHelper
         Console.WriteLine("Story");
         Storymode.main();
     }
+    #region Ascii Art
 
-    public static void MainMenuDesign(string[] mainMenuOptions)
+    static string anvil = """
+              ⢰⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⡄⠀⠀⠀⠀
+        ⠹⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢠⣄⡀⠀
+        ⠀⠙⢿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⡶
+        ⠀⠀⠀⠉⠛⠇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠸⠟⠋⠀
+        ⠀⠀⠀⠀⠀⠀⠸⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠇⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣶⣶⣶⣶⣶⣶⣶⣶⡀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⣀⣀⣈⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣁⣀⣀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀
+        """;
+
+
+    #endregion
+
+    public static void MainMenuDesign(string[] mainMenuOptions, bool withQuit)
     {
         PrintBanner("Main Menu");
         //PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
-
+        //CIO.PromptForMenuSelectionInBox(mainMenuOptions, true, mainMenuOptions.Count(), true);
         //Center the menu options
-
-        //Print a box/Vertical rectangle
-
-        //Print the menu options inside the box
 
         //Add some color to the menu options
 
@@ -526,6 +540,8 @@ public static class ConsoleOutputHelper
         Console.SetCursorPosition(cursorLeft, cursorTop);
         Repeat("\t", 17, false);
         PrintCombatantParty(enemyParty, true);
+        Console.WriteLine("Press any key to continue...");
+        Console.Read();
 
     }
  #region Print banner methods
