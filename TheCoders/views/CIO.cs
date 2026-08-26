@@ -43,7 +43,8 @@ namespace TheCoders.views
             if (optionsIE == null || (optionsIE.Count() == 0 && (!withQuit)))
                 throw new ArgumentException("Options cannot be null or empty with no quit");
 
-            
+            int cursorLeft = 0;
+            int cursorTop = 0;
 
             string topLeftArch = "\u2554";
             string topRightArch = "\u2557";
