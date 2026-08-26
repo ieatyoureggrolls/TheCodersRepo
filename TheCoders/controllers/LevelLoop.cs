@@ -141,9 +141,13 @@ namespace TheCoders.controllers
         {
             if (party != null)
                 partyMembers = party;
-            Weapon weaponToEnchant = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to upgrade?", partyMembers);
+            Weapon weaponToEnchant = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to enchant?", partyMembers);
             if (weaponToEnchant != null)
+            {
                 weaponToEnchant.displayEnchantments();
+                weaponToEnchant.addEnchantment();
+            }
+
 
         }
         #endregion

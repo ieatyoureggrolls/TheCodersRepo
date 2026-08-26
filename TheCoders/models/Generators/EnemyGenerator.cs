@@ -20,7 +20,7 @@ namespace TheCoders.models.Generators
         /// </summary>
         /// <param name="level">A modifier to adjust how strong the generated enemy is</param>
         /// <returns>A single enemy</returns>
-        public static Enemy GenerateOneEnemy(int level, bool isBoss = true)
+        public static Enemy GenerateOneEnemy(int level, bool isBoss = false)
         {
             double scale = Math.Pow(statScaler, level) * (isBoss ? bossScaler : 1);
             int health = (int)Math.Round((baseHealth + random.Next(11) - 5) * scale);
