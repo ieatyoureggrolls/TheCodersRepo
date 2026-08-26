@@ -13,10 +13,11 @@ namespace TheCoders.models
 
         public Enemy(string name, int maxHealth, int speed, int damage) : base(name, maxHealth, speed, damage, false) { }
         public Enemy(string name, bool isBoss, int maxHealth, int speed, int damage) : base(name, maxHealth, speed, damage, false) { IsBoss = isBoss; }
-        public Enemy(string name, int maxHealth, int speed, int damage, Element element, int gold) : base(name, maxHealth, speed, damage, false) 
+        public Enemy(string name, int maxHealth, int speed, int damage, Element element, int gold, bool isBoss = false) : base(name, maxHealth, speed, damage, false) 
         {
             Element = element;
             this.gold = gold;
+            IsBoss = isBoss;
         }
 
         public override string ToString()
