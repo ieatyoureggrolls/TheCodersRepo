@@ -34,20 +34,15 @@ namespace TheCoders.views
                 sb.Append("0. Quit");
 
             int input = PromptForInt(sb.ToString(), (withQuit ? 0 : 1), options.Count());
+
             return input;
         }
-        public static int PromptForMenuSelectionInBox(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
+        public static int PromptForMenuSelectionInBox(IEnumerable<string> options, bool withQuit,  bool centered = false)
         {
             if (options == null || (options.Count() == 0 && (!withQuit)))
                 throw new ArgumentException("Options cannot be null or empty with no quit");
 
-            StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < options.Count(); i++)
-                sb.Append($"{(i + 1)}. {options.ElementAt(i)}\n");
-
-            if (withQuit)
-                sb.Append("0. Quit");
             string topLeftArch = "\u2554";
             string topRightArch = "\u2557";
             string bottomLeftArch = "\u255A";
@@ -57,15 +52,35 @@ namespace TheCoders.views
             //Repeat(" ", 10, false);
             // ChooseMode();
 
+            if (withQuit)
+            {
+                
+                options = options.Append("Quit");
+                
 
-            int width = 2;
+            }
+            int height = options.Count();
+            
+            int width = 7;
+            for(int index = 0; index < options.Count(); index++)
+            {
+                if (options.ElementAt(index).Length > width)
+                {
+                    width += options.ElementAt(index).Length;
+                }
+            }
+            Console.WriteLine($"Width: {width}, Height: {height}");
+            
+            int column = 0;
+
 
             for (int index = 0; index < height; index++)
             {
+                column++;
                 int padding;
                 if (centered)
                 {
-                    padding = (Console.WindowWidth - width) / 2;
+                    padding = (Console.WindowWidth - width) / 2 - 1;
                 }
                 else
                 {
@@ -81,7 +96,7 @@ namespace TheCoders.views
                     }
                     Console.WriteLine(topRightArch);
                 }
-                else if (index == height - 1)
+                else if (index == height)
                 {
                     COH.Repeat(" ", padding, false);
                     Console.Write(bottomLeftArch);
@@ -91,11 +106,23 @@ namespace TheCoders.views
                     }
                     Console.WriteLine(bottomRightArch);
                 }
-                else if (index == height / 2 - 1)
+                else if (index >= height / 2 - 1 + height)
                 {
                     COH.Repeat(" ", padding, false);
                     Console.Write(verticalLine);
-                    Console.Write($" message ");
+                    if (withQuit)
+                    {
+                        if (index == height / 2 - 1 + options.Count())
+                        {
+                            Console.Write($" 0. Quit ");
+                        }
+                        else
+                        {
+                            Console.Write($"  {index}. {options.ElementAt(index - 1)} ");
+                        }
+                    }
+                    
+                    COH.Repeat(" ", 1, false);
                     Console.WriteLine(verticalLine);
                 }
                 else
@@ -109,7 +136,26 @@ namespace TheCoders.views
                     Console.WriteLine(verticalLine);
                 }
             }
-            int input = PromptForInt(sb.ToString(), (withQuit ? 0 : 1), options.Count());
+            
+            string anvil = ("""
+                      ⢰⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⡄⠀⠀⠀⠀
+                ⠹⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢠⣄⡀⠀
+                ⠀⠙⢿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⡶
+                ⠀⠀⠀⠉⠛⠇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠸⠟⠋⠀
+                ⠀⠀⠀⠀⠀⠀⠸⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠇⠀⠀⠀⠀
+                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣶⣶⣶⣶⣶⣶⣶⣶⡀⠀⠀⠀⠀⠀⠀⠀⠀
+                ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀
+                ⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀
+                ⠀⠀⠀⠀⠀⣀⣀⣈⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣉⣁⣀⣀⠀⠀⠀
+                ⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀
+                """);
+            string[] anvilLines = anvil.Split("\n");
+            foreach (string line in anvilLines)
+            {
+                COH.Repeat(" ", (Console.WindowWidth - line.Length) / 2, false);
+                Console.WriteLine(line);
+            }
+            int input = PromptForInt("Option: ",(withQuit ? 0 : 1), options.Count());
             return input;
         }
 
