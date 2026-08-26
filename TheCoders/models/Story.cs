@@ -122,11 +122,13 @@ namespace TheCoders.models
 
             const int currentLevel = 1;
 
+            ConsoleOutputHelper.PrintCombatantParty(enemies);
+
             Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
             Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
             Console.WriteLine("\n\nTake a look the enemies are quickly approaching\n");
 
-            ConsoleOutputHelper.PrintCombatantParty(enemies);
+            
 
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
             tutorialWeapon.renameWeapon("wood you like something better?");
@@ -154,14 +156,15 @@ namespace TheCoders.models
 
         private static void Level2()
         {
+            HealPlayer();
+
             ConsoleOutputHelper.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1,2);
             const int currentLevel = 2;
 
-            Console.WriteLine("More enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too\n");
-
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
+            Console.WriteLine("\n\nMore enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too\n");
             Console.WriteLine("\n these guys are tought try making something better than a wooden sword");
 
           
@@ -193,16 +196,20 @@ namespace TheCoders.models
 
         private static void Level3()
         {
+
+            HealPlayer();
+
             ConsoleOutputHelper.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 2);
             const int currentLevel = 3;
-
-            theParty[0].heldWeapon.breakWeapon();
-            theParty[0].heldWeapon.displayWeaponInfo();
-
             ConsoleOutputHelper.PrintCombatantParty(enemies);
 
-            Console.WriteLine($"\n\n you can't win with a broken weapon try repairing {theParty[0].heldWeapon.getName()}'s weapon");
+            //theParty[0].heldWeapon.breakWeapon();
+            theParty[0].heldWeapon.displayWeaponInfo();
+
+            
+
+            Console.WriteLine($"\n\n you can't win with a broken weapon try repairing {theParty[0].Name}'s weapon");
 
             RepairWeapon();
 
@@ -225,20 +232,26 @@ namespace TheCoders.models
 
         private static void Level4()
         {
+
+            HealPlayer();
+
             ConsoleOutputHelper.ClearScreen();
-            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 3);
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(2, 2);
+            Enemy boss = EnemyGenerator.GenerateOneEnemy(1, true);
+
+            Enemy[] army = new Enemy[enemies.Length + 1];
+            Array.Copy(enemies, army, enemies.Length);
+            army[enemies.Length] = boss;
+
             const int currentLevel = 4;
+            ConsoleOutputHelper.PrintCombatantParty(army);
 
             Console.WriteLine("\n\n from here on out its all you, im sure you can handle whatevers coming");
-
-            ConsoleOutputHelper.PrintCombatantParty(enemies);
-
-
             Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best those guys are tought");
 
-            //create wepon method
+            playerChoice();
 
-            LevelLoop.Battle(enemies.ToList(), theParty);
+            LevelLoop.Battle(army.ToList(), theParty);
 
             WinOrLose(theParty, currentLevel);
 
@@ -255,6 +268,9 @@ namespace TheCoders.models
 
         private static void Level5()
         {
+
+            HealPlayer();
+
             ConsoleOutputHelper.ClearScreen();
             const int currentLevel = 5;
 
@@ -355,7 +371,16 @@ namespace TheCoders.models
 
         }
 
+        private static void HealPlayer() 
+        {
+            for(int i =0; i < (theParty.Length); i++) 
+            {
 
+                theParty[i].CurrentHealth = theParty[i].MaxHealth;
+
+            }
+
+        }
 
         private static void WhoGetsAWeapon(Person[] theParty, Weapon weapon)
         {
@@ -427,9 +452,19 @@ namespace TheCoders.models
            Weapon chosenWeapon = weaponStorage.ElementAt(selection);
            int heroSlot = ChooseHero();
 
-            weaponStorage.Add(theParty[heroSlot].heldWeapon);
-            theParty[heroSlot].EquipWeapon(chosenWeapon);
-            weaponStorage.RemoveAt(selection);
+
+            if (heroSlot >= 0 && heroSlot < (theParty.Length-1))
+            {
+                weaponStorage.Add(theParty[heroSlot].heldWeapon);
+                theParty[heroSlot].EquipWeapon(chosenWeapon);
+                weaponStorage.RemoveAt(selection);
+            }
+            else
+            {
+                Console.WriteLine("Invalid hero selection.");
+            }
+
+            
 
 
 
@@ -471,8 +506,9 @@ namespace TheCoders.models
         }
         private static int ChooseHero() //not complete
         {
-            ConsoleOutputHelper.PrintHeroNames(theParty);
+
             int heroSlot = CIO.PromptForInt($"which heroes from slot 1 to {theParty.Length} do you want to choose", 1, theParty.Length);
+            ConsoleOutputHelper.PrintHeroNames(theParty);
             return heroSlot-1;
 
         }
