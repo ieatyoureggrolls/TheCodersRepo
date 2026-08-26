@@ -6,8 +6,10 @@ namespace TheCoders.models.Generators
 {
     public static class EnemyGenerator
     {
-        private static readonly string[] possibleNames = { "Bartholomew", "Dewy", "Travis Scott", "Kevin Lamar", "Katy Perry", "Jeffery Dalmer", "Donald Trump", "Donald Of Trump", "Freddie Mercury", "Orel", "Sid", "Sid The Sloth", "Turbo The Snail", "Lady Gaga", "Talor Swift", "Sony The Company", "Data Center", "Geofery Bezos", "Helen Keller", "Hellen Degenerate", "Person with glasses", "Imposter", "Sam Altmen", "Adam Sandler", "Tom Cruise", "Mr. Krebs", "Herobrine From Minecraft", "Mr. Krabs" };
+        private static readonly string[] possibleNames = { "Bartholomew", "Dewy", "Travis Scott", "Kevin Lamar", "Katy Perry", "Jeffery Dalmer", "Donald Trump", "Donald Of Trump", "Freddie Mercury", "Orel", "Sid", "Sid The Sloth", "Turbo The Snail", "Lady Gaga", "Talor Swift", "Sony The Company", "Data Center", "Geofery Bezos", "Helen Keller", "Hellen Degenerate", "Person with glasses", "Imposter", "Sam Altmen", "Adam Sandler", "Tom Cruise", "Mr. Krebs", "Herobrine From Minecraft", "Mr. Krabs", "The Shortest Person", "The Person The Internet Votes For" };
         private const float statScaler = 1.04f;
+
+        private const float bossScaler = 2.5f;
         private const int baseDamage = 3;
         private const int baseSpeed = 3;
         private const int baseHealth = 100;
@@ -18,9 +20,9 @@ namespace TheCoders.models.Generators
         /// </summary>
         /// <param name="level">A modifier to adjust how strong the generated enemy is</param>
         /// <returns>A single enemy</returns>
-        public static Enemy GenerateOneEnemy(int level)
+        public static Enemy GenerateOneEnemy(int level, bool isBoss = false)
         {
-            double scale = Math.Pow(statScaler, level);
+            double scale = Math.Pow(statScaler, level) * (isBoss ? bossScaler : 1);
             int health = (int)Math.Round((baseHealth + random.Next(11) - 5) * scale);
             int damage = (int)Math.Round((baseDamage + random.Next(2) - 1) * scale);
             int speed = (int)Math.Round((baseSpeed + random.Next(5) - 2) * scale);

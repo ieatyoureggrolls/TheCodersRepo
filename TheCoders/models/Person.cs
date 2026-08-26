@@ -21,7 +21,17 @@ namespace TheCoders.models
             }
         }
         public int MaxHealth { get; private set; }
-        public int Speed { get; private set; }
+        public int Speed {
+            get
+            {
+                if (!IsHero)
+                    return field;
+                if (heldWeapon == null || heldWeapon.getBroken())
+                    return 5;
+                else
+                    return heldWeapon.getSpeed();
+            }
+            private set; }
         public float critChance { get; private set; } = .025f;
         public int Damage { 
             get

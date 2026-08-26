@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TheCoders.models;
 using COH = TheCoders.views.ConsoleOutputHelper;
 
 
@@ -543,6 +544,60 @@ namespace TheCoders.views
                 }
                 return response;
             } while (true);
+        }
+
+        public static Person PromptForPerson(string prompt, Person[] people)
+        {
+            string[] names = new string[people.Length];
+            for (int i = 0; i < names.Length; i++)
+                names[i] = people[i].Name;
+            Console.WriteLine(prompt);
+            int choice = PromptForMenuSelection(names, false) - 1;
+            return people[choice];
+        }
+
+        public static Weapon PromptForWeapon(string prompt, Weapon[] weapons)
+        {
+            Console.WriteLine(prompt);
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                Console.Write($"{i}. ");
+                weapons[i].displayWeaponInfo();
+            }
+            int choice = PromptForInt("Selection: ", 1, weapons.Length) - 1;
+            return weapons[choice];
+        }
+
+        public static Weapon PromptForWeaponFromPerson(string prompt, Person[] people)
+        {
+            Console.WriteLine(prompt);
+            for (int i = 0; i < people.Length; i++)
+            {
+                Person person = people[i];
+                Console.Write($"{i + 1}. {person}\n\t");
+                if (person.heldWeapon != null)
+                    person.heldWeapon.displayWeaponInfo();
+                else
+                    Console.WriteLine("No Weapon");
+            }
+            int choice = PromptForInt("Selection: ", 1, people.Length) - 1;
+            return people[choice].heldWeapon;
+        }
+
+        public static Person PromptForPersonWithWeapon(string prompt, Person[] people)
+        {
+            Console.WriteLine(prompt);
+            for (int i = 0; i < people.Length; i++)
+            {
+                Person person = people[i];
+                Console.Write($"{i}. {person}\n\t");
+                if (person.heldWeapon != null)
+                    person.heldWeapon.displayWeaponInfo();
+                else
+                    Console.WriteLine("No Weapon");
+            }
+            int choice = PromptForInt("Selection: ", 1, people.Length) - 1;
+            return people[choice];
         }
     }
 }

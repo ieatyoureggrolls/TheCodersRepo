@@ -94,7 +94,6 @@ namespace TheCoders.controllers
         {
             if (party != null)
                 partyMembers = party;
-            //Weapon craftedWeapon = new Weapon();
             Weapon craftedWeapon = Weapon.createWeapon();
             string[] partyNames = new string[partyMembers.Length];
             for (int i = 0; i < partyMembers.Length; i++)
@@ -109,44 +108,22 @@ namespace TheCoders.controllers
         {
             if (party != null)
                 partyMembers = party;
-            List<string> weapons = new List<string>();
-            Console.WriteLine("Whoes weapon would you like to repair?");
-            for (int i = 0; i < partyMembers.Length; i++)
-            {
-                if (partyMembers[i].heldWeapon == null)
-                    continue;
-                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} - Weapon:");
-                partyMembers[i].heldWeapon.displayWeaponInfo();
-            }
-            int weaponToRepair = CIO.PromptForInt("", 1, partyMembers.Length) - 1;
-            partyMembers[weaponToRepair].heldWeapon.repairWeapon();
+            Weapon weaponToRepair = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to repair?", partyMembers);
+            if (weaponToRepair != null)
+                weaponToRepair.repairWeapon();
         }
 
         public static void ReplaceWeapon(List<Weapon> weaponInventory, Person[] party = null)
         {
             if (party != null)
                 partyMembers = party;
-            Console.WriteLine("Whoes weapon would you like to replace?");
-            for (int i = 0; i < partyMembers.Length; i++)
-            {
-                if (partyMembers[i].heldWeapon == null)
-                    continue;
-                Console.WriteLine($"{i + 1}. {partyMembers[i].Name} - Weapon:");
-                partyMembers[i].heldWeapon.displayWeaponInfo();
-            }
-            int weaponToReplace = CIO.PromptForInt("", 1, partyMembers.Length) - 1;
+            Person personToSwitch = CIO.PromptForPersonWithWeapon("Whose weapon would you like to replace?", partyMembers);
+            Weapon weaponToEquip = CIO.PromptForWeapon("Which weapon would you like them to start using?", weaponInventory.ToArray());
 
-            Console.WriteLine("Which weapon would you like them to start using?");
-            for (int i = 0; i < weaponInventory.Count; i++)
-            {
-                Console.Write($"{i + 1}. ");
-                weaponInventory[i].displayWeaponInfo();
-            }
-            int weaponReplacing = CIO.PromptForInt("", 1, weaponInventory.Count) - 1;
-            Weapon weaponToStorage = partyMembers[weaponToReplace].heldWeapon;
-            partyMembers[weaponToReplace].EquipWeapon(weaponInventory[weaponReplacing]);
-            weaponInventory.RemoveAt(weaponToReplace);
-            weaponInventory.Add(weaponToStorage);
+            Weapon weaponToStorage = personToSwitch.heldWeapon;
+            weaponInventory.Remove(weaponToEquip);
+            if (weaponToStorage != null)
+                weaponInventory.Add(weaponToStorage);
         }
 
         public static void UpgradeWeapon(Person[] party = null)
@@ -154,12 +131,19 @@ namespace TheCoders.controllers
             if (party != null)
                 partyMembers = party;
 
+            Weapon weaponToUpgrade = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to upgrade?", partyMembers);
+            if (weaponToUpgrade != null)
+                weaponToUpgrade.upgradeWeapon();
+
         }
 
         public static void EnchantWeapon(Person[] party = null)
         {
             if (party != null)
                 partyMembers = party;
+            Weapon weaponToEnchant = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to upgrade?", partyMembers);
+            if (weaponToEnchant != null)
+                weaponToEnchant.displayEnchantments();
 
         }
         #endregion
@@ -196,7 +180,7 @@ namespace TheCoders.controllers
                     }
                 }
                 COH.PrintBattleStanding(aliveHeroes, aliveEnemies);
-                CIO.PromptForInput("Press enter to continue", true);
+                //CIO.PromptForInput("Press enter to continue", true);
                 attackOrder = alivePeople;
 
                 foreach (Person person in attackOrder)
