@@ -38,11 +38,12 @@ namespace TheCoders.views
 
             return input;
         }
-        public static int PromptForMenuSelectionInBox(IEnumerable<string> options, bool withQuit,  bool centered = false)
+        public static int PromptForMenuSelectionInBox(IEnumerable<string> optionsIE, bool withQuit,  bool centered = false)
         {
-            if (options == null || (options.Count() == 0 && (!withQuit)))
+            if (optionsIE == null || (optionsIE.Count() == 0 && (!withQuit)))
                 throw new ArgumentException("Options cannot be null or empty with no quit");
 
+            
 
             string topLeftArch = "\u2554";
             string topRightArch = "\u2557";
@@ -56,20 +57,23 @@ namespace TheCoders.views
             if (withQuit)
             {
                 
-                options = options.Append("Quit");
+                optionsIE = optionsIE.Append("Quit");
                 
 
             }
-            int height = options.Count();
+            string[] options = optionsIE.ToArray();
+            int listIndex = 0;
+            int height = options.Count() + 2;
             
-            int width = 7;
+            int width = 0;
             for(int index = 0; index < options.Count(); index++)
             {
                 if (options.ElementAt(index).Length > width)
                 {
-                    width += options.ElementAt(index).Length;
+                    width = options.ElementAt(index).Length;
                 }
             }
+            width += 7;
             Console.WriteLine($"Width: {width}, Height: {height}");
             
             int column = 0;
@@ -97,7 +101,7 @@ namespace TheCoders.views
                     }
                     Console.WriteLine(topRightArch);
                 }
-                else if (index == height)
+                else if (index == height+1)
                 {
                     COH.Repeat(" ", padding, false);
                     Console.Write(bottomLeftArch);
@@ -107,25 +111,29 @@ namespace TheCoders.views
                     }
                     Console.WriteLine(bottomRightArch);
                 }
-                else if (index >= height / 2 - 1 + height)
+                else if (index < options.Count() + 1)
                 {
                     COH.Repeat(" ", padding, false);
+
+
                     Console.Write(verticalLine);
-                    if (withQuit)
-                    {
-                        if (index == height / 2 - 1 + options.Count())
-                        {
-                            Console.Write($" 0. Quit ");
-                        }
-                        else
-                        {
-                            Console.Write($"  {index}. {options.ElementAt(index - 1)} ");
-                        }
-                    }
                     
+                    Console.Write($"  {index}. {options[index - 1]} ");
+                    if(index == 1)
+                    {
+                        Console.Write("  ");
+                    }
+
+                    listIndex++;
+                    if (index == 3)
+                    {
+                        Console.Write("        ");
+                    }
+
                     COH.Repeat(" ", 1, false);
                     Console.WriteLine(verticalLine);
                 }
+
                 else
                 {
                     COH.Repeat(" ", padding, false);
@@ -135,6 +143,17 @@ namespace TheCoders.views
                         Console.Write(" ");
                     }
                     Console.WriteLine(verticalLine);
+                }
+
+                if(index == height - 1)
+                {
+                    COH.Repeat(" ", padding, false);
+                    Console.Write(bottomLeftArch);
+                    for (int i = 0; i < width; i++)
+                    {
+                        Console.Write(horizontalLine);
+                    }
+                    Console.WriteLine(bottomRightArch);
                 }
             }
             

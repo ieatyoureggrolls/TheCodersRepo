@@ -26,7 +26,7 @@ public class Runner
     private void ChooseMode()
     {
         //int input = CIO.PromptForMenuSelectionInBox(["Story Mode", "Endless Mode"], true,true);
-        int input = CIO.PromptForMenuSelection(["Story Mode", "Endless Mode"], true);
+        int input = CIO.PromptForMenuSelectionInBox(["Story Mode", "Endless Mode"], true,true);
         switch (input)
         {
             case 1:
