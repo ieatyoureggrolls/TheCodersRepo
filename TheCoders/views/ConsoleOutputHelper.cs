@@ -299,7 +299,7 @@ public static class ConsoleOutputHelper
     /// <param name="heroParty">The list of heroes in the party.</param>
     public static void PrintHeroNames(IReadOnlyList<Person> heroParty)
     {
-        Console.WriteLine("Hero Party\n");
+        Console.WriteLine("Hero Party");
         for (int i = 0; i < heroParty.Count; i++)
         {
             if (heroParty[i].heldWeapon == null)
