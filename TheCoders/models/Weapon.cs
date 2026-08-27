@@ -597,6 +597,7 @@ namespace TheCoders
                     damageIndex = enchantmentList.Count() - 1;
                 }
             }
+            updateDamageType();
         }
 
         //sets the damage type to an enchantment that changes the type
@@ -702,7 +703,7 @@ namespace TheCoders
         //sets isBroken to true as well as lowers stats.
         public void breakWeapon()
         {
-            Console.WriteLine("The weapon broke in half!");
+            Console.WriteLine("The weapon is broken!");
             isBroken = true;
             halfDurablility = false;
             attack = 0;
