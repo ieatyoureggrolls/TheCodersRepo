@@ -1,10 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using TheCoders.models;
 using TheCoders.views;
+using Handle = TheCoders.models.Handle;
 
 namespace TheCoders
 {
@@ -36,6 +38,7 @@ namespace TheCoders
         private int level = 1;
         private int repairCost = 0;
         private int upgradeCost = 0;
+        private int MaxAttack = 0;
 
         public String getName() { return name; }
         public int getRepair() {  return repairCost; }
@@ -61,6 +64,7 @@ namespace TheCoders
             maxDurability = blade.getDurability()+handle.getDurability();
             value = blade.getPrice() + handle.getPrice();
             upgradeCost = (blade.getPrice()+handle.getPrice())/2;
+            MaxAttack = attack;
 
             if (blade.getThreshold() > handle.getThreshold())
             {
@@ -677,6 +681,7 @@ namespace TheCoders
             durability = maxDurability;
             isBroken = false;
             halfDurablility = false;
+            attack = MaxAttack;
         }
 
         //lowers the weapon durability by one. If the weapon durability is less than or equal to zero, calls breakWeapon()
