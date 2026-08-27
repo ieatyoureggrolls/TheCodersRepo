@@ -22,24 +22,9 @@ namespace TheCoders.models
 
         }
 
-        /*
-         * tasks needed to complete:
-         * 
-         * methods
-         
-         * level1 player spectates the computer making a weapon and sees the auto battler (complete)
-         * level2 player makes a weapon for the second hero and watches auto battler (complete) 
-         * level3 weapons are low on durability so player learns to repair weapons (partially complete) display weapon durability and then ask player to repair
-         * level4 player learns to replace weapons (partially complete)
-         * level5 player upgrades existing wepons with enchantmets? perhaps (partially complete)
-         * 
-         *make a method that display weapon durability when the enemy status is being shown (light work)
-         *
-         *find a way to delay dialogoue in story mode (idk)
-         *
-         *let the player choose which action tehy would like to perform instead of forcing it (make the method, in progress)
-         *
-         */
+        // limited crafting is based on gold count
+        //add a healplayer to player choice
+        //use printStory for all story text
 
 
         private static void TakeToLevel(int levelSelect)
@@ -117,19 +102,15 @@ namespace TheCoders.models
         private static void Level1()
         {
 
-            ConsoleOutputHelper.ClearScreen();
+            COH.ClearScreen();
 
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 1);
 
             const int currentLevel = 1;
 
-            //ConsoleOutputHelper.PrintCombatantParty(enemies);
-
-            //Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
-            //Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
-            //Console.WriteLine("\n\nTake a look the enemies are quickly approaching\n");
+           
             string intro = $"You are the greatest blacksmith in this village help the heros by making weapons for them the team consists of {theParty.Length} heroes. You must make a weapon for all of them. Take a look, the enemies are quickly approaching!";
-            COH.PrintStory(intro, 7);
+            COH.PrintStory(intro, 25);
             COH.PrintCombatantParty(enemies);
 
 
@@ -138,18 +119,15 @@ namespace TheCoders.models
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
             tutorialWeapon.renameWeapon("wood you like something better?");
 
-            //Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
 
-            //Console.WriteLine("\n I don't have time to explain things to you right now take this sword\n");
             COH.PrintStory("I don't have time to explain things to you right now take this sword!", 7);
             tutorialWeapon.displayWeaponInfo();
-            //COH.
-            //Console.WriteLine("\nNow pick which hero will get this weapon, once you do the battle will begin\n");
+        
             COH.PrintStory("Now pick which hero will get this weapon, once you do the battle will begin", 5);
 
             WhoGetsAWeapon(theParty, tutorialWeapon);
 
-            ConsoleOutputHelper.ClearScreen();
+            COH.ClearScreen();
 
             LevelLoop.Battle(enemies.ToList(), theParty);
 
@@ -166,24 +144,24 @@ namespace TheCoders.models
         {
             HealPlayer();
 
-            ConsoleOutputHelper.ClearScreen();
+            COH.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1,2);
             const int currentLevel = 2;
 
-            ConsoleOutputHelper.PrintCombatantParty(enemies);
+            COH.PrintStory("More enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too, these guys are tought try making something better than a wooden sword ", 20);
 
-            Console.WriteLine("\n\nMore enemies are coming, one hero won't be enought to hold them off its time for you to make a weapon too\n");
-            Console.WriteLine("\n these guys are tought try making something better than a wooden sword");
 
-          
+            COH.PrintCombatantParty(enemies);
+
+
+           
 
             Weapon newWeapon = Weapon.createWeapon(2); 
             Console.WriteLine("\n");
             newWeapon.displayWeaponInfo();
-            Console.WriteLine("\n thats a great weapon for our new hero");
+            COH.PrintStory("thats a great weapon for our new hero,\n 2 vs 2 is much more of a fair fight", 7);
             WhoGetsAWeapon(theParty, newWeapon);
 
-            Console.WriteLine("\n\n2 vs 2 is much more of a fair fight\n\n");
 
             LevelLoop.Battle(enemies.ToList(), theParty);
 
@@ -207,21 +185,17 @@ namespace TheCoders.models
 
             HealPlayer();
 
-            ConsoleOutputHelper.ClearScreen();
+            COH.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 2);
             const int currentLevel = 3;
-            ConsoleOutputHelper.PrintCombatantParty(enemies);
+            COH.PrintCombatantParty(enemies);
 
-            //theParty[0].heldWeapon.breakWeapon();
             theParty[0].heldWeapon.displayWeaponInfo();
-
+         
             
-
-            Console.WriteLine($"\n\n you can't win with a broken weapon try repairing {theParty[0].Name}'s weapon");
-
+            COH.PrintStory("you can't win with a broken weapon try repairing {theParty[0].Name}'s weapon", 7);
             RepairWeapon();
-
-            Console.WriteLine("\n\ngood now the heroes are able to continue fighting");
+            COH.PrintStory("good now the heroes are able to continue fighting",7);
 
             LevelLoop.Battle(enemies.ToList(), theParty);
 
@@ -243,7 +217,7 @@ namespace TheCoders.models
 
             HealPlayer();
 
-            ConsoleOutputHelper.ClearScreen();
+            COH.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(2, 2);
             Enemy boss = EnemyGenerator.GenerateOneEnemy(1, true);
 
@@ -252,10 +226,11 @@ namespace TheCoders.models
             army[enemies.Length] = boss;
 
             const int currentLevel = 4;
-            ConsoleOutputHelper.PrintCombatantParty(army);
+            COH.PrintCombatantParty(army);
 
             Console.WriteLine("\n\n from here on out its all you, im sure you can handle whatevers coming");
             Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best those guys are tought");
+            COH.PrintStory("from here on out its all you, im sure you can handle whatevers coming,\nit seems that the enemy side has a boss character do your best those guys are tought", 20);
 
             playerChoice();
 
@@ -357,20 +332,20 @@ namespace TheCoders.models
 
                 case 1:
 
-                    ConsoleOutputHelper.ClearScreen();
+                    COH.ClearScreen();
                     TakeToLevel(currentLevel + 1);
                     break;
 
                 case 2:
 
 
-                    ConsoleOutputHelper.ClearScreen();
+                    COH.ClearScreen();
                     ChooseLevel(availableLevels);
                     break;
 
                 default:
 
-                    ConsoleOutputHelper.ClearScreen();
+                    COH.ClearScreen();
                     ReturnToMainMenu();
                     break;
             }
@@ -394,7 +369,7 @@ namespace TheCoders.models
         {
 
 
-            ConsoleOutputHelper.PrintHeroNames(theParty);
+            COH.PrintHeroNames(theParty);
 
             int heroSlot = CIO.PromptForInt($"which of the heroes from slot 1 to {theParty.Length} do you want to recieve the weapon", 1, theParty.Length);
 
@@ -413,7 +388,7 @@ namespace TheCoders.models
             do
             {
                 Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon(work in progress)", "Enchant Weapon(work in progress)", "displayWeaponStats(work in progress)", "Craftpedia(work in progress)" };
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "display weapon stats(WIP)","HealHero(WIP)" };
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
                 switch (selection)
                 {
@@ -431,17 +406,12 @@ namespace TheCoders.models
                         ReplaceWeapon(); //not tested
                         break;
                     case 5:
-                     //   UpgradeWeapon(); //not complete but apparently in the weapon class
-                        break;
-                    case 6:
-                        //  EnchantWeapon(); //not complete but apparently in the weapon class
-                        break;
-                    case 7:
                         //  displayweaponstats
                         break;
-                    case 8:
-                        // search the craftpedia
+                    case 6:
+                        // HealHero
                         break;
+                 
                 }
             } while (isCrafting);
         }
@@ -449,7 +419,7 @@ namespace TheCoders.models
         private static void ReplaceWeapon() 
         {
 
-            Console.WriteLine("\n\nWhich weapon would you like to equip");
+            COH.PrintStory("Which weapon would you like to equip",7);
             List<string> weaponNames = new List<string>();
             foreach (Weapon weapon in weaponStorage) 
             {
@@ -490,7 +460,7 @@ namespace TheCoders.models
             }
             else
             {
-                Console.WriteLine($"the hero {theParty[heroSlot].Name} does not have a weapon that need repairing");
+                Console.WriteLine($"the hero {theParty[heroSlot].Name} does not have a weapon that needs repairing");
             }
 
             Console.WriteLine("\n\n");
@@ -512,11 +482,11 @@ namespace TheCoders.models
             
 
         }
-        private static int ChooseHero() //not complete
+        private static int ChooseHero() 
         {
 
+            COH.PrintHeroNames(theParty);
             int heroSlot = CIO.PromptForInt($"which heroes from slot 1 to {theParty.Length} do you want to choose", 1, theParty.Length);
-            ConsoleOutputHelper.PrintHeroNames(theParty);
             return heroSlot-1;
 
         }
