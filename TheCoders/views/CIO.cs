@@ -75,7 +75,6 @@ namespace TheCoders.views
                 }
             }
             width += 7;
-            Console.WriteLine($"Width: {width}, Height: {height}");
             
             int column = 0;
 
@@ -139,11 +138,11 @@ namespace TheCoders.views
                 {
                     COH.Repeat(" ", padding, false);
                     Console.Write(verticalLine);
-                    for (int i = 0; i < width; i++)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.WriteLine(verticalLine);
+                    cursorLeft = Console.CursorLeft;
+                    cursorTop = Console.CursorTop;
+                    Console.WriteLine();
+                    
+                    
                 }
 
                 if(index == height - 1)
@@ -154,7 +153,12 @@ namespace TheCoders.views
                     {
                         Console.Write(horizontalLine);
                     }
+                    Console.CursorTop -= 1;
+                    Console.Write(verticalLine);
+                    Console.CursorTop += 1;
+                    Console.CursorLeft -= 1;
                     Console.WriteLine(bottomRightArch);
+                    
                 }
             }
             
@@ -176,7 +180,9 @@ namespace TheCoders.views
                 COH.Repeat(" ", (Console.WindowWidth - line.Length) / 2, false);
                 Console.WriteLine(line);
             }
-            int input = PromptForInt("Option: ",(withQuit ? 0 : 1), options.Count());
+            Console.SetCursorPosition(cursorLeft, cursorTop);
+            int input = PromptForInt("  Select", 1, options.Count());
+            
             return input;
         }
 
@@ -314,7 +320,7 @@ namespace TheCoders.views
 
             do
             {
-                string input = PromptForInput($"{prompt}({min}-{max})", false);
+                string input = PromptForInput($"{prompt}({min}-{max}): ", false);
                 int response;
                 try
                 {

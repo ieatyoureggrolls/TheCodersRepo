@@ -22,12 +22,20 @@ namespace TheCoders.views;
 
 public static class ConsoleOutputHelper
 {
+    #region UTC codes
+    public static string topLeftArch = "\u2554";
+    public static string topRightArch = "\u2557";
+    public static string bottomLeftArch = "\u255A";
+    public static string bottomRightArch = "\u255D";
+    public static string verticalLine = "\u2551";
+    public static string horizontalLine = "\u2550";
+    #endregion
     public static Random rand = new Random();
 
     public static void Test()
     {
 
-        
+
         Weapon weapon = Weapon.giveWeapon(Blade.BladeType.Short, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
         Person hero1 = new Person("one", 100, 1, 1, true);
         Person hero2 = new Person("two", 100, 1, 1, true);
@@ -50,7 +58,7 @@ public static class ConsoleOutputHelper
         eList.Add(e1);
         eList.Add(e2);
         eList.Add(boss);
-        MainMenuDesign([ "Option 1", "Option 2", "Option 3" ], true);
+        MainMenuDesign(["Option 1", "Option 2", "Option 3"], true);
 
         //PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
         //PrintMainMenu(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);\
@@ -65,7 +73,7 @@ public static class ConsoleOutputHelper
         //    {
         //        enemy.CurrentHealth -= rand.Next(1, 10);
         //    }
-           PrintBattleStanding(pList, eList);
+        PrintBattleStanding(pList, eList);
         //    Thread.Sleep(1000);
         //} while (pList.Any(p => p.CurrentHealth > 0) && eList.Any(e => e.CurrentHealth > 0));
 
@@ -73,27 +81,64 @@ public static class ConsoleOutputHelper
 
     }
 
-    private static void ChooseMode()
+
+    public static void PrintStory(string story, int wordLimit)
     {
-        int input = CIO.PromptForMenuSelection(["Story Mode", "Endless Mode"], true);
-        switch (input)
+        PrintDialogInBox(story, wordLimit);
+    }
+
+    public static void PrintDialogInBox(string message, int wordLimit)
+    {
+        List<string> words = message.Split(' ').ToList();
+
+        // Group words into lines of length 'wordLimit' and join them
+        var rows = words
+            .Chunk(wordLimit)
+            .Select(chunk => string.Join(" ", chunk))
+            .ToList();
+
+        // Average character length across all rows
+        double averageRowLength = rows.Average(row => row.Length);
+
+        // Longest row character length (if needed)
+        int longestRowLength = rows.Max(row => row.Length);
+
+
+
+        int width = longestRowLength + 3;
+        int height = (int)(words.Count / wordLimit) + 1;
+
+
+        Console.Write(topLeftArch);
+        for (int index2 = 0; index2 < width; index2++)
         {
-            case 1:
-                Story();
-                break;
-            case 2:
-                Endless.StartEndless();
-                break;
-            default:
-                //Quit message here
-                break;
+            Console.Write(horizontalLine);
         }
+        Console.WriteLine(topRightArch);
+        foreach (string row in rows)
+        {
+            Console.Write(verticalLine);
+            Console.Write(" "); // Left padding
+
+            // Print text with typewriter delay
+            DialogDelay(row, 25, false);
+
+            // Right padding to align the right border
+            int trailingSpaces = width - 1 - row.Length;
+            Repeat(" ", trailingSpaces, false);
+
+            Console.WriteLine(verticalLine);
+        }
+        Console.Write(bottomLeftArch);
+        for (int index2 = 0; index2 < width; index2++)
+        {
+            Console.Write(horizontalLine);
+        }
+        Console.WriteLine(bottomRightArch);
     }
-    public static void Story()
-    {
-        Console.WriteLine("Story");
-        Storymode.main();
-    }
+
+
+
     #region Ascii Art
 
     static string anvil = """
@@ -128,7 +173,7 @@ public static class ConsoleOutputHelper
 
     public static void PrintMainMenu(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
     {
-        
+
     }
 
     /// <summary>
@@ -204,14 +249,23 @@ public static class ConsoleOutputHelper
     /// <param name="message">The message to print.</param>
     /// <param name="delay">The delay between each character in milliseconds.</param>
     /// <param name="pause">Whether to pause for user input after the message is printed.</param>
-    public static void DialogDelay(string message, int delay = 50, bool pause = false)
+    /// <param name="newLine">Whether to print a new line after the message.</param>
+    public static void DialogDelay(string message, int delay = 50, bool pause = false, bool newLine = false)
     {
         foreach (char c in message)
         {
-            Console.Write(c);
+            if (newLine)
+            {
+                Console.WriteLine(c);
+            }
+            else
+            {
+                Console.Write(c);
+            }
+
             Thread.Sleep(delay);
         }
-        Console.WriteLine();
+
         if (pause)
         {
             DialogPause();
@@ -541,7 +595,7 @@ public static class ConsoleOutputHelper
         Console.SetCursorPosition(cursorLeft, cursorTop);
         Repeat("\t", 17, false);
         PrintCombatantParty(enemyParty, true);
-        if(enemyParty.Count() > heroParty.Count()) 
+        if (enemyParty.Count() > heroParty.Count())
         {
             Console.SetCursorPosition(0, cursorTop + enemyParty.Count() * 5 + 1);
         }
@@ -551,13 +605,13 @@ public static class ConsoleOutputHelper
         }
 
 
-     
-        
+
+
         Console.WriteLine("Press any key to continue...");
         Console.Read();
 
     }
- #region Print banner methods
+    #region Print banner methods
 
     /// <summary>
     /// Prints the left side of a rectangle, with a top left arch, bottom left arch, and vertical line
@@ -642,7 +696,7 @@ public static class ConsoleOutputHelper
     /// <param name="message">The message to display in the banner</param>
     public static void PrintBanner(string message)
     {
-        
+
         ClearScreen();
         Console.WriteLine();
         Console.WriteLine();
@@ -652,12 +706,7 @@ public static class ConsoleOutputHelper
         //Figure out char length of Terminal
         //Print message in the top center
         //Fill the left and right sides with -----
-        string bottomLeftArch = "\u2554";
-        string bottomRightArch = "\u2557";
-        string topLeftArch = "\u255A";
-        string topRightArch = "\u255D";
-        string verticalLine = "\u2551";
-        string horizontalLine = "\u2550";
+
 
         Console.WriteLine();
         Console.WriteLine();
@@ -755,7 +804,7 @@ public static class ConsoleOutputHelper
             PrintColoredChar(c, false, bg, fg);
         }
 
-        
+
         Console.WriteLine();
     }
     /// <summary>
@@ -799,8 +848,8 @@ public static class ConsoleOutputHelper
                 isBright = true;
             }
         }
-        while(!isBright);
-        
+        while (!isBright);
+
         return rgb;
     }
 
@@ -1210,7 +1259,7 @@ public static class ConsoleOutputHelper
                 }
 
                 //Weapon Place holder
-                if(person.heldWeapon != null)
+                if (person.heldWeapon != null)
                 {
                     Console.WriteLine($"Weapon: {person.heldWeapon.getName()}");
                 }
@@ -1218,15 +1267,14 @@ public static class ConsoleOutputHelper
                 {
                     Console.WriteLine($"No Weapon");
                 }
-                
+
                 ///speed
                 Console.WriteLine($"Speed: {person.Speed}");
                 ///damage
                 Console.WriteLine($"Damage: {person.Damage} \n");
 
             }
+
         }
-
-
     }
 }

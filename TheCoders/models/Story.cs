@@ -1,7 +1,7 @@
 ﻿using TheCoders.controllers;
 using TheCoders.views;
 using TheCoders.models.Generators;
-
+using COH = TheCoders.views.ConsoleOutputHelper;
 
 namespace TheCoders.models
 {
@@ -16,6 +16,7 @@ namespace TheCoders.models
         {
 
             //playerChoice();
+            Console.Clear();
             ChooseLevel(availableLevels);
 
 
@@ -122,22 +123,29 @@ namespace TheCoders.models
 
             const int currentLevel = 1;
 
-            ConsoleOutputHelper.PrintCombatantParty(enemies);
+            //ConsoleOutputHelper.PrintCombatantParty(enemies);
 
-            Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
-            Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
-            Console.WriteLine("\n\nTake a look the enemies are quickly approaching\n");
+            //Console.WriteLine("\n\nYou are the greatest blacksmith in this village help the heros by making weapons for them\n ");
+            //Console.WriteLine($"the team consists of {theParty.Length} heroes you must make a weapon for all of them");
+            //Console.WriteLine("\n\nTake a look the enemies are quickly approaching\n");
+            string intro = $"You are the greatest blacksmith in this village help the heros by making weapons for them the team consists of {theParty.Length} heroes. You must make a weapon for all of them. Take a look, the enemies are quickly approaching!";
+            COH.PrintStory(intro, 7);
+            COH.PrintCombatantParty(enemies);
 
-            
+
+
 
             Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
             tutorialWeapon.renameWeapon("wood you like something better?");
 
             //Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
 
-            Console.WriteLine("\n I don't have time to explain things to you right now take this sword\n");
+            //Console.WriteLine("\n I don't have time to explain things to you right now take this sword\n");
+            COH.PrintStory("I don't have time to explain things to you right now take this sword!", 7);
             tutorialWeapon.displayWeaponInfo();
-            Console.WriteLine("\nNow pick which hero will get this weapon, once you do the battle will begin\n");
+            //COH.
+            //Console.WriteLine("\nNow pick which hero will get this weapon, once you do the battle will begin\n");
+            COH.PrintStory("Now pick which hero will get this weapon, once you do the battle will begin", 5);
 
             WhoGetsAWeapon(theParty, tutorialWeapon);
 

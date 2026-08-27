@@ -15,6 +15,8 @@ public class Runner
         Console.ReadLine();
         COH.ClearScreen();
 
+        COH.PrintStory("Welcome to Hero's Blacksmith. A game where you make weapons for a party of heroes.", 5);
+
         //COH.Test();
         ChooseMode();
 
