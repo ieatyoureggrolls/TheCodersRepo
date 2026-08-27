@@ -58,7 +58,7 @@ public static class ConsoleOutputHelper
         eList.Add(e1);
         eList.Add(e2);
         eList.Add(boss);
-        MainMenuDesign(["Option 1", "Option 2", "Option 3"], true);
+
 
         //PrintBattleSummary(pList, eList, true, new List<Pieces.Material>(), 100);
         //PrintMainMenu(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);\
@@ -169,24 +169,8 @@ public static class ConsoleOutputHelper
 
     #endregion
 
-    public static void MainMenuDesign(string[] mainMenuOptions, bool withQuit)
-    {
-        PrintBanner("Main Menu");
-        //PrintMenuBox(new[] { "Option 1", "Option 2", "Option 3" }, true, 10, true);
-        //CIO.PromptForMenuSelectionInBox(mainMenuOptions, true, mainMenuOptions.Count(), true);
-        //Center the menu options
 
-        //Add some color to the menu options
 
-        //Add some Icons
-
-        //Add some Ascii art and/or animations
-    }
-
-    public static void PrintMainMenu(IEnumerable<string> options, bool withQuit, int height, bool centered = false)
-    {
-
-    }
 
     /// <summary>
     /// Prints a summary of the battle, including the hero party's health, weapon durability, materials dropped, and gold dropped.
@@ -229,19 +213,6 @@ public static class ConsoleOutputHelper
                 }
             }
 
-            // Materials dropped
-            if (materialsDropped.Count > 0)
-            {
-                Console.WriteLine("Materials Dropped:");
-                foreach (Pieces.Material material in materialsDropped)
-                {
-                    Console.WriteLine(material);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No materials dropped.");
-            }
 
             Console.WriteLine($"\nGold dropped: {goldDropped}\n");
             DialogPause();
@@ -634,7 +605,7 @@ public static class ConsoleOutputHelper
     /// <param name="bottomLeftArch">The bottom left arch of the rectangle</param>
     /// <param name="verticalLine">The vertical line of the rectangle</param>
     /// <param name="curserCords">A set of cursor cooridinates that need to be modified during the method</param>
-    public static void PrintLeftRect(int cursorLeft, int cursorTop, string topLeftArch, string bottomLeftArch, string verticalLine, int[] curserCords)
+    public static void PrintLeftRect(int cursorLeft, int cursorTop, int[] curserCords)
     {
         //Saves the cursor position so it can be reset before printing certain parts
         int oldLeft = Console.CursorLeft;
@@ -643,12 +614,12 @@ public static class ConsoleOutputHelper
 
 
         Console.WriteLine(verticalLine);
-        Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+        Console.SetCursorPosition(cursorLeft, cursorTop - 1);
         Console.Write(topLeftArch);
         curserCords[0] = Console.CursorLeft;
         curserCords[1] = Console.CursorTop;
         Console.SetCursorPosition(oldLeft, oldTop);
-        Console.SetCursorPosition(oldLeft, oldTop - 1);
+        Console.SetCursorPosition(oldLeft, oldTop + 1);
         Console.Write(bottomLeftArch);
         Console.SetCursorPosition(oldLeft + 1, oldTop);
     }
@@ -661,17 +632,17 @@ public static class ConsoleOutputHelper
     /// <param name="topRightArch">The top right arch of the rectangle</param>
     /// <param name="bottomRightArch">The bottom right arch of the rectangle</param>
     /// <param name="verticalLine">The vertical Edgeof the rectangle</param>
-    public static void PrintRightRect(int cursorLeft, int cursorTop, string topRightArch, string bottomRightArch, string verticalLine)
+    public static void PrintRightRect(int cursorLeft, int cursorTop)
     {
         //Saves the cursor position so it can be reset before printing certain parts
         int oldLeft = Console.CursorLeft;
         int oldTop = Console.CursorTop;
 
         Console.Write(verticalLine);
-        Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+        Console.SetCursorPosition(cursorLeft, cursorTop -  1);
         Console.Write(topRightArch);
         Console.SetCursorPosition(oldLeft, oldTop);
-        Console.SetCursorPosition(oldLeft, oldTop - 1);
+        Console.SetCursorPosition(oldLeft, oldTop + 1);
         Console.Write(bottomRightArch);
         Console.SetCursorPosition(oldLeft + 1, oldTop);
     }
@@ -688,14 +659,14 @@ public static class ConsoleOutputHelper
         for (int index = 0; index < length + 2; index++)
         {
             Console.Write(edge);
-            Console.SetCursorPosition(cursorLeft + index, cursorTop - 2);
+            Console.SetCursorPosition(cursorLeft + index, cursorTop + 2);
             Console.Write(edge);
             Console.SetCursorPosition(cursorLeft + index, cursorTop);
             Console.Write(edge);
         }
 
         //extra removal
-        Console.SetCursorPosition(0, cursorTop);
+        Console.SetCursorPosition(0, cursorTop + 2);
         for (int index = 0; index != length; index++)
         {
             Console.Write(" ");
@@ -746,11 +717,11 @@ public static class ConsoleOutputHelper
                 if (index == padding - 2)
                 {
 
-                    PrintLeftRect(oldLeft, oldTop, topLeftArch, bottomLeftArch, verticalLine, curserCords);
+                    PrintLeftRect(oldLeft, oldTop, curserCords);
                 }
                 else if (index == padding + 2)
                 {
-                    PrintRightRect(oldLeft, oldTop, topRightArch, bottomRightArch, verticalLine);
+                    PrintRightRect(oldLeft, oldTop);
                 }
             }
 
