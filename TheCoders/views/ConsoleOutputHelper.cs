@@ -82,12 +82,24 @@ public static class ConsoleOutputHelper
     }
 
 
-    public static void PrintStory(string story, int wordLimit)
+    /// <summary>
+    /// Prints a story to the console, with a specified word limit per line and an optional delay between each character.
+    /// </summary>
+    /// <param name="story">The story to print.</param>
+    /// <param name="wordLimit">The maximum number of words per line.</param>
+    /// <param name="delay">The delay between each character (in milliseconds).</param>
+    public static void PrintStory(string story, int wordLimit, int delay = 25)
     {
-        PrintDialogInBox(story, wordLimit);
+        PrintDialogInBox(story, wordLimit, delay);
     }
 
-    public static void PrintDialogInBox(string message, int wordLimit)
+    /// <summary>
+    /// Prints a message in a box with a specified word limit per line and an optional delay between each character.
+    /// </summary>
+    /// <param name="message">The message to print.</param>
+    /// <param name="wordLimit">The maximum number of words per line.</param>
+    /// <param name="delay">The delay between each character (in milliseconds).</param>
+    public static void PrintDialogInBox(string message, int wordLimit, int delay)
     {
         List<string> words = message.Split(' ').ToList();
 
@@ -121,7 +133,7 @@ public static class ConsoleOutputHelper
             Console.Write(" "); // Left padding
 
             // Print text with typewriter delay
-            DialogDelay(row, 25, false);
+            DialogDelay(row, delay, false);
 
             // Right padding to align the right border
             int trailingSpaces = width - 1 - row.Length;
