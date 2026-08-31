@@ -81,6 +81,30 @@ public static class ConsoleOutputHelper
 
     }
 
+    /// <summary>
+    /// Prints information about the incoming wave of enemies, including the wave number and a list of enemies with their health, speed, and damage.
+    /// </summary>
+    /// <param name="waveNumber">The Current wave number.</param>
+    /// <param name="enemies">The list of enemies</param>
+    public static void PrintWaveInfo(int waveNumber, IReadOnlyCollection<Person> enemies)
+    {
+        ClearScreen();
+        PrintBanner($"Wave {waveNumber} Incoming!");
+        Console.WriteLine();
+        Console.WriteLine("Enemies:");
+        List<string> enemyInfo = new List<string>();
+        foreach (Person enemy in enemies)
+        {
+            string info = $"Name:{enemy.Name} \n Health: {enemy.MaxHealth} \n Speed: {enemy.Speed} \n Damage: {enemy.Damage}";
+            enemyInfo.Add(info);
+        }
+        foreach (string info in enemyInfo)
+        {
+            PrintDialogInBox(info, 10, 25);
+        }
+        Console.WriteLine();
+        DialogPause();
+    }
 
     /// <summary>
     /// Prints a story to the console, with a specified word limit per line and an optional delay between each character.
@@ -590,8 +614,7 @@ public static class ConsoleOutputHelper
 
 
 
-        Console.WriteLine("Press any key to continue...");
-        Console.Read();
+        CIO.PromptForInput("Press any key to continue...", true);
 
     }
     #region Print banner methods
@@ -639,7 +662,7 @@ public static class ConsoleOutputHelper
         int oldTop = Console.CursorTop;
 
         Console.Write(verticalLine);
-        Console.SetCursorPosition(cursorLeft, cursorTop -  1);
+        Console.SetCursorPosition(cursorLeft, cursorTop - 1);
         Console.Write(topRightArch);
         Console.SetCursorPosition(oldLeft, oldTop);
         Console.SetCursorPosition(oldLeft, oldTop + 1);
@@ -751,13 +774,9 @@ public static class ConsoleOutputHelper
     /// <param name="damage">The amount of damage done</param>
     /// <param name="attackerName">The person who attacked</param>
     /// <param name="targetNames">A string array filled with the names of who is being attacked</param>
-    public static void PrintCrit(int damage, string attackerName, string[] targetNames)
+    public static void PrintCrit(string message)
     {
-        foreach (string targetName in targetNames)
-        {
-            CalmRainbowText($"{attackerName} critically hit {targetName} for {damage} damage!");
-        }
-
+        CalmRainbowText(message);
     }
 
     #region coloring
@@ -1259,5 +1278,13 @@ public static class ConsoleOutputHelper
             }
 
         }
+    }
+
+    public static void PrintDamage(string[] message)
+    {
+        if (bool.Parse(message[1]))
+            PrintCrit(message[0]);
+        else
+            Console.WriteLine(message[0]);
     }
 }

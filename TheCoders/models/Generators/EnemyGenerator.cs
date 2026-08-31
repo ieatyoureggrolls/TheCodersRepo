@@ -13,7 +13,7 @@ namespace TheCoders.models.Generators
         private const int baseDamage = 3;
         private const int baseSpeed = 3;
         private const int baseHealth = 100;
-        private const int minGold = 20, maxGold = 100;
+        private const int minGold = 250, maxGold = 350;
         private static Random random = new Random();
         /// <summary>
         /// Generates a random enemy with stats scaled to the current level by the formula "1.04^level"
@@ -67,9 +67,13 @@ namespace TheCoders.models.Generators
         /// <returns>An Enemy Array full of not ai generated enemies</returns>
         public static Enemy[] GenerateEnemies(int level, int amount)
         {
+            bool isBoss = level % 5 == 0;
             Enemy[] enemies = new Enemy[amount];
             for (int i = 0; i < enemies.Length; i++)
-                enemies[i] = GenerateOneEnemy(level);
+            {
+                enemies[i] = GenerateOneEnemy(level, isBoss);
+                isBoss = false;
+            }
             return enemies;
         }
 

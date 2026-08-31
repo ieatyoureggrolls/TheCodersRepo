@@ -704,10 +704,14 @@ namespace TheCoders
         public void breakWeapon()
         {
             Console.WriteLine("The weapon is broken!");
-            isBroken = true;
-            halfDurablility = false;
-            attack = 0;
-            value = value / 2;
+            if (!isBroken)
+            { 
+                isBroken = true;
+                halfDurablility = false;
+                attack = 0;
+                value = value / 2;
+            }
+
         }
 
         //increases the stats of a weapon
