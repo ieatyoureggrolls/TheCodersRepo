@@ -81,6 +81,30 @@ public static class ConsoleOutputHelper
 
     }
 
+    /// <summary>
+    /// Prints information about the incoming wave of enemies, including the wave number and a list of enemies with their health, speed, and damage.
+    /// </summary>
+    /// <param name="waveNumber">The Current wave number.</param>
+    /// <param name="enemies">The list of enemies</param>
+    public static void PrintWaveInfo(int waveNumber, IReadOnlyCollection<Person> enemies)
+    {
+        ClearScreen();
+        PrintBanner($"Wave {waveNumber} Incoming!");
+        Console.WriteLine();
+        Console.WriteLine("Enemies:");
+        List<string> enemyInfo = new List<string>();
+        foreach (Person enemy in enemies)
+        {
+            string info = $"Name:{enemy.Name} \n Health: {enemy.MaxHealth} \n Speed: {enemy.Speed} \n Damage: {enemy.Damage}";
+            enemyInfo.Add(info);
+        }
+        foreach (string info in enemyInfo)
+        {
+            PrintDialogInBox(info, 10, 25);
+        }
+        Console.WriteLine();
+        DialogPause();
+    }
 
     /// <summary>
     /// Prints a story to the console, with a specified word limit per line and an optional delay between each character.

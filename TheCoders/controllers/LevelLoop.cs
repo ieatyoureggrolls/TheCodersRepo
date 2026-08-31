@@ -24,11 +24,10 @@ namespace TheCoders.controllers
         public static bool Wave(int level, Person[] party, List<Weapon> weaponStorage, List<Enemy>? enemies = null)
         {
             partyMembers = party;
-            Console.WriteLine($"Wave: {level}");
             if (enemies == null)
                 enemies = EnemyGenerator.GenerateRangeOfEnemies(level, 2, 4).ToList();
 
-            PrintEnemies(enemies.ToArray());
+            COH.PrintWaveInfo(level, enemies);
 
             HandleWeapons(weaponStorage);
 
