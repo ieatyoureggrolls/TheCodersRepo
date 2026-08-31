@@ -23,7 +23,7 @@ namespace TheCoders.models
         }
 
         
-        //add a healplayer to player choice
+        
         
 
 
@@ -88,6 +88,12 @@ namespace TheCoders.models
                 case (5):
                     Level5();
                     break;
+                case (6):
+                    Level6();
+                    break;
+                case (7):
+                    Level7();
+                    break;
 
                 default:
                     Console.WriteLine("Sorry that wasn't a proper level choose something else");
@@ -142,7 +148,7 @@ namespace TheCoders.models
 
         private static void Level2()
         {
-            HealPlayer();
+      
 
             COH.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1,2);
@@ -184,7 +190,7 @@ namespace TheCoders.models
         private static void Level3()
         {
 
-            HealPlayer();
+            
 
             COH.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 2);
@@ -216,7 +222,7 @@ namespace TheCoders.models
         private static void Level4()
         {
 
-            HealPlayer();
+            
 
             COH.ClearScreen();
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(2, 2);
@@ -229,7 +235,7 @@ namespace TheCoders.models
             const int currentLevel = 4;
             COH.PrintCombatantParty(army);
 
-            COH.PrintStory("from here on out its all you, im sure you can handle whatevers coming,\nit seems that the enemy side has a boss character do your best those guys are tought", 20);
+            COH.PrintStory("it seems that the enemy side has a boss character do your best those guys are tought", 20);
 
             playerChoice();
 
@@ -251,20 +257,20 @@ namespace TheCoders.models
         private static void Level5()
         {
 
-            HealPlayer();
+            
             
 
             COH.ClearScreen();
             const int currentLevel = 5;
-            Enemy[] enemies = EnemyGenerator.GenerateEnemies(2, 3);
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 5);
             
             COH.PrintStory("Good job defeating that boss, now that the village is defended its time to go on the offensive", 7);
 
             COH.PrintCombatantParty(enemies);
 
-            Console.WriteLine("\n\nwow thats a lot of them good luck you know what to do");
+            COH.PrintStory("\n\nwow thats a lot of them good luck you know what to do",7);
 
-            //create wepon method
+            playerChoice();
 
             LevelLoop.Battle(enemies.ToList(), theParty);
 
@@ -281,6 +287,71 @@ namespace TheCoders.models
 
         }
 
+        private static void Level6()
+        {
+
+
+
+
+            COH.ClearScreen();
+            const int currentLevel = 6;
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(3, 3);
+
+            COH.PrintStory("I think this is the last of the evil king's defences, after this he'll be left defenceless ", 7);
+
+            COH.PrintCombatantParty(enemies);
+                        
+            playerChoice();
+
+            LevelLoop.Battle(enemies.ToList(), theParty);
+
+            WinOrLose(theParty, currentLevel);
+
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+
+            WantNextLevel(currentLevel);
+
+        }
+
+        private static void Level7()
+        {
+
+
+
+            COH.ClearScreen();
+            
+            Enemy King = EnemyGenerator.GenerateOneEnemy(3, true);
+            Enemy Queen = EnemyGenerator.GenerateOneEnemy(3, true);
+            King.Name = "King George";
+            Queen.Name = "Queen Elisabeth";
+            Enemy[] army = new Enemy[2] { King,Queen};
+           
+            const int currentLevel = 7;
+            COH.PrintCombatantParty(army);
+
+            COH.PrintStory("this is our chance only the King and Queen remain destroy them", 20);
+
+            playerChoice();
+
+            LevelLoop.Battle(army.ToList(), theParty);
+
+            WinOrLose(theParty, currentLevel);
+
+            if (availableLevels == currentLevel)
+            {
+
+                availableLevels++;
+
+            }
+
+            WantNextLevel(currentLevel);
+
+        }
 
 
         private static void WinOrLose(Person[] theParty, int currentLevel)
@@ -357,12 +428,19 @@ namespace TheCoders.models
 
         private static void HealPlayer() 
         {
-            for(int i =0; i < (theParty.Length); i++) 
-            {
-
-                theParty[i].CurrentHealth = theParty[i].MaxHealth;
-
+            int healCost = 750;
+            if (LevelLoop.gold < healCost) {
+                int theslot = ChooseHero();
+                theParty[theslot].CurrentHealth = theParty[theslot].MaxHealth;
+                LevelLoop.gold -= healCost;
             }
+            else 
+            {
+                Console.WriteLine("You do not have enought gold to heal this ally");
+            }
+            
+
+            
 
         }
 
@@ -389,7 +467,7 @@ namespace TheCoders.models
             do
             {
                 Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "display weapon stats(WIP)","HealHero(WIP)" };
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "HealHero"};
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
                 switch (selection)
                 {
@@ -404,14 +482,12 @@ namespace TheCoders.models
                         RepairWeapon(); 
                         break;
                     case 4:
-                        ReplaceWeapon(); //not tested
+                        ReplaceWeapon(); 
                         break;
                     case 5:
-                        //  displayweaponstats
+                        HealPlayer();
                         break;
-                    case 6:
-                        // HealHero
-                        break;
+                   
                  
                 }
             } while (isCrafting);
