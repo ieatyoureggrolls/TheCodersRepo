@@ -6,7 +6,7 @@ namespace TheCoders.models
 {
     public class Person
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public int CurrentHealth
         {
             get;

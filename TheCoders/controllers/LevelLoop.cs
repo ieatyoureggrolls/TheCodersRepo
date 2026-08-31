@@ -108,8 +108,20 @@ namespace TheCoders.controllers
             if (party != null)
                 partyMembers = party;
             Weapon weaponToRepair = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to repair?", partyMembers);
-            if (weaponToRepair != null)
-                weaponToRepair.repairWeapon();
+            bool doBuy = CIO.PromptForBool($"it will cost {weaponToRepair.getRepair()} gold\nAre you sure?\n", "Yes", "No");
+            if (weaponToRepair != null && doBuy)
+            {
+                if (weaponToRepair.getRepair() > gold)
+                {
+                    Console.WriteLine("You don't have enough to repair this weapon...(getajobwhydontyaorelseyouwillendupbrokehoweveryoudohavethisjobsoiguessyouaretryingyourbest)");
+                }
+                else
+                {
+                    weaponToRepair.repairWeapon();
+                    gold -= weaponToRepair.getRepair();
+                }
+            }
+
         }
 
         public static void ReplaceWeapon(List<Weapon> weaponInventory, Person[] party = null)
@@ -131,8 +143,19 @@ namespace TheCoders.controllers
                 partyMembers = party;
 
             Weapon weaponToUpgrade = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to upgrade?", partyMembers);
-            if (weaponToUpgrade != null)
-                weaponToUpgrade.upgradeWeapon();
+            bool doBuy = CIO.PromptForBool($"it will cost {weaponToUpgrade.getUpgradeCost()} gold\nAre you sure?\n", "Yes", "No");
+            if (weaponToUpgrade != null && doBuy)
+            {
+                if (weaponToUpgrade.getUpgradeCost() > gold)
+                {
+                    Console.WriteLine("You don't have enough to repair this weapon...(getajobwhydontyaorelseyouwillendupbrokehoweveryoudohavethisjobsoiguessyouaretryingyourbest)");
+                }
+                else
+                {  
+                    weaponToUpgrade.upgradeWeapon();
+                    gold -= weaponToUpgrade.getUpgradeCost();
+                }
+            }
 
         }
 
