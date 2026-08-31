@@ -22,9 +22,9 @@ namespace TheCoders.models
 
         }
 
-        // limited crafting is based on gold count
+        
         //add a healplayer to player choice
-        //use printStory for all story text
+        
 
 
         private static void TakeToLevel(int levelSelect)
@@ -154,14 +154,15 @@ namespace TheCoders.models
             COH.PrintCombatantParty(enemies);
 
 
-           
 
-            Weapon newWeapon = Weapon.createWeapon(2); 
+
+            Weapon newWeapon = Weapon.createWeapon(2);
             Console.WriteLine("\n");
             newWeapon.displayWeaponInfo();
             COH.PrintStory("thats a great weapon for our new hero,\n 2 vs 2 is much more of a fair fight", 7);
             WhoGetsAWeapon(theParty, newWeapon);
 
+            
 
             LevelLoop.Battle(enemies.ToList(), theParty);
 
@@ -193,7 +194,7 @@ namespace TheCoders.models
             theParty[0].heldWeapon.displayWeaponInfo();
          
             
-            COH.PrintStory("you can't win with a broken weapon try repairing {theParty[0].Name}'s weapon", 7);
+            COH.PrintStory($"you can't win with a broken weapon try repairing {theParty[0].Name}'s weapon", 7);
             RepairWeapon();
             COH.PrintStory("good now the heroes are able to continue fighting",7);
 
@@ -228,8 +229,6 @@ namespace TheCoders.models
             const int currentLevel = 4;
             COH.PrintCombatantParty(army);
 
-            Console.WriteLine("\n\n from here on out its all you, im sure you can handle whatevers coming");
-            Console.WriteLine("\n\nit seems that the enemy side has a boss character do your best those guys are tought");
             COH.PrintStory("from here on out its all you, im sure you can handle whatevers coming,\nit seems that the enemy side has a boss character do your best those guys are tought", 20);
 
             playerChoice();
@@ -253,19 +252,21 @@ namespace TheCoders.models
         {
 
             HealPlayer();
+            
 
-            ConsoleOutputHelper.ClearScreen();
+            COH.ClearScreen();
             const int currentLevel = 5;
+            Enemy[] enemies = EnemyGenerator.GenerateEnemies(2, 3);
+            
+            COH.PrintStory("Good job defeating that boss, now that the village is defended its time to go on the offensive", 7);
 
-            Console.WriteLine("\n\n Good job defeating that boss, now that the village is defended its time to go on the offensive");
-
-            //call enemy inspect method
+            COH.PrintCombatantParty(enemies);
 
             Console.WriteLine("\n\nwow thats a lot of them good luck you know what to do");
 
             //create wepon method
 
-            //auto battler method
+            LevelLoop.Battle(enemies.ToList(), theParty);
 
             WinOrLose(theParty, currentLevel);
 
@@ -468,8 +469,10 @@ namespace TheCoders.models
 
         private static void MakeWeapon() 
         {
+            int limit = (LevelLoop.gold / 1000) + 2;
+
             int heroSlot = ChooseHero();
-            Weapon newWeapon = Weapon.createWeapon();
+            Weapon newWeapon = Weapon.createWeapon(limit);
 
             if (theParty[heroSlot].heldWeapon != null)
             {
