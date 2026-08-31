@@ -58,8 +58,8 @@ namespace TheCoders.controllers
             bool isCrafting = true;
             do
             {
-                Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon", "Enchant Weapon" };
+                Console.WriteLine($"What would you like to do?\nGold: {gold}");
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon" };
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
 
                 switch (selection)
@@ -78,9 +78,6 @@ namespace TheCoders.controllers
                         break;
                     case 5:
                         UpgradeWeapon();
-                        break;
-                    case 6:
-                        EnchantWeapon();
                         break;
                 }
             } while (isCrafting);
@@ -156,20 +153,6 @@ namespace TheCoders.controllers
                     gold -= weaponToUpgrade.getUpgradeCost();
                 }
             }
-
-        }
-
-        public static void EnchantWeapon(Person[] party = null)
-        {
-            if (party != null)
-                partyMembers = party;
-            Weapon weaponToEnchant = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to enchant?", partyMembers);
-            if (weaponToEnchant != null)
-            {
-                weaponToEnchant.displayEnchantments();
-                weaponToEnchant.addEnchantment();
-            }
-
 
         }
         #endregion
