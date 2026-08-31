@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TheCoders.controllers;
+using TheCoders.views;
 
 namespace TheCoders.models
 {
@@ -9,12 +10,13 @@ namespace TheCoders.models
     {
         public static int currentLevel = 1;
         public static int gold = 0;
-        public static Person[] partyMembers = { new Person("Bob", 100, 5, 1, true), new Person("Billy", 100, 5, 1, true), new Person("Joe", 100, 5, 1, true) };
+        public static Person[] partyMembers;
 
         public static void StartEndless()
         {
             Console.WriteLine("Welcome To Endless");
             bool partyAlive;
+            partyMembers = new Person[]{ new Person("Bob", 100, 5, 1, true), new Person("Billy", 100, 5, 1, true), new Person("Joe", 100, 5, 1, true) };
             do
             {
                 LevelLoop.gold = gold;
@@ -22,6 +24,7 @@ namespace TheCoders.models
                 currentLevel++;
                 gold = LevelLoop.gold;
             } while (partyAlive);
+            CIO.PromptForMenuSelectionInBox(new string[] { "Try Again" }, true, true);
         }
     }
 }

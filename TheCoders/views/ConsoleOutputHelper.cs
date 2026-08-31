@@ -614,8 +614,7 @@ public static class ConsoleOutputHelper
 
 
 
-        Console.WriteLine("Press any key to continue...");
-        Console.Read();
+        CIO.PromptForInput("Press any key to continue...", true);
 
     }
     #region Print banner methods
@@ -663,7 +662,7 @@ public static class ConsoleOutputHelper
         int oldTop = Console.CursorTop;
 
         Console.Write(verticalLine);
-        Console.SetCursorPosition(cursorLeft, cursorTop -  1);
+        Console.SetCursorPosition(cursorLeft, cursorTop - 1);
         Console.Write(topRightArch);
         Console.SetCursorPosition(oldLeft, oldTop);
         Console.SetCursorPosition(oldLeft, oldTop + 1);
@@ -775,13 +774,9 @@ public static class ConsoleOutputHelper
     /// <param name="damage">The amount of damage done</param>
     /// <param name="attackerName">The person who attacked</param>
     /// <param name="targetNames">A string array filled with the names of who is being attacked</param>
-    public static void PrintCrit(int damage, string attackerName, string[] targetNames)
+    public static void PrintCrit(string message)
     {
-        foreach (string targetName in targetNames)
-        {
-            CalmRainbowText($"{attackerName} critically hit {targetName} for {damage} damage!");
-        }
-
+        CalmRainbowText(message);
     }
 
     #region coloring
@@ -1283,5 +1278,13 @@ public static class ConsoleOutputHelper
             }
 
         }
+    }
+
+    public static void PrintDamage(string[] message)
+    {
+        if (bool.Parse(message[1]))
+            PrintCrit(message[0]);
+        else
+            Console.WriteLine(message[0]);
     }
 }

@@ -188,10 +188,13 @@ namespace TheCoders.controllers
 
                 foreach (Person person in attackOrder)
                 {
+                    if (person.CurrentHealth == 0)
+                        continue;
                     int defenderIndex = random.Next(person.IsHero ? aliveEnemies.Count : aliveHeroes.Count);
                     Person defender = person.IsHero ? aliveEnemies[defenderIndex] : aliveHeroes[defenderIndex];
 
-                    PersonAttacks(person, defender);
+                    string[] attackMessage = PersonAttacks(person, defender);
+                    COH.PrintDamage(attackMessage);
                     Console.WriteLine("\n");
                     Thread.Sleep(1000);
                 }
@@ -214,16 +217,14 @@ namespace TheCoders.controllers
         /// </summary>
         /// <param name="attacker">The person doing damage</param>
         /// <param name="defender">The person taking damage</param>
-        public static void PersonAttacks(Person attacker, Person defender, Person[] party = null)
+        /// <returns>String array where index 0 is the message and index 1 is if it is a crit</returns>
+        public static string[] PersonAttacks(Person attacker, Person defender, Person[] party = null)
         {
             if (party != null)
                 partyMembers = party;
             int[] attackResult = attacker.DealDamage();
             int damageDealt = defender.TakeDamage(attackResult[0]);
-            if (attackResult[1] > 0)
-                COH.PrintCrit(attackResult[0], attacker.Name, new string[] { defender.Name });
-            else
-                Console.WriteLine($"{attacker.Name} did {damageDealt} damage to {defender.Name}\n\n");
+            return new string[] { $"{attacker.Name} did {damageDealt} damage to {defender.Name}\n\n", (attackResult[1] > 0 ? "true" : "false") };
         }
 
         /// <summary>

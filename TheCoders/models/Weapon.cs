@@ -1,10 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using TheCoders.models;
 using TheCoders.views;
+using Handle = TheCoders.models.Handle;
 
 namespace TheCoders
 {
@@ -36,6 +38,7 @@ namespace TheCoders
         private int level = 1;
         private int repairCost = 0;
         private int upgradeCost = 0;
+        private int MaxAttack = 0;
 
         public String getName() { return name; }
         public int getRepair() {  return repairCost; }
@@ -61,6 +64,7 @@ namespace TheCoders
             maxDurability = blade.getDurability()+handle.getDurability();
             value = blade.getPrice() + handle.getPrice();
             upgradeCost = (blade.getPrice()+handle.getPrice())/2;
+            MaxAttack = attack;
 
             if (blade.getThreshold() > handle.getThreshold())
             {
@@ -593,6 +597,7 @@ namespace TheCoders
                     damageIndex = enchantmentList.Count() - 1;
                 }
             }
+            updateDamageType();
         }
 
         //sets the damage type to an enchantment that changes the type
@@ -677,6 +682,7 @@ namespace TheCoders
             durability = maxDurability;
             isBroken = false;
             halfDurablility = false;
+            attack = MaxAttack;
         }
 
         //lowers the weapon durability by one. If the weapon durability is less than or equal to zero, calls breakWeapon()
@@ -697,11 +703,15 @@ namespace TheCoders
         //sets isBroken to true as well as lowers stats.
         public void breakWeapon()
         {
-            Console.WriteLine("The weapon broke in half!");
-            isBroken = true;
-            halfDurablility = false;
-            attack = 0;
-            value = value / 2;
+            Console.WriteLine("The weapon is broken!");
+            if (!isBroken)
+            { 
+                isBroken = true;
+                halfDurablility = false;
+                attack = 0;
+                value = value / 2;
+            }
+
         }
 
         //increases the stats of a weapon
