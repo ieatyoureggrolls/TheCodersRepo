@@ -148,7 +148,7 @@ namespace TheCoders.controllers
             {
                 if (weaponToUpgrade.getUpgradeCost() > gold)
                 {
-                    Console.WriteLine("You don't have enough to repair this weapon...(getajobwhydontyaorelseyouwillendupbrokehoweveryoudohavethisjobsoiguessyouaretryingyourbest)");
+                    Console.WriteLine("You don't have enough to upgrade this weapon...(getajobwhydontyaorelseyouwillendupbrokehoweveryoudohavethisjobsoiguessyouaretryingyourbest)");
                 }
                 else
                 {  
