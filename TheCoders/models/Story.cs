@@ -219,7 +219,7 @@ namespace TheCoders.models
             theParty[0].heldWeapon.displayWeaponInfo();
 
 
-            COH.PrintStory($"you can't win with a broken weapon try repairing {theParty[0].Name}'s weapon", 7);
+            COH.PrintStory($"you can't win with a Damaged weapon try repairing Your most broken wepaon", 7);
             RepairWeapon();
             COH.PrintStory("good now the heroes are able to continue fighting", 7);
 
