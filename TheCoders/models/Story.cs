@@ -386,31 +386,42 @@ namespace TheCoders.models
 
             }
 
+            bool loop = true;
+
             if (fallenHeros == theParty.Length)
             {
-                Console.WriteLine("All the heros have fallen they cannot continue\n\n Game Over!");
-
-
-                string input = CIO.PromptForInput("\n\nWould you like to restart the level?\nYes: Y\n No: N ", false);
-
-                if (input == "Y" || input == "YES")
+                do
                 {
-                    TakeToLevel(currentLevel);
-                }
-                else
-                {
-                    ReturnToMainMenu();
+                    Console.WriteLine("All the heros have fallen they cannot continue\n\n Game Over!");
 
-                }
 
+
+                    string input = CIO.PromptForInput("\n\nWould you like to restart the level?\nYes: Y\n No: N ", false);
+                    input = input.ToUpper();
+
+                    if (input == "Y" || input == "YES")
+                    {
+                        loop = false;
+                        TakeToLevel(currentLevel);
+                    }
+                    else if (input == "N" || input == "NO")
+                    {
+                        loop = false;
+                        ReturnToMainMenu();
+
+                    }
+                } while (loop);
 
             }
             else
             {
                 Console.WriteLine("\n==============\n!!!VICTORY!!!\n==============\n");
             }
-
         }
+
+
+
+
 
         private static void WantNextLevel(int currentLevel)
         {
@@ -488,7 +499,7 @@ namespace TheCoders.models
             do
             {
                 Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "HealHero" };
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "HealHero", "Check Gold" };
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
                 switch (selection)
                 {
@@ -503,7 +514,7 @@ namespace TheCoders.models
                         RepairWeapon();
                         break;
                     case 4:
-                        ReplaceWeapon();
+                        SwapFromInventoryWeapon();
                         break;
                     case 5:
                         HealPlayer();
@@ -524,7 +535,7 @@ namespace TheCoders.models
             COH.PrintStory($"{LevelLoop.gold}", 4);
         }
 
-        private static void ReplaceWeapon()
+        private static void SwapFromInventoryWeapon()
         {
 
             COH.PrintStory("Which weapon would you like to equip", 7);
@@ -557,7 +568,7 @@ namespace TheCoders.models
             Console.WriteLine("\n\n");
         }
 
-        
+
 
         public static void RepairWeapon()
         {
