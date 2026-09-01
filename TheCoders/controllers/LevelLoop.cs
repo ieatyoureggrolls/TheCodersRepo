@@ -194,8 +194,7 @@ namespace TheCoders.controllers
                     Person defender = person.IsHero ? aliveEnemies[defenderIndex] : aliveHeroes[defenderIndex];
 
                     string[] attackMessage = PersonAttacks(person, defender);
-                    COH.PrintDamage(attackMessage);
-                    Console.WriteLine("\n");
+                    COH.PrintDamage(attackMessage, !person.IsHero);
                     Thread.Sleep(1000);
                 }
 
@@ -224,7 +223,9 @@ namespace TheCoders.controllers
                 partyMembers = party;
             int[] attackResult = attacker.DealDamage();
             int damageDealt = defender.TakeDamage(attackResult[0]);
-            return new string[] { $"{attacker.Name} did {damageDealt} damage to {defender.Name}\n\n", (attackResult[1] > 0 ? "true" : "false") };
+            string sanitizedAttackerName = attacker.Name.Replace(" ", "\u00A0");
+            string sanitizedDefenderName = defender.Name.Replace(" ", "\u00A0");
+            return new string[] { $"{sanitizedAttackerName} did {damageDealt} damage to {sanitizedDefenderName}\n\n", (attackResult[1] > 0 ? "true" : "false") };
         }
 
         /// <summary>

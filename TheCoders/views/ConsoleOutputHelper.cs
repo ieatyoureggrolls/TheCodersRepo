@@ -95,12 +95,13 @@ public static class ConsoleOutputHelper
         List<string> enemyInfo = new List<string>();
         foreach (Person enemy in enemies)
         {
-            string info = $"Name:{enemy.Name} \n Health: {enemy.MaxHealth} \n Speed: {enemy.Speed} \n Damage: {enemy.Damage}";
+            string sanitizedName = enemy.Name.Replace(' ', '\u00A0');
+            string info = $"Name: {sanitizedName} Health: {enemy.MaxHealth} Speed: {enemy.Speed} Damage: {enemy.Damage}";
             enemyInfo.Add(info);
         }
         foreach (string info in enemyInfo)
         {
-            PrintDialogInBox(info, 10, 25);
+            PrintDialogInBox(info, 2, 25);
         }
         Console.WriteLine();
         DialogPause();
@@ -112,9 +113,9 @@ public static class ConsoleOutputHelper
     /// <param name="story">The story to print.</param>
     /// <param name="wordLimit">The maximum number of words per line.</param>
     /// <param name="delay">The delay between each character (in milliseconds).</param>
-    public static void PrintStory(string story, int wordLimit, int delay = 25)
+    public static void PrintStory(string story, int wordLimit, int delay = 25, ConsoleColor color = ConsoleColor.White)
     {
-        PrintDialogInBox(story, wordLimit, delay);
+        PrintDialogInBox(story, wordLimit, delay, color);
     }
 
     /// <summary>
@@ -123,54 +124,70 @@ public static class ConsoleOutputHelper
     /// <param name="message">The message to print.</param>
     /// <param name="wordLimit">The maximum number of words per line.</param>
     /// <param name="delay">The delay between each character (in milliseconds).</param>
-    public static void PrintDialogInBox(string message, int wordLimit, int delay)
+    /// <param name="color">The color of the text.</param>
+    public static void PrintDialogInBox(string message, int wordLimit, int delay, ConsoleColor color = ConsoleColor.White)
     {
-        List<string> words = message.Split(' ').ToList();
+        if (string.IsNullOrWhiteSpace(message)) return;
 
-        // Group words into lines of length 'wordLimit' and join them
+        // 1. Strip all newlines and carriage returns so DialogDelay cannot break the line prematurely
+        string sanitized = message.Replace("\r", "").Replace("\n", " ").Trim();
+
+        // 2. Split cleanly by spaces
+        List<string> words = sanitized.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+        if (words.Count == 0) return;
+
+        // 3. Group words into lines
         var rows = words
             .Chunk(wordLimit)
             .Select(chunk => string.Join(" ", chunk))
             .ToList();
 
-        // Average character length across all rows
-        double averageRowLength = rows.Average(row => row.Length);
+        int innerWidth = rows.Max(row => row.Length);
 
-        // Longest row character length (if needed)
-        int longestRowLength = rows.Max(row => row.Length);
-
-
-
-        int width = longestRowLength + 3;
-        int height = (int)(words.Count / wordLimit) + 1;
-
-
+        // Top border
+        Console.ForegroundColor = color;
         Console.Write(topLeftArch);
-        for (int index2 = 0; index2 < width; index2++)
+        Console.Write(horizontalLine);
+        for (int i = 0; i < innerWidth; i++)
         {
             Console.Write(horizontalLine);
         }
+        Console.Write(horizontalLine);
         Console.WriteLine(topRightArch);
+        Console.ResetColor();
+
+        // Rows
         foreach (string row in rows)
         {
+            Console.ForegroundColor = color;
             Console.Write(verticalLine);
+            Console.ResetColor();
             Console.Write(" "); // Left padding
 
-            // Print text with typewriter delay
+            // Print text with delay
             DialogDelay(row, delay, false);
 
-            // Right padding to align the right border
-            int trailingSpaces = width - 1 - row.Length;
+            // Right padding flush with the border
+            int trailingSpaces = innerWidth - row.Length;
             Repeat(" ", trailingSpaces, false);
 
+            Console.Write(" "); // Right padding
+            Console.ForegroundColor = color;
             Console.WriteLine(verticalLine);
+            Console.ResetColor();
         }
+
+        // Bottom border
+        Console.ForegroundColor = color;
         Console.Write(bottomLeftArch);
-        for (int index2 = 0; index2 < width; index2++)
+        Console.Write(horizontalLine);
+        for (int i = 0; i < innerWidth; i++)
         {
             Console.Write(horizontalLine);
         }
+        Console.Write(horizontalLine);
         Console.WriteLine(bottomRightArch);
+        Console.ResetColor();
     }
 
 
@@ -591,10 +608,14 @@ public static class ConsoleOutputHelper
 
         //The weird string format is used because the Terminal Cursor is being used to print the parties side-by-side.
         //Not sure if this is optimal, but it seemed like the easiest way.
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.Write($"\t\t Hero Party");
+        Console.ResetColor();
         int cursorTopOriginal = Console.CursorTop;
         Repeat("\t", 16, false);
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.WriteLine("Enemy Party \n");
+        Console.ResetColor();
         int cursorLeft = Console.CursorLeft;
         int cursorTop = Console.CursorTop;
 
@@ -614,7 +635,7 @@ public static class ConsoleOutputHelper
 
 
 
-        CIO.PromptForInput("Press any key to continue...", true);
+        CIO.PromptForInput("Press enter to continue...", true);
 
     }
     #region Print banner methods
@@ -1280,11 +1301,25 @@ public static class ConsoleOutputHelper
         }
     }
 
-    public static void PrintDamage(string[] message)
+
+
+    public static void PrintDamage(string[] message, bool isEnemy)
     {
-        if (bool.Parse(message[1]))
-            PrintCrit(message[0]);
+        if (message == null || message.Length == 0) return;
+
+        string text = message[0];
+        bool isCrit = message.Length > 1 && bool.TryParse(message[1], out bool parsed) && parsed;
+
+        if (isEnemy)
+        {
+            PrintDialogInBox(text, 6, 25, ConsoleColor.DarkRed);
+        }
         else
-            Console.WriteLine(message[0]);
+        {
+            PrintDialogInBox(text, 6, 25, ConsoleColor.DarkGreen);
+
+        
+        
+        }
     }
 }
