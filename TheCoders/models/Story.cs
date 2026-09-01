@@ -9,7 +9,7 @@ namespace TheCoders.models
     {
         static int availableLevels = 1;
         const int minimumLevels = 1;
-        private static Person[] theParty = { new Person("hero:Bob", 100, 5, 1, true), new Person("hero:Billy", 100, 5, 1, true), new Person("hero:Joe", 100, 5, 1, true) };
+        private static Person[] theParty = { new Person("Bob", 100, 5, 1, true), new Person("Billy", 100, 5, 1, true), new Person("Joe", 100, 5, 1, true) };
         private static List<Weapon> weaponStorage = new List<Weapon>();
 
         public static void main()
@@ -59,6 +59,12 @@ namespace TheCoders.models
 
                 case (5):
                     Level5();
+                    break;
+                case (6):
+                    Level6();
+                    break;
+                case (7):
+                    Level7();
                     break;
                 default:
                     Console.WriteLine("Sorry that wasn't a proper level");
@@ -133,8 +139,10 @@ namespace TheCoders.models
 
 
 
-            Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
-            tutorialWeapon.renameWeapon("wood you like something better?");
+            //Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.wood, Handle.HandleType.Long, Pieces.Material.wood);
+
+            Weapon tutorialWeapon = Weapon.giveWeapon(Blade.BladeType.Long, Pieces.Material.adamantine, Handle.HandleType.Long, Pieces.Material.adamantine);
+            tutorialWeapon.renameWeapon("Strong Sword");
 
 
             COH.PrintStory("I don't have time to explain things to you right now take this sword!", 7);
@@ -273,6 +281,7 @@ namespace TheCoders.models
 
             COH.ClearScreen();
             const int currentLevel = 5;
+
             Enemy[] enemies = EnemyGenerator.GenerateEnemies(1, 5);
 
             COH.PrintStory("Good job defeating that boss, now that the village is defended its time to go on the offensive", 7);
