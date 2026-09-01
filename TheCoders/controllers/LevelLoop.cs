@@ -58,8 +58,8 @@ namespace TheCoders.controllers
             bool isCrafting = true;
             do
             {
-                Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon", "Enchant Weapon" };
+                Console.WriteLine($"What would you like to do?\nGold: {gold}");
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "Upgrade Weapon" };
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
 
                 switch (selection)
@@ -78,9 +78,6 @@ namespace TheCoders.controllers
                         break;
                     case 5:
                         UpgradeWeapon();
-                        break;
-                    case 6:
-                        EnchantWeapon();
                         break;
                 }
             } while (isCrafting);
@@ -108,8 +105,20 @@ namespace TheCoders.controllers
             if (party != null)
                 partyMembers = party;
             Weapon weaponToRepair = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to repair?", partyMembers);
-            if (weaponToRepair != null)
-                weaponToRepair.repairWeapon();
+            bool doBuy = CIO.PromptForBool($"it will cost {weaponToRepair.getRepair()} gold\nAre you sure?\n", "Yes", "No");
+            if (weaponToRepair != null && doBuy)
+            {
+                if (weaponToRepair.getRepair() > gold)
+                {
+                    Console.WriteLine("You don't have enough to repair this weapon...(getajobwhydontyaorelseyouwillendupbrokehoweveryoudohavethisjobsoiguessyouaretryingyourbest)");
+                }
+                else
+                {
+                    weaponToRepair.repairWeapon();
+                    gold -= weaponToRepair.getRepair();
+                }
+            }
+
         }
 
         public static void ReplaceWeapon(List<Weapon> weaponInventory, Person[] party = null)
@@ -131,22 +140,19 @@ namespace TheCoders.controllers
                 partyMembers = party;
 
             Weapon weaponToUpgrade = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to upgrade?", partyMembers);
-            if (weaponToUpgrade != null)
-                weaponToUpgrade.upgradeWeapon();
-
-        }
-
-        public static void EnchantWeapon(Person[] party = null)
-        {
-            if (party != null)
-                partyMembers = party;
-            Weapon weaponToEnchant = CIO.PromptForWeaponFromPerson("Whoes weapon would you like to enchant?", partyMembers);
-            if (weaponToEnchant != null)
+            bool doBuy = CIO.PromptForBool($"it will cost {weaponToUpgrade.getUpgradeCost()} gold\nAre you sure?\n", "Yes", "No");
+            if (weaponToUpgrade != null && doBuy)
             {
-                weaponToEnchant.displayEnchantments();
-                weaponToEnchant.addEnchantment();
+                if (weaponToUpgrade.getUpgradeCost() > gold)
+                {
+                    Console.WriteLine("You don't have enough to upgrade this weapon...(getajobwhydontyaorelseyouwillendupbrokehoweveryoudohavethisjobsoiguessyouaretryingyourbest)");
+                }
+                else
+                {  
+                    weaponToUpgrade.upgradeWeapon();
+                    gold -= weaponToUpgrade.getUpgradeCost();
+                }
             }
-
 
         }
         #endregion
