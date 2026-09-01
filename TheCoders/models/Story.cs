@@ -499,7 +499,7 @@ namespace TheCoders.models
             do
             {
                 Console.WriteLine("What would you like to do?");
-                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "HealHero", "Check Gold" };
+                string[] possibleMenus = { "Skip", "Craft Weapon", "Repair Weapon", "Replace Weapon", "HealHero","UpgradeWeapon", "Check Gold" };
                 int selection = CIO.PromptForMenuSelection(possibleMenus, false);
                 switch (selection)
                 {
