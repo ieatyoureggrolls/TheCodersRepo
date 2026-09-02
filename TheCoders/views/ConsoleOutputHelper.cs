@@ -113,7 +113,7 @@ public static class ConsoleOutputHelper
     /// <param name="story">The story to print.</param>
     /// <param name="wordLimit">The maximum number of words per line.</param>
     /// <param name="delay">The delay between each character (in milliseconds).</param>
-    public static void PrintStory(string story, int wordLimit, int delay = 25, ConsoleColor color = ConsoleColor.White)
+    public static void PrintStory(string story, int wordLimit, int delay = 5, ConsoleColor color = ConsoleColor.White)
     {
         PrintDialogInBox(story, wordLimit, delay, color);
     }
@@ -125,8 +125,9 @@ public static class ConsoleOutputHelper
     /// <param name="wordLimit">The maximum number of words per line.</param>
     /// <param name="delay">The delay between each character (in milliseconds).</param>
     /// <param name="color">The color of the text.</param>
-    public static void PrintDialogInBox(string message, int wordLimit, int delay, ConsoleColor color = ConsoleColor.White)
+    public static void PrintDialogInBox(string message, int wordLimit, int delay = 5, ConsoleColor color = ConsoleColor.White)
     {
+        
         if (string.IsNullOrWhiteSpace(message)) return;
 
         // 1. Strip all newlines and carriage returns so DialogDelay cannot break the line prematurely
@@ -825,6 +826,7 @@ public static class ConsoleOutputHelper
             }
             while (TooSimilarShade(bg, fg, 20));
             PrintColoredChar(c, false, bg, fg);
+            Thread.Sleep(1);
         }
 
 
@@ -1312,14 +1314,21 @@ public static class ConsoleOutputHelper
 
         if (isEnemy)
         {
+            int cursorLeft = Console.CursorLeft;
+            int cursorTop = Console.CursorTop;
             PrintDialogInBox(text, 6, 25, ConsoleColor.DarkRed);
         }
         else
         {
+            int cursorLeft = Console.CursorLeft;
+            int cursorTop = Console.CursorTop;
             PrintDialogInBox(text, 6, 25, ConsoleColor.DarkGreen);
-
-        
-        
+        }
+        if (isCrit)
+        {
+            Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop - 2);
+            PrintCrit(text);
+            Thread.Sleep(10);
         }
     }
 }

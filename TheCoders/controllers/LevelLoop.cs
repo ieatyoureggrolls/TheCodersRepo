@@ -201,7 +201,7 @@ namespace TheCoders.controllers
 
                     string[] attackMessage = PersonAttacks(person, defender);
                     COH.PrintDamage(attackMessage, !person.IsHero);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(50);
                 }
 
                 round++;
